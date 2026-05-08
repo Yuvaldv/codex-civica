@@ -17,6 +17,7 @@ lxml==6.1.0
 Markdown==3.10.2
 pydantic==2.13.4
 pydantic_core==2.46.4
+pymupdf==1.25.5
 pyslet==0.7.20170805
 pyth==0.6.0
 python-docx==1.2.0
