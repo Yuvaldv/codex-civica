@@ -1,0 +1,19 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.env
+
+# Node
+node_modules/
+site/.docusaurus/
+site/build/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secrets
+.env.local
+*.key
