@@ -1,3 +1,7 @@
+# Pipeline runtime output (never commit)
+data/raw/
+*.pdf
+
 # Python
 .venv/
 __pycache__/
