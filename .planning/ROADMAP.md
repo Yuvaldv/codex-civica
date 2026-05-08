@@ -31,10 +31,18 @@
   4. `pipeline/README.md` exists and a developer can follow it step-by-step to run the full pipeline without needing to ask anyone
 **Plans**: 3 plans
 
-Plans:
+**Wave 1** — 01-PLAN-01-fetch.md *(no dependencies)*
 - [ ] 01-PLAN-01-fetch.md — fetch.py + requirements.txt: OData metadata fetch and PDF download
+
+**Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 01-PLAN-02-convert.md — convert.py: PDF-to-Markdown conversion with frontmatter generation
+
+**Wave 3** *(blocked on Wave 2 completion)*
 - [ ] 01-PLAN-03-validate-readme.md — validate.py + README.md: schema validation and pipeline documentation
+
+**Cross-cutting constraints:**
+- All commands: `source ~/.venv-codex/bin/activate` (Linux-side venv, not repo .venv)
+- All file writes are crash-safe (manifest written every 100 laws; convert skips already-done files)
 
 ### Phase 2: Content
 **Goal**: All 14 Israeli Basic Laws are in the repository as correctly formatted, validated Markdown files

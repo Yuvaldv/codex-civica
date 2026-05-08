@@ -9,9 +9,9 @@
 
 ### Pipeline
 
-- [ ] **PIPE-01**: User can run `convert.py` to transform a `.docx` file into a Markdown file with complete, valid frontmatter (title, title_he, law_id, category, enacted, status, source_url)
+- [ ] **PIPE-01**: User can run `convert.py` to transform a PDF file (downloaded via `fetch.py`) into a Markdown file with complete, valid frontmatter (title_he, law_id, category, enacted, status, source_url)
 - [ ] **PIPE-02**: User can run `validate.py` to get a report of frontmatter completeness and internal link integrity across all laws in `laws/israel/`
-- [ ] **PIPE-03**: `pipeline/README.md` documents the manual download workflow (Windows browser → Knesset site → save to `data/raw/israel/`) and the full pipeline command sequence
+- [ ] **PIPE-03**: `pipeline/README.md` documents the fully automated pipeline workflow (fetch.py → convert.py → validate.py, all from WSL2) so a developer can run it end-to-end without asking anyone
 
 ### Content — Basic Laws
 

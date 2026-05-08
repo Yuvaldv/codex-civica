@@ -19,21 +19,21 @@
 | Field | Value |
 |-------|-------|
 | Current phase | Phase 1: Pipeline |
-| Current plan | TBD |
-| Phase status | Not started |
+| Current plan | 3 plans ready |
+| Phase status | Ready to execute |
 | Last updated | 2026-05-08 |
 
 **Progress:**
 
 ```
-Phase 1: Pipeline       [ ] Not started
+Phase 1: Pipeline       [P] Planned (3 plans, 3 waves)
 Phase 2: Content        [ ] Not started
 Phase 3: Site Foundation[ ] Not started
 Phase 4: Search         [ ] Not started
 Phase 5: Custom UI      [ ] Not started
 Phase 6: Deployment     [ ] Not started
 
-Overall: 0/6 phases complete
+Overall: 0/6 phases complete (Phase 1 planned, ready to execute)
 ```
 
 ---
@@ -72,7 +72,7 @@ Overall: 0/6 phases complete
 
 **Last session summary:** Project initialized. Roadmap created covering 6 phases and 17 requirements.
 
-**Next action:** Run `/gsd-plan-phase 1` to plan the pipeline phase.
+**Next action:** Run `/gsd-execute-phase 1` to execute the pipeline plans.
 
 **Files to review on re-entry:**
 - `/mnt/c/Dev/codex-civica/.planning/ROADMAP.md` — phase structure

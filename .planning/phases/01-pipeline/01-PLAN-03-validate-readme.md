@@ -23,7 +23,7 @@ must_haves:
   artifacts:
     - path: "pipeline/validate.py"
       provides: "Frontmatter completeness + internal link integrity checker"
-      exports: ["validate_file", "check_links", "main"]
+      exports: ["validate_file", "main"]
     - path: "pipeline/README.md"
       provides: "Developer documentation for the full pipeline workflow"
       contains: "source ~/.venv-codex/bin/activate"

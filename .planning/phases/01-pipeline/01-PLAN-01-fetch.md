@@ -10,7 +10,6 @@ files_modified:
 autonomous: true
 requirements:
   - PIPE-01
-  - PIPE-03
 
 must_haves:
   truths:
