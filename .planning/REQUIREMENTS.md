@@ -69,20 +69,20 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| PIPE-01 | TBD | — |
-| PIPE-02 | TBD | — |
-| PIPE-03 | TBD | — |
-| CONT-01 | TBD | — |
-| CONT-02 | TBD | — |
-| CONT-03 | TBD | — |
-| CONT-04 | TBD | — |
-| SITE-01 | TBD | — |
-| SITE-02 | TBD | — |
-| SITE-03 | TBD | — |
-| SITE-04 | TBD | — |
-| UI-01 | TBD | — |
-| UI-02 | TBD | — |
-| UI-03 | TBD | — |
-| UI-04 | TBD | — |
-| DEPLOY-01 | TBD | — |
-| DEPLOY-02 | TBD | — |
+| PIPE-01 | Phase 1 | Pending |
+| PIPE-02 | Phase 1 | Pending |
+| PIPE-03 | Phase 1 | Pending |
+| CONT-01 | Phase 2 | Pending |
+| CONT-02 | Phase 2 | Pending |
+| CONT-03 | Phase 2 | Pending |
+| CONT-04 | Phase 2 | Pending |
+| SITE-01 | Phase 3 | Pending |
+| SITE-02 | Phase 3 | Pending |
+| SITE-04 | Phase 3 | Pending |
+| SITE-03 | Phase 4 | Pending |
+| UI-01 | Phase 5 | Pending |
+| UI-02 | Phase 5 | Pending |
+| UI-03 | Phase 5 | Pending |
+| UI-04 | Phase 5 | Pending |
+| DEPLOY-01 | Phase 6 | Pending |
+| DEPLOY-02 | Phase 6 | Pending |
