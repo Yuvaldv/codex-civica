@@ -19,21 +19,21 @@
 | Field | Value |
 |-------|-------|
 | Current phase | Phase 1: Pipeline |
-| Current plan | 3 plans ready |
-| Phase status | Ready to execute |
+| Current plan | Wave 1 — Plan 01 (fetch.py) |
+| Phase status | In progress |
 | Last updated | 2026-05-08 |
 
 **Progress:**
 
 ```
-Phase 1: Pipeline       [P] Planned (3 plans, 3 waves)
+Phase 1: Pipeline       [▶] In progress (Wave 1/3 running)
 Phase 2: Content        [ ] Not started
 Phase 3: Site Foundation[ ] Not started
 Phase 4: Search         [ ] Not started
 Phase 5: Custom UI      [ ] Not started
 Phase 6: Deployment     [ ] Not started
 
-Overall: 0/6 phases complete (Phase 1 planned, ready to execute)
+Overall: 0/6 phases complete (Phase 1 in progress)
 ```
 
 ---
