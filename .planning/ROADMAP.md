@@ -8,7 +8,7 @@
 
 ## Phases
 
-- [ ] **Phase 1: Pipeline** — Build convert.py and validate.py; document the manual download workflow
+- [ ] **Phase 1: Pipeline** — Build fetch.py, convert.py, and validate.py; fully automated from WSL2 using OData API + fs.knesset.gov.il
 - [ ] **Phase 2: Content** — Download, convert, and validate all 14 Israeli Basic Laws
 - [ ] **Phase 3: Site Foundation** — Wire laws into Docusaurus; configure RTL, sidebar, and remove boilerplate
 - [ ] **Phase 4: Search** — Install and configure Docusaurus local search plugin
@@ -20,15 +20,21 @@
 ## Phase Details
 
 ### Phase 1: Pipeline
-**Goal**: A working pipeline that converts .docx files to correctly structured Markdown and validates the output
+**Goal**: A working pipeline that fetches laws from the Knesset OData API, converts PDFs to structured Markdown, and validates the output — fully automated from WSL2
 **Mode:** mvp
 **Depends on**: Nothing (first phase)
 **Requirements**: PIPE-01, PIPE-02, PIPE-03
 **Success Criteria** (what must be TRUE):
-  1. Running `python pipeline/convert.py --input data/raw/israel/ --output laws/israel/` on a .docx file produces a .md file with all mandatory frontmatter fields populated
-  2. Running `python pipeline/validate.py --laws laws/israel/ --report` produces a machine-readable report listing completeness and link integrity results per file
-  3. `pipeline/README.md` exists and a developer can follow it step-by-step to download a law from the Knesset site and run the full pipeline without needing to ask anyone
-**Plans**: TBD
+  1. Running `python pipeline/fetch.py` downloads PDFs and writes `data/raw/israel/manifest.json`
+  2. Running `python pipeline/convert.py --input data/raw/israel/ --output laws/israel/` produces .md files with all mandatory frontmatter fields populated
+  3. Running `python pipeline/validate.py --laws laws/israel/ --report` produces a machine-readable report listing completeness and link integrity results per file
+  4. `pipeline/README.md` exists and a developer can follow it step-by-step to run the full pipeline without needing to ask anyone
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-PLAN-01-fetch.md — fetch.py + requirements.txt: OData metadata fetch and PDF download
+- [ ] 01-PLAN-02-convert.md — convert.py: PDF-to-Markdown conversion with frontmatter generation
+- [ ] 01-PLAN-03-validate-readme.md — validate.py + README.md: schema validation and pipeline documentation
 
 ### Phase 2: Content
 **Goal**: All 14 Israeli Basic Laws are in the repository as correctly formatted, validated Markdown files
@@ -98,7 +104,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Pipeline | 0/? | Not started | - |
+| 1. Pipeline | 0/3 | Planned | - |
 | 2. Content | 0/? | Not started | - |
 | 3. Site Foundation | 0/? | Not started | - |
 | 4. Search | 0/? | Not started | - |
@@ -134,3 +140,4 @@
 ---
 
 *Created: 2026-05-08*
+*Updated: 2026-05-08 — Phase 1 plans finalized (3 plans, wave structure 1→2→3)*
