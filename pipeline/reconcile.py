@@ -69,14 +69,24 @@ def assemble_request(prompt: str, native_text: str, ocr_text: str) -> str:
 
 
 def call_gemini(client: genai.Client, request: str) -> str:
+    # Disable thinking on 2.5-flash. Reconciliation is mechanical and the
+    # detailed prompt does the reasoning work. Thinking tokens otherwise
+    # eat the output budget and cause silent truncation on long docs.
     response = client.models.generate_content(
         model=MODEL,
         contents=request,
         config=types.GenerateContentConfig(
             temperature=0.0,
             response_mime_type="text/plain",
+            max_output_tokens=65536,
+            thinking_config=types.ThinkingConfig(thinking_budget=0),
         ),
     )
+    finish = None
+    if response.candidates:
+        finish = response.candidates[0].finish_reason
+        if finish and str(finish) not in ("FinishReason.STOP", "STOP"):
+            logging.warning("Gemini finish_reason=%s (output may be truncated)", finish)
     text = (response.text or "").strip()
     # Strip stray code fences if the model added them despite instructions.
     if text.startswith("```"):
