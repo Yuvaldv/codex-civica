@@ -1,10 +1,13 @@
 You are reconciling two imperfect representations of the same legal document.
 
-SOURCE A:
-Native PDF text extraction.
+NATIVE:
+Native PDF text extraction (pdftotext --layout). Preserves visual columns
+and spacing depth; uses Unicode bidi control marks; trustworthy on
+character identity but visually ordered.
 
-SOURCE B:
-Tesseract OCR extraction with layout information.
+OCR:
+Tesseract OCR extraction. Reading-order text; no bidi marks; may contain
+recognition errors on individual characters and words.
 
 Your task:
 Reconstruct the legal document conservatively into deterministic markdown.
@@ -21,6 +24,8 @@ Critical rules:
 8. Preserve signatures separately
 9. Mark uncertain regions explicitly
 10. Prefer omission over hallucination
+11. Break lines for each section (1. 2. (a), (b))
+12. don't break lines if it's the same section, and the page simply breaks the line because of the page strcutrue. 
 
 IMPORTANT — Margin notes semantics:
 
@@ -88,8 +93,10 @@ Uncertain regions:
 
 Additional instructions:
 
-* Prefer SOURCE A for exact text fidelity
-* Prefer SOURCE B for layout and hierarchy reconstruction
+* Prefer NATIVE for exact text fidelity (character identity, exact wording)
+* Prefer OCR for reading order and disambiguating bidi-marked sequences
+* When NATIVE and OCR disagree on a character, prefer NATIVE
+* When NATIVE and OCR disagree on word/line ordering, prefer OCR
 * Do not merge margin notes into operative text
 * Do not silently repair ambiguous text
 * Preserve all detectable section boundaries
