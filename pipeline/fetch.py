@@ -22,17 +22,28 @@ RETRY_DELAY = 2               # seconds between retries
 MAX_RETRIES = 3
 
 
-def fetch_bills(session, skip=0, top=100):
+def fetch_bills(session, skip=0, top=100, name_prefixes=None):
     """Fetch a page of enacted bills from the Knesset OData API.
+
+    Optional ``name_prefixes`` is a list of strings; when given, the OData
+    filter is extended with an OR of ``startswith(Name, '<prefix>')`` clauses
+    so the server returns only bills whose Name begins with one of them.
 
     Returns a list of bill dicts or raises requests.HTTPError on failure.
     """
-    url = (
-        f"{ODATA_BASE}/KNS_Bill"
-        f"?$filter=StatusID eq {STATUS_IN_EFFECT}"
-        f"&$top={top}&$skip={skip}&$format=json"
-    )
-    response = session.get(url, timeout=REQUEST_TIMEOUT)
+    filter_parts = [f"StatusID eq {STATUS_IN_EFFECT}"]
+    if name_prefixes:
+        # OData strings escape ' as '' (double single-quote)
+        clauses = [f"startswith(Name, '{p.replace(chr(39), chr(39)*2)}')" for p in name_prefixes]
+        filter_parts.append("(" + " or ".join(clauses) + ")")
+    filter_str = " and ".join(filter_parts)
+    params = {
+        "$filter": filter_str,
+        "$top": top,
+        "$skip": skip,
+        "$format": "json",
+    }
+    response = session.get(f"{ODATA_BASE}/KNS_Bill", params=params, timeout=REQUEST_TIMEOUT)
     response.raise_for_status()
     return response.json()["value"]
 
@@ -131,7 +142,7 @@ def save_manifest(manifest):
         json.dump(list(manifest.values()), f, ensure_ascii=False, indent=2)
 
 
-def main(limit=None):
+def main(limit=None, name_prefixes=None):
     """Main entry point: fetch all enacted laws and download their PDFs."""
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
@@ -142,12 +153,14 @@ def main(limit=None):
     logging.info("Loaded %d existing manifest entries.", len(manifest))
 
     # Paginate through KNS_Bill to collect all enacted laws
+    if name_prefixes:
+        logging.info("Filtering bills by name prefixes: %s", name_prefixes)
     logging.info("Fetching bill list from OData API...")
     all_bills = []
     skip = 0
     while True:
         try:
-            page = fetch_bills(session, skip=skip, top=PAGE_SIZE)
+            page = fetch_bills(session, skip=skip, top=PAGE_SIZE, name_prefixes=name_prefixes)
         except (requests.HTTPError, requests.ConnectionError, requests.Timeout) as e:
             logging.error("Failed to fetch bills at skip=%d: %s", skip, e)
             break
@@ -233,5 +246,11 @@ if __name__ == "__main__":
         "--limit", type=int, default=None,
         help="Fetch only first N laws (for testing)",
     )
+    parser.add_argument(
+        "--name-prefix", action="append", default=None, dest="name_prefixes",
+        help="Server-side filter: keep only bills whose Name starts with this string. "
+             "Repeat the flag for multiple prefixes (OR'd). Example: "
+             "--name-prefix 'חוק-יסוד' --name-prefix 'חוק יסוד'",
+    )
     args = parser.parse_args()
-    main(limit=args.limit)
+    main(limit=args.limit, name_prefixes=args.name_prefixes)
