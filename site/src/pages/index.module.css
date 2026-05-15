@@ -75,10 +75,8 @@
 }
 
 .countryFlag {
-  width: 56px;
-  height: 40px;
-  object-fit: contain;
-  border-radius: 3px;
+  font-size: 3rem;
+  line-height: 1;
   display: block;
 }
 

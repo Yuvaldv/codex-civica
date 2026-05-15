@@ -200,14 +200,26 @@ aside.theme-doc-sidebar-container {
   border-left: 1px solid var(--ifm-toc-border-color);
 }
 
-/* Remove the TOC panel (the "brief" on the right) */
-.theme-doc-toc-desktop {
-  display: none;
+/* Remove TOC panel on desktop and mobile */
+.theme-doc-toc-desktop,
+.theme-doc-toc-mobile {
+  display: none !important;
 }
 
 /* Expand content to fill the space left by the hidden TOC */
 [class*='docItemCol'] {
   max-width: 100% !important;
+}
+
+/* Group-by widget in mobile hamburger menu */
+@media (max-width: 996px) {
+  .navbar-sortby {
+    flex-direction: row;
+    padding: 0.6rem 1rem;
+    margin-left: 0;
+    width: 100%;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
 }
 
 /* Pull RTL law text closer to the right sidebar — remove right-side padding */

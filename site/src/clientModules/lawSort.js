@@ -140,15 +140,24 @@ function applyGroup(groupBy) {
   }
 }
 
+let _showGroupBy = false;
+
+function syncGroupByVisibility() {
+  document.querySelectorAll('[id="navbar-sortby"]').forEach(el => {
+    el.style.display = _showGroupBy ? 'flex' : 'none';
+  });
+}
+
 function syncSelect() {
-  const sel = document.getElementById('law-sort-select');
-  if (sel) sel.value = getGroup();
+  const val = getGroup();
+  document.querySelectorAll('[id="law-sort-select"]').forEach(sel => {
+    sel.value = val;
+  });
 }
 
 function updateVisibility(pathname) {
-  const el = document.getElementById('navbar-sortby');
-  if (!el) return;
-  el.style.display = pathname.includes('/laws') ? 'flex' : 'none';
+  _showGroupBy = pathname.includes('/laws');
+  syncGroupByVisibility();
 }
 
 export function onRouteDidUpdate({location}) {
@@ -162,13 +171,27 @@ if (typeof window !== 'undefined') {
     updateVisibility(window.location.pathname);
     syncSelect();
 
-    const sel = document.getElementById('law-sort-select');
-    if (sel) {
-      sel.addEventListener('change', e => {
-        setGroup(e.target.value);
-        applyGroup(e.target.value);
+    // Event delegation: catches both desktop and mobile hamburger selects
+    document.addEventListener('change', e => {
+      if (e.target && e.target.id === 'law-sort-select') {
+        const val = e.target.value;
+        setGroup(val);
+        syncSelect();
+        applyGroup(val);
+      }
+    });
+
+    // MutationObserver: re-sync when mobile hamburger mounts its copy of the widget
+    let rafId = null;
+    const obs = new MutationObserver(() => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(() => {
+        syncGroupByVisibility();
+        syncSelect();
+        rafId = null;
       });
-    }
+    });
+    obs.observe(document.body, {childList: true, subtree: true});
 
     setTimeout(() => applyGroup(getGroup()), 300);
   });
