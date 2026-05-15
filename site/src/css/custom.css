@@ -211,14 +211,27 @@ aside.theme-doc-sidebar-container {
   max-width: 100% !important;
 }
 
-/* Group-by widget in mobile hamburger menu */
+/* Group-by on mobile: keep in the top navbar bar, NOT in the hamburger */
 @media (max-width: 996px) {
-  .navbar-sortby {
-    flex-direction: row;
-    padding: 0.6rem 1rem;
+  /* Force the top-navbar copy visible (Docusaurus hides it on mobile by default) */
+  .navbar__inner .navbar-groupby-item {
+    display: flex !important;
+    align-items: center;
+  }
+
+  /* Drop the "Group by" label — only the select fits on mobile */
+  .navbar__inner .navbar-sortby__label {
+    display: none;
+  }
+
+  /* Reset desktop spacing so it sits tight next to the hamburger */
+  .navbar__inner .navbar-sortby {
     margin-left: 0;
-    width: 100%;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* Hide the duplicate copy that Docusaurus injects into the hamburger menu */
+  .navbar-sidebar .navbar-groupby-item {
+    display: none !important;
   }
 }
 
