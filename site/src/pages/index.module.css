@@ -75,8 +75,11 @@
 }
 
 .countryFlag {
-  font-size: 2.5rem;
-  line-height: 1;
+  width: 56px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 3px;
+  display: block;
 }
 
 .countryName {

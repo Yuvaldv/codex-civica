@@ -72,16 +72,14 @@
 
 .markdown h2 {
   font-size: 1.1rem;
-  margin-top: 1rem;
-  margin-bottom: 0.3rem;
+  margin: 0.75rem 0 0.25rem 0;
   font-weight: 600;
 }
 
 .markdown h3,
 .markdown h4 {
   font-size: 1rem;
-  margin-top: 0.75rem;
-  margin-bottom: 0.25rem;
+  margin: 0.6rem 0 0.2rem 0;
   font-weight: 600;
 }
 
@@ -97,8 +95,8 @@
   border-right: 4px solid var(--brand-gold);
   border-left: none;
   background: rgba(254, 203, 64, 0.08);
-  padding: 0.4rem 0.75rem;
-  margin: 0.5rem 0 0.5rem 2rem;
+  padding: 0.3rem 0.6rem;
+  margin: 0.4rem 0;
   font-size: 0.9rem;
   color: var(--ifm-color-emphasis-700);
   font-style: normal;

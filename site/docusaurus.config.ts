@@ -58,10 +58,9 @@ const config: Config = {
       title: 'Codex Civica',
       items: [
         {
-          type: 'docSidebar',
-          sidebarId: 'lawsSidebar',
+          type: 'html',
           position: 'left',
-          label: '🇮🇱',
+          value: '<a href="/codex-civica/laws/147449" class="navbar__link" title="Israel"><img src="/codex-civica/img/flag-il.svg" alt="Israel" width="28" height="20" style="vertical-align:middle;border-radius:2px;"/></a>',
         },
         {
           href: 'https://justsocial.io',
