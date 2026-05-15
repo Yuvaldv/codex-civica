@@ -5,7 +5,8 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'State',
-      collapsible: false,
+      collapsible: true,
+      collapsed: false,
       items: [
         {type: 'doc', id: '147453', label: 'חוק-יסוד: הכנסת'},
         {type: 'doc', id: '147468', label: 'חוק הירושה'},

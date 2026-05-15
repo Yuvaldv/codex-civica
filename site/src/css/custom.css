@@ -158,16 +158,26 @@
   color: #fff;
 }
 
-/* Sidebar section headers (State / Municipal) */
-.menu__list-item--collapsed > .menu__list-item-collapsible > .menu__link,
-.menu__list > .menu__list-item > .menu__link--sublist-caret,
-.menu__list > .menu__list-item:not([class*='collapsed']) > .menu__list-item-collapsible > .menu__link {
+/* State / Municipal top-level category headers — gold, uppercase, clickable */
+ul.menu__list > li.menu__list-item:not(.law-group) > .menu__list-item-collapsible > .menu__link {
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--brand-gold) !important;
-  pointer-events: none;
+}
+
+/* Inner law-group sub-categories — normal size, collapsible */
+li.law-group > .menu__list-item-collapsible > .menu__link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Collapse inner group list when toggled */
+li.law-group.menu__list-item--collapsed > ul.menu__list {
+  display: none;
 }
 
 /* Municipal placeholder header in sidebar */

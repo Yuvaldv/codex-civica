@@ -67,7 +67,7 @@ const config: Config = {
         {
           type: 'html',
           position: 'left',
-          value: '<div class="navbar-sortby" id="navbar-sortby" style="display:none"><span class="navbar-sortby__label">Order by</span><select id="law-sort-select" class="navbar-sortby__select"><option value="year">Year</option><option value="category">Category</option></select></div>',
+          value: '<div class="navbar-sortby" id="navbar-sortby" style="display:none"><span class="navbar-sortby__label">Group by</span><select id="law-sort-select" class="navbar-sortby__select"><option value="year">Year</option><option value="category">Category</option><option value="minister">Ministry</option><option value="status">Status</option></select></div>',
         },
         {
           href: 'https://justsocial.io',
