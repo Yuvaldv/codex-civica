@@ -1,30 +1,96 @@
-/**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
- */
-
-/* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-color-primary: #1a5276;
+  --ifm-color-primary-dark: #174666;
+  --ifm-color-primary-darker: #15415f;
+  --ifm-color-primary-darkest: #10334e;
+  --ifm-color-primary-light: #1d5e86;
+  --ifm-color-primary-lighter: #1f638d;
+  --ifm-color-primary-lightest: #23719e;
   --ifm-code-font-size: 95%;
+  --ifm-font-family-base: 'Segoe UI', 'Arial', sans-serif;
+  --ifm-heading-font-weight: 700;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
+  --ifm-color-primary: #5dade2;
+  --ifm-color-primary-dark: #3d9bd7;
+  --ifm-color-primary-darker: #2e8fc9;
+  --ifm-color-primary-darkest: #2273a3;
+  --ifm-color-primary-light: #7dbfe8;
+  --ifm-color-primary-lighter: #8ec8ec;
+  --ifm-color-primary-lightest: #afd9f2;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Hebrew law content — RTL */
+.markdown {
+  direction: rtl;
+  text-align: right;
+  font-size: 1.05rem;
+  line-height: 1.85;
+}
+
+/* Section headings — give breathing room */
+.markdown h1 {
+  font-size: 1.35rem;
+  margin-top: 2rem;
+  margin-bottom: 0.4rem;
+  border-bottom: none;
+}
+
+.markdown h2 {
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.markdown h3,
+.markdown h4 {
+  font-size: 1rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+/* First H1 is the law title — make it stand out */
+.markdown > h1:first-child {
+  font-size: 1.7rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--ifm-color-primary);
+}
+
+/* Margin notes (blockquotes) */
+.markdown blockquote {
+  border-right: 4px solid var(--ifm-color-primary-lighter);
+  border-left: none;
+  background: var(--ifm-color-emphasis-100);
+  padding: 0.4rem 0.75rem;
+  margin: 0.5rem 0 0.5rem 2rem;
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+  font-style: normal;
+}
+
+[data-theme='dark'] .markdown blockquote {
+  background: var(--ifm-color-emphasis-200);
+}
+
+/* Signatures and footnotes section */
+.markdown hr {
+  margin: 2rem 0;
+}
+
+/* Definition lists */
+.markdown ul {
+  padding-right: 1.5rem;
+  padding-left: 0;
+}
+
+/* Uncertain text marker */
+.markdown p:has(> [טקסט לא ודאי]) {
+  opacity: 0.7;
+  font-style: italic;
 }

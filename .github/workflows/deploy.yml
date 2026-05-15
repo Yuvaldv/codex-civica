@@ -3,8 +3,7 @@ name: Deploy Codex Civica
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -19,12 +18,13 @@ jobs:
           cache: npm
           cache-dependency-path: site/package-lock.json
       - name: Install dependencies
-        run: cd site && npm ci
+        run: npm ci
+        working-directory: site
       - name: Build site
-        run: cd site && npm run build
+        run: npm run build
+        working-directory: site
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site/build
