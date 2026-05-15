@@ -36,6 +36,7 @@ PIPELINE_DIR = Path(__file__).parent
 DATA_DIR = PIPELINE_DIR.parent / "data" / "raw" / "israel"
 OUT_DIR = PIPELINE_DIR.parent / "laws" / "israel"
 MANIFEST_PATH = DATA_DIR / "manifest.json"
+MANIFEST_LAWS_PATH = DATA_DIR / "manifest_laws.json"
 PROMPT_PATH = PIPELINE_DIR / "prompts" / "track2_gemini.md"
 
 MODEL = "gemini-2.5-flash"
@@ -101,16 +102,51 @@ def build_frontmatter(entry: dict) -> str:
     title = (entry.get("name_he") or "").replace('"', '\\"')
     pub_date = (entry.get("publication_date") or "")[:10]
     pdf_path = entry.get("pdf_path") or ""
-    bill_id = entry.get("bill_id")
     now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    lines = [
-        "---",
-        f"bill_id: {bill_id}",
-        f'title_he: "{title}"',
-        f"publication_date: {pub_date}" if pub_date else "publication_date: ~",
+    # Determine ID field: prefer law_id (IsraelLaw system), fall back to bill_id
+    law_id = entry.get("law_id")
+    bill_id = entry.get("bill_id")
+    id_line = f"law_id: {law_id}" if law_id else f"bill_id: {bill_id}"
+
+    lines = ["---", id_line, f'title_he: "{title}"']
+
+    if pub_date:
+        lines.append(f"publication_date: {pub_date}")
+    else:
+        lines.append("publication_date: ~")
+
+    latest = (entry.get("latest_publication_date") or "")[:10]
+    if latest and latest != pub_date:
+        lines.append(f"latest_publication_date: {latest}")
+
+    if entry.get("is_basic_law"):
+        lines.append("is_basic_law: true")
+    if entry.get("is_budget_law"):
+        lines.append("is_budget_law: true")
+    if entry.get("law_validity"):
+        lines.append(f'law_validity: "{entry["law_validity"]}"')
+
+    category = entry.get("category") or ""
+    if category:
+        lines.append(f"category: {category}")
+
+    # Tags from classifications
+    classifications = entry.get("classifications") or []
+    if classifications:
+        tag_list = "\n".join(f'  - "{c["desc"]}"' for c in classifications if c.get("desc"))
+        if tag_list:
+            lines.append("tags:")
+            lines.append(tag_list)
+
+    # Ministry IDs (name mapping TODO — legacy GovMinistryID range)
+    ministry_ids = entry.get("ministry_ids") or []
+    if ministry_ids:
+        lines.append(f"ministry_ids: {json.dumps(ministry_ids)}")
+
+    lines += [
         f"source_pdf: {pdf_path}",
-        f"generated_by: pipeline/reconcile.py",
+        "generated_by: pipeline/reconcile.py",
         f"model: {MODEL}",
         f"generated_at: {now}",
         "---",
@@ -119,10 +155,15 @@ def build_frontmatter(entry: dict) -> str:
     return "\n".join(lines)
 
 
+def _id_key(entry: dict) -> str:
+    """Return the primary ID string for an entry (law_id or bill_id)."""
+    return str(entry.get("law_id") or entry.get("bill_id") or "")
+
+
 def reconcile_one(client: genai.Client, prompt: str, entry: dict) -> str | None:
-    bill_id = entry["bill_id"]
-    native_path = DATA_DIR / f"{bill_id}.native.txt"
-    ocr_path = DATA_DIR / f"{bill_id}.ocr.txt"
+    entry_id = _id_key(entry)
+    native_path = DATA_DIR / f"{entry_id}.native.txt"
+    ocr_path = DATA_DIR / f"{entry_id}.ocr.txt"
 
     if not native_path.exists():
         logging.warning("Missing native: %s", native_path)
@@ -138,17 +179,25 @@ def reconcile_one(client: genai.Client, prompt: str, entry: dict) -> str | None:
     request = assemble_request(prompt, native_text, ocr_text)
     body = call_gemini(client, request)
     if not body:
-        logging.error("Empty response from Gemini for bill %s", bill_id)
+        logging.error("Empty response from Gemini for entry %s", entry_id)
         return None
 
     return build_frontmatter(entry) + body + ("\n" if not body.endswith("\n") else "")
 
 
-def main(force: bool = False, bill_ids: list[str] | None = None) -> int:
+def main(
+    force: bool = False,
+    bill_ids: list[str] | None = None,
+    manifest_path: Path | None = None,
+) -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
-    if not MANIFEST_PATH.exists():
-        logging.error("Manifest not found: %s", MANIFEST_PATH)
+    # Prefer manifest_laws.json if no override given and it exists
+    if manifest_path is None:
+        manifest_path = MANIFEST_LAWS_PATH if MANIFEST_LAWS_PATH.exists() else MANIFEST_PATH
+
+    if not manifest_path.exists():
+        logging.error("Manifest not found: %s", manifest_path)
         return 1
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -156,13 +205,13 @@ def main(force: bool = False, bill_ids: list[str] | None = None) -> int:
     api_key = load_api_key()
     client = genai.Client(api_key=api_key)
 
-    with open(MANIFEST_PATH, encoding="utf-8") as f:
+    with open(manifest_path, encoding="utf-8") as f:
         manifest = json.load(f)
 
     selected = [e for e in manifest if e.get("pdf_path")]
     if bill_ids:
         wanted = set(bill_ids)
-        selected = [e for e in selected if str(e["bill_id"]) in wanted]
+        selected = [e for e in selected if _id_key(e) in wanted]
 
     if not selected:
         logging.warning("No PDFs to process.")
@@ -170,19 +219,19 @@ def main(force: bool = False, bill_ids: list[str] | None = None) -> int:
 
     successes = 0
     for entry in selected:
-        bill_id = entry["bill_id"]
-        out_path = OUT_DIR / f"{bill_id}.md"
+        entry_id = _id_key(entry)
+        out_path = OUT_DIR / f"{entry_id}.md"
 
         if out_path.exists() and not force:
             logging.info("skip (exists): %s", out_path.name)
             successes += 1
             continue
 
-        logging.info("reconcile: bill %s (%s)", bill_id, entry.get("name_he", ""))
+        logging.info("reconcile: %s (%s)", entry_id, entry.get("name_he", ""))
         try:
             md = reconcile_one(client, prompt, entry)
         except Exception as exc:  # noqa: BLE001 — we log and continue per pipeline policy
-            logging.error("Gemini call failed for bill %s: %s", bill_id, exc)
+            logging.error("Gemini call failed for entry %s: %s", entry_id, exc)
             continue
 
         if md is None:
