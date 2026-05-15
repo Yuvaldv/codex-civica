@@ -106,18 +106,26 @@ function applyGroup(groupBy) {
 
 // ─── metadata bubbles on law pages ─────────────────────────────────────────
 
-function injectMetaBubbles(pathname) {
-  const m = pathname.match(/\/laws\/(\d+)/);
-  if (!m) return false;
-  const id = m[1];
-  const meta = GENERATED_LAW_META[id];
+// Single shared injection state — prevents two concurrent scheduleInject
+// closures from both succeeding (which caused the double-bar bug).
+let _pendingTimers = [];
+let _injectedLawId = null;
+
+function cancelPendingInject() {
+  _pendingTimers.forEach(clearTimeout);
+  _pendingTimers = [];
+}
+
+function injectMetaBubbles(lawId) {
+  const meta = GENERATED_LAW_META[lawId];
   if (!meta) return false;
 
-  // Find container first — bail early if page hasn't rendered yet
   const container = document.querySelector('.markdown');
   if (!container) return false;
 
-  // Remove any previously injected bar (idempotent)
+  // Already showing the correct bar — nothing to do.
+  if (_injectedLawId === lawId && container.querySelector('.law-meta-bar')) return true;
+
   document.querySelectorAll('.law-meta-bar').forEach(el => el.remove());
 
   const bar = document.createElement('div');
@@ -131,15 +139,35 @@ function injectMetaBubbles(pathname) {
     bar.appendChild(s);
   };
 
+  // Fixed order, all Hebrew: year · category · ministry · status
+  if (meta.year) addBadge(String(meta.year), 'year');
   addBadge(meta.categoryLabelHe || meta.categoryLabel, 'category');
-  (meta.tags || []).forEach(t => addBadge(t, 'tag'));
+  addBadge(meta.ministerHe || null, 'minister');
   if (meta.statusHe) addBadge(meta.statusHe, 'status-' + (meta.status || '').toLowerCase().replace(/\s+/g, '-'));
-  if (meta.year)     addBadge(String(meta.year), 'year');
-  addBadge(meta.ministerHe || meta.minister || null, 'minister');
 
-  // Prepend so bar is always the very first element in .markdown
   container.insertBefore(bar, container.firstChild);
+  _injectedLawId = lawId;
   return true;
+}
+
+function scheduleInject(pathname) {
+  cancelPendingInject();
+
+  const m = pathname.match(/\/laws\/(\d+)/);
+  if (!m) {
+    // Left a law page — clear bar and state.
+    document.querySelectorAll('.law-meta-bar').forEach(el => el.remove());
+    _injectedLawId = null;
+    return;
+  }
+  const lawId = m[1];
+
+  const delays = [0, 150, 400];
+  _pendingTimers = delays.map(ms => setTimeout(() => {
+    if (_injectedLawId !== lawId || !document.querySelector('.law-meta-bar')) {
+      injectMetaBubbles(lawId);
+    }
+  }, ms));
 }
 
 // ─── navbar Group-by visibility ─────────────────────────────────────────────
@@ -163,16 +191,6 @@ function updateVisibility(pathname) {
 }
 
 // ─── Docusaurus lifecycle hooks ─────────────────────────────────────────────
-
-function scheduleInject(pathname) {
-  const delays = [80, 250, 600];
-  let done = false;
-  delays.forEach(ms => {
-    setTimeout(() => {
-      if (!done) done = injectMetaBubbles(pathname);
-    }, ms);
-  });
-}
 
 export function onRouteDidUpdate({ location }) {
   updateVisibility(location.pathname);
@@ -208,6 +226,6 @@ if (typeof window !== 'undefined') {
     obs.observe(document.body, { childList: true, subtree: true });
 
     applyGroup(getGroup());
-    scheduleInject(window.location.pathname);
+    // onRouteDidUpdate also fires on initial load in Docusaurus — no second scheduleInject needed.
   });
 }
