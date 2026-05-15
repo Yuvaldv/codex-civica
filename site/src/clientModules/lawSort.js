@@ -2,30 +2,31 @@ import { GENERATED_LAW_META } from '../generatedLawMeta';
 
 // ─── Storage ──────────────────────────────────────────────────────────────────
 
-function readGroup()    { try { return localStorage.getItem('law-group') || 'year'; } catch { return 'year'; } }
-function writeGroup(v)  { try { localStorage.setItem('law-group', v); } catch {} }
+function readGroup()   { try { return localStorage.getItem('law-group') || 'year'; } catch { return 'year'; } }
+function writeGroup(v) { try { localStorage.setItem('law-group', v); } catch {} }
 
-// ─── URL helpers ──────────────────────────────────────────────────────────────
-
-function lawIdFromPath(path) { const m = (path || '').match(/\/laws\/(\d+)/); return m ? m[1] : null; }
-function lawIdFromHref(href) { const m = (href || '').match(/\/laws\/(\d+)/); return m ? m[1] : null; }
-
-// ─── Sidebar grouping ─────────────────────────────────────────────────────────
+// ─── Group key ────────────────────────────────────────────────────────────────
 
 const STATUS_HE = { 'In Effect': 'תקף', 'Cancelled': 'בטל', 'Expired': 'פקע' };
 
 function groupKey(by, meta) {
   switch (by) {
-    case 'year':     return meta.year ? String(meta.year) : '?';
     case 'category': return meta.categoryLabelHe || meta.categoryLabel || 'אחר';
     case 'minister': return meta.ministerHe || meta.minister || 'אחר';
     case 'status':   return meta.statusHe || STATUS_HE[meta.status] || meta.status || '?';
-    default:         return meta.year ? String(meta.year) : '?';
+    default:         return meta.year ? String(meta.year) : '?'; // 'year' + fallback
   }
 }
 
+// ─── Sidebar grouping ─────────────────────────────────────────────────────────
+
+function lawIdFromHref(href) {
+  const m = (href || '').match(/\/laws\/(\d+)/);
+  return m ? m[1] : null;
+}
+
 function makeGroupEl(label, items) {
-  const li  = document.createElement('li');
+  const li = document.createElement('li');
   li.className = 'menu__list-item law-group';
 
   const wrap = document.createElement('div');
@@ -36,7 +37,6 @@ function makeGroupEl(label, items) {
   btn.type = 'button';
   btn.textContent = label;
   btn.addEventListener('click', () => li.classList.toggle('menu__list-item--collapsed'));
-
   wrap.appendChild(btn);
   li.appendChild(wrap);
 
@@ -47,16 +47,17 @@ function makeGroupEl(label, items) {
   return li;
 }
 
-function applyGroup(by) {
-  const lawList = document.querySelector('ul.theme-doc-sidebar-menu.menu__list');
-  if (!lawList) return;
-
-  // Purge our custom group containers FIRST so they don't pollute collection.
-  // (React hydration can re-add fresh flat items alongside our old group nodes,
-  //  causing duplicates if we collect before purging.)
+// Applies grouping to a single sidebar <ul>. Safe to call multiple times —
+// always purges old groups before collecting, and deduplicates by law ID.
+function applyGroupToList(lawList, by) {
+  // Purge our injected group containers first. This must happen before
+  // collecting items so that React-hydrated fresh items and old group items
+  // are never both in the collection at the same time (which caused duplicates).
   for (const g of lawList.querySelectorAll(':scope > li.law-group')) g.remove();
 
-  // Collect direct-child law items, deduplicated by law ID.
+  // Collect direct-child law <li> elements, keyed by law ID.
+  // Using a Map deduplicates if React hydration left stale nodes alongside
+  // fresh ones (last occurrence wins — prefer freshest in DOM order).
   const byId = new Map();
   for (const a of lawList.querySelectorAll('a[href*="/laws/"]')) {
     const id = lawIdFromHref(a.getAttribute('href'));
@@ -82,79 +83,12 @@ function applyGroup(by) {
   for (const key of sorted) lawList.appendChild(makeGroupEl(key, groups.get(key)));
 }
 
-// ─── Metadata bar ─────────────────────────────────────────────────────────────
-
-let _barObserver  = null;
-let _currentLawId = null;
-
-function buildBar(lawId) {
-  const meta = GENERATED_LAW_META[lawId];
-  if (!meta) return null;
-
-  const bar = document.createElement('div');
-  bar.className = 'law-meta-bar';
-  bar.dataset.lawId = lawId;
-
-  const badge = (text, type) => {
-    if (!text) return;
-    const s = document.createElement('span');
-    s.className = `law-meta-badge law-meta-badge--${type}`;
-    s.textContent = text;
-    bar.appendChild(s);
-  };
-
-  // Fixed order, all Hebrew: year · category · ministry · status
-  badge(meta.year ? String(meta.year) : null, 'year');
-  badge(meta.categoryLabelHe || meta.categoryLabel || null, 'category');
-  badge(meta.ministerHe || null, 'minister');
-  if (meta.statusHe) badge(meta.statusHe, 'status-' + (meta.status || '').toLowerCase().replace(/\s+/g, '-'));
-
-  return bar;
-}
-
-function tryInjectBar(lawId) {
-  const bar = buildBar(lawId);
-  if (!bar) return false;
-  const container = document.querySelector('.markdown');
-  if (!container) return false;
-  document.querySelectorAll('.law-meta-bar').forEach(el => el.remove());
-  container.insertBefore(bar, container.firstChild);
-  return true;
-}
-
-function stopBarObserver() {
-  if (_barObserver) { _barObserver.disconnect(); _barObserver = null; }
-}
-
-function watchForBar(lawId) {
-  stopBarObserver();
-  _currentLawId = lawId;
-
-  // Try immediately — on initial load .markdown is usually already present.
-  if (tryInjectBar(lawId)) return;
-
-  // Otherwise watch for .markdown to appear. Disconnects after first successful
-  // inject so it can never fire twice for the same page.
-  let safetyTimer = setTimeout(stopBarObserver, 4000);
-
-  _barObserver = new MutationObserver(() => {
-    if (_currentLawId !== lawId) { clearTimeout(safetyTimer); stopBarObserver(); return; }
-    if (tryInjectBar(lawId))     { clearTimeout(safetyTimer); stopBarObserver(); }
-  });
-  _barObserver.observe(document.getElementById('__docusaurus') || document.body, {
-    childList: true,
-    subtree: true,
-  });
-}
-
-function handleRoute(pathname) {
-  const lawId = lawIdFromPath(pathname);
-  if (lawId) {
-    watchForBar(lawId);
-  } else {
-    stopBarObserver();
-    _currentLawId = null;
-    document.querySelectorAll('.law-meta-bar').forEach(el => el.remove());
+// Applies grouping to ALL sidebar instances in the document.
+// Docusaurus renders a second sidebar for the mobile hamburger drawer —
+// both must be grouped independently.
+function applyGroup(by) {
+  for (const list of document.querySelectorAll('ul.theme-doc-sidebar-menu.menu__list')) {
+    applyGroupToList(list, by);
   }
 }
 
@@ -173,16 +107,53 @@ function syncSelect() {
   document.querySelectorAll('[id="law-sort-select"]').forEach(sel => { sel.value = val; });
 }
 
+// ─── DOM observer (mobile sidebar) ───────────────────────────────────────────
+// Watches for Docusaurus mounting new sidebar instances (e.g. the mobile
+// hamburger drawer). Groups only newly-added sidebar <ul> elements so it
+// cannot trigger a mutation loop from its own DOM writes.
+
+function startDomObserver() {
+  let rafId = null;
+
+  const obs = new MutationObserver((mutations) => {
+    // Sync navbar UI at most once per frame.
+    if (!rafId) {
+      rafId = requestAnimationFrame(() => {
+        syncGroupByVisibility();
+        syncSelect();
+        rafId = null;
+      });
+    }
+
+    // Look for newly-added sidebar <ul> elements and group them immediately.
+    // We intentionally do NOT call applyGroup() here — that would re-traverse
+    // the whole document and could loop. Instead we only touch added nodes.
+    for (const mut of mutations) {
+      for (const node of mut.addedNodes) {
+        if (node.nodeType !== 1) continue;
+        // Is the added node itself a sidebar list?
+        if (node.matches('ul.theme-doc-sidebar-menu.menu__list')) {
+          applyGroupToList(node, readGroup());
+          continue;
+        }
+        // Does it contain sidebar lists? (e.g. the hamburger drawer wrapper)
+        for (const list of node.querySelectorAll('ul.theme-doc-sidebar-menu.menu__list')) {
+          applyGroupToList(list, readGroup());
+        }
+      }
+    }
+  });
+
+  obs.observe(document.body, { childList: true, subtree: true });
+}
+
 // ─── Docusaurus lifecycle hook ────────────────────────────────────────────────
 
 export function onRouteDidUpdate({ location }) {
   _showGroupBy = location.pathname.includes('/laws');
   syncGroupByVisibility();
   syncSelect();
-  requestAnimationFrame(() => {
-    applyGroup(readGroup());
-    handleRoute(location.pathname);
-  });
+  requestAnimationFrame(() => applyGroup(readGroup()));
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
@@ -201,15 +172,7 @@ if (typeof window !== 'undefined') {
       }
     });
 
-    // Re-sync group-by visibility when Docusaurus mounts mobile hamburger.
-    let rafId = null;
-    const obs = new MutationObserver(() => {
-      if (rafId) return;
-      rafId = requestAnimationFrame(() => { syncGroupByVisibility(); syncSelect(); rafId = null; });
-    });
-    obs.observe(document.body, { childList: true, subtree: true });
-
+    startDomObserver();
     applyGroup(readGroup());
-    // onRouteDidUpdate fires on initial load in Docusaurus — bar injection handled there.
   });
 }
