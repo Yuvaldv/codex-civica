@@ -115,6 +115,72 @@
   padding-left: 0;
 }
 
+/* Emoji flag in navbar */
+.navbar-flag {
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0 0.25rem;
+  text-decoration: none;
+}
+
+/* Order-by dropdown in navbar */
+.navbar-sortby {
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: 0.5rem;
+}
+
+.navbar-sortby__label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.navbar-sortby__select {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(254, 203, 64, 0.4);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  cursor: pointer;
+  outline: none;
+}
+
+.navbar-sortby__select:hover,
+.navbar-sortby__select:focus {
+  border-color: var(--brand-gold);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.navbar-sortby__select option {
+  background: var(--brand-navy);
+  color: #fff;
+}
+
+/* Sidebar section headers (State / Municipal) */
+.menu__list-item--collapsed > .menu__list-item-collapsible > .menu__link,
+.menu__list > .menu__list-item > .menu__link--sublist-caret,
+.menu__list > .menu__list-item:not([class*='collapsed']) > .menu__list-item-collapsible > .menu__link {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-gold) !important;
+  pointer-events: none;
+}
+
+/* Municipal placeholder header in sidebar */
+.sidebar-section-header {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-gold);
+  padding: 0.6rem 0.75rem 0.3rem;
+  margin-top: 0.5rem;
+}
+
 /* Doc layout: sidebar on right, TOC removed */
 
 /* Move law-list sidebar to the right */

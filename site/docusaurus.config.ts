@@ -31,6 +31,8 @@ const config: Config = {
     locales: ['en'],
   },
 
+  clientModules: ['./src/clientModules/lawSort.js'],
+
   presets: [
     [
       'classic',
@@ -60,7 +62,12 @@ const config: Config = {
         {
           type: 'html',
           position: 'left',
-          value: '<a href="/codex-civica/laws/147449" class="navbar__link" title="Israel"><img src="/codex-civica/img/flag-il.svg" alt="Israel" width="28" height="20" style="vertical-align:middle;border-radius:2px;"/></a>',
+          value: '<a href="/codex-civica/laws/147449" class="navbar__link navbar-flag" title="Israel">🇮🇱</a>',
+        },
+        {
+          type: 'html',
+          position: 'left',
+          value: '<div class="navbar-sortby" id="navbar-sortby" style="display:none"><span class="navbar-sortby__label">Order by</span><select id="law-sort-select" class="navbar-sortby__select"><option value="year">Year</option><option value="category">Category</option></select></div>',
         },
         {
           href: 'https://justsocial.io',
