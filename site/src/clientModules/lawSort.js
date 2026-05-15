@@ -23,7 +23,7 @@ function getGroupKey(groupBy, meta) {
   switch (groupBy) {
     case 'year':     return meta.year ? String(meta.year) : '?';
     case 'category': return meta.categoryLabelHe || meta.categoryLabel || 'אחר';
-    case 'minister': return meta.minister || 'אחר';
+    case 'minister': return meta.ministerHe || meta.minister || 'אחר';
     case 'status':   return meta.statusHe || STATUS_HE[meta.status] || meta.status || '?';
     default:         return meta.year ? String(meta.year) : '?';
   }
@@ -108,17 +108,17 @@ function applyGroup(groupBy) {
 
 function injectMetaBubbles(pathname) {
   const m = pathname.match(/\/laws\/(\d+)/);
-  if (!m) return;
+  if (!m) return false;
   const id = m[1];
   const meta = GENERATED_LAW_META[id];
-  if (!meta) return;
+  if (!meta) return false;
 
-  // Remove any previously injected bar
+  // Find container first — bail early if page hasn't rendered yet
+  const container = document.querySelector('.markdown');
+  if (!container) return false;
+
+  // Remove any previously injected bar (idempotent)
   document.querySelectorAll('.law-meta-bar').forEach(el => el.remove());
-
-  // Find insertion point: after the first h1 in .markdown
-  const h1 = document.querySelector('.markdown > h1');
-  if (!h1) return;
 
   const bar = document.createElement('div');
   bar.className = 'law-meta-bar';
@@ -135,9 +135,11 @@ function injectMetaBubbles(pathname) {
   (meta.tags || []).forEach(t => addBadge(t, 'tag'));
   if (meta.statusHe) addBadge(meta.statusHe, 'status-' + (meta.status || '').toLowerCase().replace(/\s+/g, '-'));
   if (meta.year)     addBadge(String(meta.year), 'year');
-  if (meta.minister) addBadge(meta.minister, 'minister');
+  addBadge(meta.ministerHe || meta.minister || null, 'minister');
 
-  h1.insertAdjacentElement('afterend', bar);
+  // Prepend so bar is always the very first element in .markdown
+  container.insertBefore(bar, container.firstChild);
+  return true;
 }
 
 // ─── navbar Group-by visibility ─────────────────────────────────────────────
@@ -162,13 +164,23 @@ function updateVisibility(pathname) {
 
 // ─── Docusaurus lifecycle hooks ─────────────────────────────────────────────
 
+function scheduleInject(pathname) {
+  const delays = [80, 250, 600];
+  let done = false;
+  delays.forEach(ms => {
+    setTimeout(() => {
+      if (!done) done = injectMetaBubbles(pathname);
+    }, ms);
+  });
+}
+
 export function onRouteDidUpdate({ location }) {
   updateVisibility(location.pathname);
   syncSelect();
-  requestAnimationFrame(() => setTimeout(() => {
+  requestAnimationFrame(() => {
     applyGroup(getGroup());
-    injectMetaBubbles(location.pathname);
-  }, 80));
+    scheduleInject(location.pathname);
+  });
 }
 
 // ─── initial page load ───────────────────────────────────────────────────────
@@ -195,9 +207,7 @@ if (typeof window !== 'undefined') {
     });
     obs.observe(document.body, { childList: true, subtree: true });
 
-    setTimeout(() => {
-      applyGroup(getGroup());
-      injectMetaBubbles(window.location.pathname);
-    }, 300);
+    applyGroup(getGroup());
+    scheduleInject(window.location.pathname);
   });
 }

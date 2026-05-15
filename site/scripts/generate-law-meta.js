@@ -75,6 +75,24 @@ const MINISTRY_EN = {
   48: 'Foreign Affairs', 49: 'Defense', 50: 'Prime Minister',
 };
 
+// Legacy ministry ID -> Hebrew name
+const MINISTRY_HE = {
+  1: 'ראש הממשלה', 2: 'אוצר', 3: 'חוץ', 4: 'ביטחון',
+  5: 'פנים', 6: 'משפטים', 7: 'חינוך', 8: 'בריאות',
+  9: 'רווחה', 10: 'עבודה', 11: 'חקלאות', 12: 'מסחר ותעשייה',
+  13: 'תקשורת', 14: 'בינוי ושיכון', 15: 'תחבורה', 16: 'תיירות',
+  17: 'אנרגיה', 18: 'איכות הסביבה', 19: 'ביטחון', 20: 'שירותי דת',
+  21: 'משטרה', 22: 'מדע', 23: 'תרבות', 24: 'כנסת',
+  25: 'מבקר המדינה', 26: 'תשתיות לאומיות', 27: 'עלייה וקליטה',
+  28: 'ספורט', 29: 'פיתוח הנגב והגליל', 30: 'מודיעין',
+  31: 'ענינים אסטרטגיים', 32: 'ענין התפוצות', 33: 'מיעוטים',
+  34: 'שוויון חברתי', 35: 'כלכלה', 36: 'חדשנות',
+  37: 'עבודה ורווחה', 38: 'פנים', 39: 'משפטים', 40: 'אוצר',
+  41: 'בריאות', 42: 'חינוך', 43: 'חקלאות', 44: 'תחבורה',
+  45: 'איכות הסביבה', 46: 'בינוי ושיכון', 47: 'תקשורת',
+  48: 'חוץ', 49: 'ביטחון', 50: 'ראש הממשלה',
+};
+
 function getField(fm, key) {
   const m = fm.match(new RegExp('^' + key + ':\\s*(.+)', 'm'));
   if (!m) return null;
@@ -127,8 +145,8 @@ for (const fname of fs.readdirSync(LAWS_DIR).sort()) {
   const categoryLabelHe = CATEGORY_HE[slug] || categoryLabel;
 
   const ministryIds = getMinistryIds(text);
-  const ministerNames = [...new Set(ministryIds.map(id => MINISTRY_EN[id]).filter(Boolean))];
-  const minister = ministerNames[0] || 'Unknown';
+  const minister = ministryIds.map(id => MINISTRY_EN[id]).filter(Boolean)[0] || 'Unknown';
+  const ministerHe = ministryIds.map(id => MINISTRY_HE[id]).filter(Boolean)[0] || null;
 
   const validity = (getField(fm, 'law_validity') || '').trim();
   const status = validity === 'תקף' ? 'In Effect'
@@ -139,7 +157,7 @@ for (const fname of fs.readdirSync(LAWS_DIR).sort()) {
 
   const tags = getTags(text);
 
-  meta[String(lawId)] = { year, categoryLabel, categoryLabelHe, minister, status, statusHe, tags };
+  meta[String(lawId)] = { year, categoryLabel, categoryLabelHe, minister, ministerHe, status, statusHe, tags };
   count++;
 }
 

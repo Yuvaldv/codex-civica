@@ -5,6 +5,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Commerce & Industry",
     "categoryLabelHe": "מסחר ותעשייה",
     "minister": "Justice",
+    "ministerHe": "משפטים",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -16,6 +17,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "Cancelled",
     "statusHe": "בטל",
     "tags": [
@@ -27,6 +29,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -39,6 +42,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Personal Status",
     "categoryLabelHe": "מעמד אישי",
     "minister": "Justice",
+    "ministerHe": "משפטים",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -50,6 +54,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Environment",
     "categoryLabelHe": "איכות הסביבה",
     "minister": "Interior",
+    "ministerHe": "פנים",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -61,6 +66,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Labor",
     "categoryLabelHe": "עבודה",
     "minister": "Labor & Welfare",
+    "ministerHe": "עבודה ורווחה",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -72,6 +78,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Knesset",
     "categoryLabelHe": "כנסת",
     "minister": "Justice",
+    "ministerHe": "משפטים",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -83,6 +90,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -95,6 +103,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Health",
     "categoryLabelHe": "בריאות",
     "minister": "Health",
+    "ministerHe": "בריאות",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -106,6 +115,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Real Estate",
     "categoryLabelHe": "מקרקעין",
     "minister": "Tourism",
+    "ministerHe": "תיירות",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -119,6 +129,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Communications",
     "categoryLabelHe": "תקשורת",
     "minister": "Housing",
+    "ministerHe": "בינוי ושיכון",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -130,6 +141,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Employment",
     "categoryLabelHe": "תעסוקה",
     "minister": "Labor & Welfare",
+    "ministerHe": "עבודה ורווחה",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -141,6 +153,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Environment",
     "categoryLabelHe": "איכות הסביבה",
     "minister": "Justice",
+    "ministerHe": "משפטים",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -152,6 +165,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Employment",
     "categoryLabelHe": "תעסוקה",
     "minister": "Strategic Affairs",
+    "ministerHe": "ענינים אסטרטגיים",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -163,6 +177,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Defense",
     "categoryLabelHe": "ביטחון",
     "minister": "Defense",
+    "ministerHe": "ביטחון",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -175,6 +190,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Immigration",
     "categoryLabelHe": "עלייה וקליטה",
     "minister": "Labor & Welfare",
+    "ministerHe": "עבודה ורווחה",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -187,6 +203,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Defense",
     "categoryLabelHe": "ביטחון",
     "minister": "Defense",
+    "ministerHe": "ביטחון",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -199,6 +216,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -211,6 +229,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Defense",
     "categoryLabelHe": "ביטחון",
     "minister": "Defense",
+    "ministerHe": "ביטחון",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -223,6 +242,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -235,6 +255,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -246,6 +267,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -257,6 +279,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -268,6 +291,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -279,6 +303,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -291,6 +316,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -303,6 +329,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Basic Laws",
     "categoryLabelHe": "חוקי יסוד",
     "minister": "Knesset",
+    "ministerHe": "כנסת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -315,6 +342,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Taxation",
     "categoryLabelHe": "מיסוי",
     "minister": "Tourism",
+    "ministerHe": "תיירות",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -327,6 +355,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Maritime",
     "categoryLabelHe": "ים ומשפט ימי",
     "minister": "Tourism",
+    "ministerHe": "תיירות",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -339,6 +368,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Taxation",
     "categoryLabelHe": "מיסוי",
     "minister": "Tourism",
+    "ministerHe": "תיירות",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -351,6 +381,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Local Government",
     "categoryLabelHe": "רשויות מקומיות",
     "minister": "Finance",
+    "ministerHe": "אוצר",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -362,6 +393,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Housing",
     "categoryLabelHe": "דיור ובנייה",
     "minister": "Economy",
+    "ministerHe": "כלכלה",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -374,6 +406,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Personal Status",
     "categoryLabelHe": "מעמד אישי",
     "minister": "Economy",
+    "ministerHe": "כלכלה",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -386,6 +419,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Environment",
     "categoryLabelHe": "איכות הסביבה",
     "minister": "Justice",
+    "ministerHe": "משפטים",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -397,6 +431,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Welfare",
     "categoryLabelHe": "רווחה",
     "minister": "Education",
+    "ministerHe": "חינוך",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -408,6 +443,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Religion",
     "categoryLabelHe": "דת",
     "minister": "Finance",
+    "ministerHe": "אוצר",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -420,6 +456,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Religion",
     "categoryLabelHe": "דת",
     "minister": "Communications",
+    "ministerHe": "תקשורת",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -431,6 +468,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Criminal Law",
     "categoryLabelHe": "משפט פלילי",
     "minister": "Economy",
+    "ministerHe": "כלכלה",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -442,6 +480,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Security",
     "categoryLabelHe": "ביטחון הציבור",
     "minister": "Finance",
+    "ministerHe": "אוצר",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -454,6 +493,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Health",
     "categoryLabelHe": "בריאות",
     "minister": "Police",
+    "ministerHe": "משטרה",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -466,6 +506,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Civil Law",
     "categoryLabelHe": "משפט אזרחי",
     "minister": "Economy",
+    "ministerHe": "כלכלה",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -477,6 +518,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Environment",
     "categoryLabelHe": "איכות הסביבה",
     "minister": "Finance",
+    "ministerHe": "אוצר",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -489,6 +531,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Religion",
     "categoryLabelHe": "דת",
     "minister": "Finance",
+    "ministerHe": "אוצר",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -501,6 +544,7 @@ export const GENERATED_LAW_META = {
     "categoryLabel": "Foreign Affairs",
     "categoryLabelHe": "יחסי חוץ",
     "minister": "Economy",
+    "ministerHe": "כלכלה",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
@@ -509,11 +553,340 @@ export const GENERATED_LAW_META = {
       "ערכאות שיפוטיות"
     ]
   },
+  "2000096": {
+    "year": 1954,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "תיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים",
+      "חוץ"
+    ]
+  },
+  "2000097": {
+    "year": 1991,
+    "categoryLabel": "Foreign Affairs",
+    "categoryLabelHe": "יחסי חוץ",
+    "minister": "Economy",
+    "ministerHe": "כלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חוץ",
+      "מעמד אישי",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000098": {
+    "year": 1960,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "תיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים",
+      "חוץ"
+    ]
+  },
+  "2000100": {
+    "year": 1976,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "תיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים",
+      "חוץ"
+    ]
+  },
+  "2000101": {
+    "year": 1986,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "תיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים",
+      "חוץ",
+      "פיתוח והשקעות"
+    ]
+  },
+  "2000102": {
+    "year": 1956,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "תיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים",
+      "חוץ"
+    ]
+  },
+  "2000104": {
+    "year": 1954,
+    "categoryLabel": "Employment",
+    "categoryLabelHe": "תעסוקה",
+    "minister": "Strategic Affairs",
+    "ministerHe": "ענינים אסטרטגיים",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תעסוקה"
+    ]
+  },
+  "2000107": {
+    "year": 1950,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Economy",
+    "ministerHe": "כלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תאגידים"
+    ]
+  },
+  "2000108": {
+    "year": 1950,
+    "categoryLabel": "Criminal Law",
+    "categoryLabelHe": "משפט פלילי",
+    "minister": "Economy",
+    "ministerHe": "כלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט פלילי"
+    ]
+  },
+  "2000110": {
+    "year": 1954,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Finance",
+    "ministerHe": "אוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בחירות"
+    ]
+  },
+  "2000111": {
+    "year": 1994,
+    "categoryLabel": "Health",
+    "categoryLabelHe": "בריאות",
+    "minister": "Police",
+    "ministerHe": "משטרה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בריאות"
+    ]
+  },
+  "2000112": {
+    "year": 1989,
+    "categoryLabel": "Health",
+    "categoryLabelHe": "בריאות",
+    "minister": "Police",
+    "ministerHe": "משטרה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בריאות",
+      "רווחה"
+    ]
+  },
+  "2000113": {
+    "year": 1997,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "תיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "פנסיה, ביטוח ושוק ההון",
+      "תחבורה ובטיחות בדרכים"
+    ]
+  },
+  "2000115": {
+    "year": 1950,
+    "categoryLabel": "Criminal Law",
+    "categoryLabelHe": "משפט פלילי",
+    "minister": "Economy",
+    "ministerHe": "כלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט פלילי"
+    ]
+  },
+  "2000116": {
+    "year": 1965,
+    "categoryLabel": "Housing",
+    "categoryLabelHe": "דיור ובנייה",
+    "minister": "Religious Affairs",
+    "ministerHe": "שירותי דת",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בינוי ושיכון",
+      "מקרקעין"
+    ]
+  },
+  "2000117": {
+    "year": 1969,
+    "categoryLabel": "Judiciary",
+    "categoryLabelHe": "שפיטה",
+    "minister": "Economy",
+    "ministerHe": "כלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ערכאות שיפוטיות",
+      "תעסוקה"
+    ]
+  },
+  "2000118": {
+    "year": 1952,
+    "categoryLabel": "Maritime",
+    "categoryLabelHe": "ים ומשפט ימי",
+    "minister": "Economy",
+    "ministerHe": "כלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ספנות",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000119": {
+    "year": 1995,
+    "categoryLabel": "Personal Status",
+    "categoryLabelHe": "מעמד אישי",
+    "minister": "Economy",
+    "ministerHe": "כלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מעמד אישי",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000120": {
+    "year": 1976,
+    "categoryLabel": "Education",
+    "categoryLabelHe": "חינוך",
+    "minister": "Sports",
+    "ministerHe": "ספורט",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חינוך",
+      "חקלאות"
+    ]
+  },
+  "2000124": {
+    "year": 1986,
+    "categoryLabel": "Housing",
+    "categoryLabelHe": "דיור ובנייה",
+    "minister": "Finance",
+    "ministerHe": "אוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בינוי ושיכון",
+      "מקרקעין",
+      "תכנון ובנייה"
+    ]
+  },
+  "2000130": {
+    "year": 1956,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Economy",
+    "ministerHe": "כלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות",
+      "מעמד אישי",
+      "ערכאות שיפוטיות",
+      "ראיות וסדרי דין"
+    ]
+  },
+  "2000132": {
+    "year": 1965,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Economy",
+    "ministerHe": "כלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות",
+      "מעמד אישי",
+      "ערכאות שיפוטיות",
+      "ראיות וסדרי דין"
+    ]
+  },
+  "2000134": {
+    "year": 1992,
+    "categoryLabel": "Administrative Law",
+    "categoryLabelHe": "דיני מינהל",
+    "minister": "Economy",
+    "ministerHe": "כלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט מינהלי",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000135": {
+    "year": 1995,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Communications",
+    "ministerHe": "תקשורת",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות",
+      "מעמד אישי",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000136": {
+    "year": 1963,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Economy",
+    "ministerHe": "כלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות",
+      "מעמד אישי",
+      "ערכאות שיפוטיות"
+    ]
+  },
   "2000325": {
     "year": 1994,
     "categoryLabel": "Knesset",
     "categoryLabelHe": "כנסת",
     "minister": "Transport",
+    "ministerHe": "תחבורה",
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
