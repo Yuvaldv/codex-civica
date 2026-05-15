@@ -62,7 +62,7 @@ const config: Config = {
         {
           type: 'html',
           position: 'left',
-          value: '<a href="/codex-civica/laws/147449" class="navbar__link navbar-flag" title="Israel">🇮🇱</a>',
+          value: '<a href="/codex-civica/laws" class="navbar__link navbar-flag" title="Israel">🇮🇱</a>',
         },
         {
           type: 'html',

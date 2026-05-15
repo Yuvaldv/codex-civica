@@ -16,7 +16,7 @@ export default function Home(): ReactNode {
           <div className={styles.pickSection}>
             <h2 className={styles.pickTitle}>Pick a country</h2>
             <div className={styles.countryGrid}>
-              <Link className={styles.countryCard} to="/laws/147449">
+              <Link className={styles.countryCard} to="/laws">
                 <span className={styles.countryFlag}>🇮🇱</span>
                 <span className={styles.countryName}>Israel</span>
               </Link>
