@@ -33,13 +33,37 @@ function findLawList() {
   return null;
 }
 
+const CATEGORY_HE = {
+  'Basic Laws':          'חוקי יסוד',
+  'Personal Status':     'מעמד אישי',
+  'Commerce & Industry': 'מסחר ותעשייה',
+  'Environment':         'איכות הסביבה',
+  'Labor':               'עבודה',
+  'Health':              'בריאות',
+  'Knesset':             'כנסת',
+};
+
+const MINISTER_HE = {
+  'Knesset':         'כנסת',
+  'Justice':         'משרד המשפטים',
+  'Interior':        'משרד הפנים',
+  'Labor & Welfare': 'משרד העבודה והרווחה',
+  'Health':          'משרד הבריאות',
+};
+
+const STATUS_HE = {
+  'In Effect': 'תקף',
+  'Cancelled': 'בטל',
+  'Expired':   'פקע',
+};
+
 function getGroupKey(groupBy, meta) {
   switch (groupBy) {
-    case 'year':     return String(meta.year || 'Unknown');
-    case 'category': return meta.categoryLabel || 'Other';
-    case 'minister': return meta.minister      || 'Other';
-    case 'status':   return meta.status        || 'Unknown';
-    default:         return String(meta.year   || 'Unknown');
+    case 'year':     return String(meta.year || '?');
+    case 'category': return CATEGORY_HE[meta.categoryLabel] || meta.categoryLabel || 'אחר';
+    case 'minister': return MINISTER_HE[meta.minister]      || meta.minister      || 'אחר';
+    case 'status':   return STATUS_HE[meta.status]          || meta.status        || '?';
+    default:         return String(meta.year || '?');
   }
 }
 
@@ -107,7 +131,7 @@ function applyGroup(groupBy) {
 
   // Sort group keys
   const sortedKeys = [...groups.keys()].sort((a, b) =>
-    groupBy === 'year' ? Number(a) - Number(b) : a.localeCompare(b)
+    groupBy === 'year' ? Number(a) - Number(b) : a.localeCompare(b, 'he')
   );
 
   // Append collapsible group elements

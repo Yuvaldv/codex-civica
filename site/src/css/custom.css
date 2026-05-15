@@ -209,3 +209,14 @@ aside.theme-doc-sidebar-container {
 [class*='docItemCol'] {
   max-width: 100% !important;
 }
+
+/* Pull RTL law text closer to the right sidebar — remove right-side padding */
+@media (min-width: 997px) {
+  [class*='docMainContainer'] {
+    padding-right: 0 !important;
+  }
+
+  [class*='docItemCol'] {
+    padding-right: 0 !important;
+  }
+}

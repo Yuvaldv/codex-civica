@@ -1,0 +1,51 @@
+.lawMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  direction: rtl;
+  justify-content: flex-start;
+}
+
+.bubble {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(18, 34, 96, 0.07);
+  color: #122260;
+  border: 1px solid rgba(18, 34, 96, 0.18);
+  white-space: nowrap;
+}
+
+[data-theme='dark'] .bubble {
+  background: rgba(254, 203, 64, 0.1);
+  color: #fecb40;
+  border-color: rgba(254, 203, 64, 0.25);
+}
+
+.active {
+  background: rgba(22, 163, 74, 0.1);
+  color: #15803d;
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+[data-theme='dark'] .active {
+  background: rgba(22, 163, 74, 0.15);
+  color: #86efac;
+  border-color: rgba(22, 163, 74, 0.35);
+}
+
+.cancelled {
+  background: rgba(220, 38, 38, 0.08);
+  color: #b91c1c;
+  border-color: rgba(220, 38, 38, 0.25);
+}
+
+[data-theme='dark'] .cancelled {
+  background: rgba(220, 38, 38, 0.12);
+  color: #fca5a5;
+  border-color: rgba(220, 38, 38, 0.35);
+}
