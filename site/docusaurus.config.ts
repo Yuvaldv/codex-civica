@@ -4,7 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Codex Civica',
-  tagline: 'חקיקה ישראלית — נגישה לכל',
+  tagline: 'Civic legislation, made readable.',
   favicon: 'img/favicon.ico',
 
   future: {
@@ -27,15 +27,8 @@ const config: Config = {
   },
 
   i18n: {
-    defaultLocale: 'he',
-    locales: ['he'],
-    localeConfigs: {
-      he: {
-        label: 'עברית',
-        direction: 'rtl',
-        htmlLang: 'he',
-      },
-    },
+    defaultLocale: 'en',
+    locales: ['en'],
   },
 
   presets: [
@@ -67,19 +60,24 @@ const config: Config = {
         {
           type: 'docSidebar',
           sidebarId: 'lawsSidebar',
-          position: 'right',
-          label: 'חוקים',
+          position: 'left',
+          label: 'Laws',
+        },
+        {
+          href: 'https://justsocial.io',
+          label: 'JustSocial',
+          position: 'left',
         },
         {
           href: 'https://github.com/Yuvaldv/codex-civica',
           label: 'GitHub',
-          position: 'left',
+          position: 'right',
         },
       ],
     },
     footer: {
       style: 'dark',
-      copyright: `Codex Civica — תוכן זה נגזר מחקיקה ציבורית של מדינת ישראל`,
+      copyright: `Codex Civica — content derived from public legislation of the State of Israel`,
     },
     prism: {
       theme: prismThemes.github,

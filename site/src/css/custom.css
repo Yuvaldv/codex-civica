@@ -1,11 +1,17 @@
+/* Brand: #122260 navy, #fecb40 gold */
+
 :root {
-  --ifm-color-primary: #1a5276;
-  --ifm-color-primary-dark: #174666;
-  --ifm-color-primary-darker: #15415f;
-  --ifm-color-primary-darkest: #10334e;
-  --ifm-color-primary-light: #1d5e86;
-  --ifm-color-primary-lighter: #1f638d;
-  --ifm-color-primary-lightest: #23719e;
+  --brand-navy: #122260;
+  --brand-gold: #fecb40;
+
+  --ifm-color-primary: #122260;
+  --ifm-color-primary-dark: #0f1d52;
+  --ifm-color-primary-darker: #0d194a;
+  --ifm-color-primary-darkest: #091035;
+  --ifm-color-primary-light: #152870;
+  --ifm-color-primary-lighter: #172c7a;
+  --ifm-color-primary-lightest: #1c3490;
+
   --ifm-code-font-size: 95%;
   --ifm-font-family-base: 'Segoe UI', 'Arial', sans-serif;
   --ifm-heading-font-weight: 700;
@@ -13,14 +19,40 @@
 }
 
 [data-theme='dark'] {
-  --ifm-color-primary: #5dade2;
-  --ifm-color-primary-dark: #3d9bd7;
-  --ifm-color-primary-darker: #2e8fc9;
-  --ifm-color-primary-darkest: #2273a3;
-  --ifm-color-primary-light: #7dbfe8;
-  --ifm-color-primary-lighter: #8ec8ec;
-  --ifm-color-primary-lightest: #afd9f2;
+  --ifm-color-primary: #fecb40;
+  --ifm-color-primary-dark: #f5bf20;
+  --ifm-color-primary-darker: #e8b41a;
+  --ifm-color-primary-darkest: #c99710;
+  --ifm-color-primary-light: #fed655;
+  --ifm-color-primary-lighter: #fedb66;
+  --ifm-color-primary-lightest: #fee491;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
+
+/* Navbar — navy background, gold accents */
+.navbar {
+  background-color: var(--brand-navy);
+  box-shadow: 0 1px 0 rgba(254, 203, 64, 0.3);
+}
+
+.navbar__title {
+  color: var(--brand-gold);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.navbar__link {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.navbar__link:hover,
+.navbar__link--active {
+  color: var(--brand-gold);
+}
+
+/* Footer */
+.footer {
+  background-color: #0a1440;
 }
 
 /* Hebrew law content — RTL */
@@ -31,7 +63,6 @@
   line-height: 1.85;
 }
 
-/* Section headings — give breathing room */
 .markdown h1 {
   font-size: 1.35rem;
   margin-top: 2rem;
@@ -54,19 +85,18 @@
   font-weight: 600;
 }
 
-/* First H1 is the law title — make it stand out */
 .markdown > h1:first-child {
   font-size: 1.7rem;
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--ifm-color-primary);
+  border-bottom: 2px solid var(--brand-gold);
 }
 
-/* Margin notes (blockquotes) */
+/* Margin notes */
 .markdown blockquote {
-  border-right: 4px solid var(--ifm-color-primary-lighter);
+  border-right: 4px solid var(--brand-gold);
   border-left: none;
-  background: var(--ifm-color-emphasis-100);
+  background: rgba(254, 203, 64, 0.08);
   padding: 0.4rem 0.75rem;
   margin: 0.5rem 0 0.5rem 2rem;
   font-size: 0.9rem;
@@ -75,22 +105,14 @@
 }
 
 [data-theme='dark'] .markdown blockquote {
-  background: var(--ifm-color-emphasis-200);
+  background: rgba(254, 203, 64, 0.12);
 }
 
-/* Signatures and footnotes section */
 .markdown hr {
   margin: 2rem 0;
 }
 
-/* Definition lists */
 .markdown ul {
   padding-right: 1.5rem;
   padding-left: 0;
-}
-
-/* Uncertain text marker */
-.markdown p:has(> [טקסט לא ודאי]) {
-  opacity: 0.7;
-  font-style: italic;
 }

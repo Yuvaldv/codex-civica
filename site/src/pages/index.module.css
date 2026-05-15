@@ -2,58 +2,98 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
-  padding: 4rem 2rem;
+  min-height: 70vh;
+  padding: 5rem 2rem;
   text-align: center;
-  direction: rtl;
+  background: linear-gradient(160deg, #0d1a4e 0%, #122260 60%, #1a2d7a 100%);
+  color: #fff;
 }
 
 .heroInner {
-  max-width: 640px;
+  max-width: 680px;
+  width: 100%;
 }
 
 .heroTitle {
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
+  font-size: 3.2rem;
+  font-weight: 900;
+  color: #fecb40;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.01em;
 }
 
 .heroTagline {
-  font-size: 1.4rem;
-  color: var(--ifm-color-emphasis-600);
-  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 3.5rem;
+  font-weight: 400;
 }
 
-.heroDesc {
-  font-size: 1.05rem;
-  line-height: 1.8;
-  color: var(--ifm-color-emphasis-700);
-  margin-bottom: 2.5rem;
+.pickSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
 }
 
-.heroButton {
-  display: inline-block;
-  padding: 0.75rem 2rem;
-  background: var(--ifm-color-primary);
-  color: #fff;
-  border-radius: 6px;
-  font-size: 1.1rem;
+.pickTitle {
+  font-size: 1rem;
   font-weight: 600;
-  text-decoration: none;
-  transition: background 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  border-bottom: none;
 }
 
-.heroButton:hover {
-  background: var(--ifm-color-primary-dark);
+.countryGrid {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.countryCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 2rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(254, 203, 64, 0.35);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  min-width: 130px;
+}
+
+.countryCard:hover {
+  background: rgba(254, 203, 64, 0.12);
+  border-color: #fecb40;
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+.countryFlag {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.countryName {
+  font-size: 1rem;
+  font-weight: 600;
   color: #fff;
-  text-decoration: none;
 }
 
-@media (max-width: 640px) {
+.countryCard:hover .countryName {
+  color: #fecb40;
+}
+
+@media (max-width: 480px) {
   .heroTitle {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
   .heroTagline {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 }
