@@ -48,26 +48,28 @@ function makeGroupEl(label, items) {
 }
 
 // Applies grouping to a single sidebar <ul>. Safe to call multiple times —
-// always purges old groups before collecting, and deduplicates by law ID.
+// handles fresh sidebars, already-grouped sidebars, and React hydration hybrids.
 function applyGroupToList(lawList, by) {
-  // Purge our injected group containers first. This must happen before
-  // collecting items so that React-hydrated fresh items and old group items
-  // are never both in the collection at the same time (which caused duplicates).
-  for (const g of lawList.querySelectorAll(':scope > li.law-group')) g.remove();
-
-  // Collect direct-child law <li> elements, keyed by law ID.
-  // Using a Map deduplicates if React hydration left stale nodes alongside
-  // fresh ones (last occurrence wins — prefer freshest in DOM order).
+  // Collect ALL law <li> elements from the full subtree (including inside
+  // existing law-group containers). First-occurrence-wins deduplication:
+  // in DOM order, React-rendered flat items precede our appended group
+  // containers, so first = freshest. This also prevents the "empty sidebar"
+  // bug where removing groups first would take their law items with them,
+  // leaving nothing to collect.
   const byId = new Map();
   for (const a of lawList.querySelectorAll('a[href*="/laws/"]')) {
     const id = lawIdFromHref(a.getAttribute('href'));
     if (!id) continue;
     const li = a.closest('li.menu__list-item');
-    if (li && li.parentNode === lawList) byId.set(id, li);
+    if (li && !byId.has(id)) byId.set(id, li);
   }
   if (byId.size === 0) return;
 
+  // Detach collected items from wherever they live (flat list or inside groups).
   for (const li of byId.values()) li.remove();
+
+  // Now remove group containers — they are empty or fully detached at this point.
+  for (const g of lawList.querySelectorAll(':scope > li.law-group')) g.remove();
 
   const groups = new Map();
   for (const [id, li] of byId) {

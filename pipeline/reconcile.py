@@ -136,7 +136,7 @@ def build_frontmatter(entry: dict) -> str:
     if classifications:
         tag_list = "\n".join(f'  - "{c["desc"]}"' for c in classifications if c.get("desc"))
         if tag_list:
-            lines.append("tags:")
+            lines.append("law_tags:")
             lines.append(tag_list)
 
     # Ministry IDs (name mapping TODO — legacy GovMinistryID range)

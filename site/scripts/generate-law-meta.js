@@ -100,16 +100,16 @@ function getField(fm, key) {
 }
 
 function getTags(text) {
-  // Block sequence: tags:\n  - "x"\n  - "y"
-  const block = text.match(/^tags:\n((?:[ \t]+-[^\n]+\n?)+)/m);
+  // Block sequence: law_tags:\n  - "x"\n  - "y"
+  const block = text.match(/^law_tags:\n((?:[ \t]+-[^\n]+\n?)+)/m);
   if (block) {
     return block[1]
       .split('\n')
       .map(l => l.replace(/^[ \t]+-\s*/, '').replace(/^["']|["']$/g, '').trim())
       .filter(Boolean);
   }
-  // Inline: tags: ["x", "y"]
-  const inline = text.match(/^tags:\s*\[([^\]]+)\]/m);
+  // Inline: law_tags: ["x", "y"]
+  const inline = text.match(/^law_tags:\s*\[([^\]]+)\]/m);
   if (inline) {
     return inline[1].split(',').map(s => s.replace(/["']/g, '').trim()).filter(Boolean);
   }
