@@ -116,3 +116,22 @@
   padding-right: 1.5rem;
   padding-left: 0;
 }
+
+/* Doc layout: sidebar on right, TOC removed */
+
+/* Move law-list sidebar to the right */
+aside.theme-doc-sidebar-container {
+  order: 2;
+  border-right: none !important;
+  border-left: 1px solid var(--ifm-toc-border-color);
+}
+
+/* Remove the TOC panel (the "brief" on the right) */
+.theme-doc-toc-desktop {
+  display: none;
+}
+
+/* Expand content to fill the space left by the hidden TOC */
+[class*='docItemCol'] {
+  max-width: 100% !important;
+}

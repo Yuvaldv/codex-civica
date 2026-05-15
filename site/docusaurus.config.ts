@@ -61,7 +61,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'lawsSidebar',
           position: 'left',
-          label: 'Laws',
+          label: '🇮🇱',
         },
         {
           href: 'https://justsocial.io',
