@@ -10,7 +10,7 @@
 
 **Current milestone:** Milestone 1 — Israeli Basic Laws on a live, searchable site.
 
-**Current focus:** Phase 2 — Content (factory import restarted from scratch)
+**Current focus:** Phase 4 — Content (factory import in progress)
 
 ---
 
@@ -18,7 +18,7 @@
 
 | Field | Value |
 |-------|-------|
-| Current phase | Phase 2: Content (factory import in progress) |
+| Current phase | Phase 4: Content (factory import in progress) |
 | Current plan | Factory-line import of all 718 Israeli laws with PDFs |
 | Phase status | In progress |
 | Last updated | 2026-05-19 |
@@ -26,14 +26,14 @@
 **Progress:**
 
 ```
-Phase 1: Pipeline       [✓] Complete (pipeline operational)
-Phase 2: Content        [▶] 10/718 laws imported and live
-Phase 3: Site Foundation[ ] Not started
-Phase 4: Search         [ ] Not started
-Phase 5: Custom UI      [ ] Not started
-Phase 6: Deployment     [ ] Not started
+Phase 1: Pipeline        [✓] Complete
+Phase 2: Site Foundation [✓] Complete (Docusaurus + RTL + sidebar live)
+Phase 3: Custom UI       [✓] Complete (navbar, metadata bubbles, grouping)
+Phase 4: Content         [▶] In progress — 10/718 laws imported
+Phase 5: Deployment      [✓] Complete (GitHub Pages + auto-deploy)
+Phase 6: Search          [ ] Not started
 
-Overall: 1/6 phases complete
+Overall: 4/6 phases complete
 ```
 
 ---
