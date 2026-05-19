@@ -111,18 +111,13 @@ def stage_ocr(law_id: int, pdf_path: str, dpi: int = 300, force: bool = False) -
         logging.error("pymupdf not installed (needed for OCR page rendering).")
         return False
 
-    doc = fitz.open(pdf_path)
-    n_pages = len(doc)
-    doc.close()
-
     all_text: list[str] = []
     pages_layout: list[dict] = []
 
-    for page_idx in range(n_pages):
-        logging.info("  OCR page %d/%d", page_idx + 1, n_pages)
-        # Render page to temp PNG
-        doc = fitz.open(pdf_path)
-        try:
+    with fitz.open(pdf_path) as doc:
+        n_pages = len(doc)
+        for page_idx in range(n_pages):
+            logging.info("  OCR page %d/%d", page_idx + 1, n_pages)
             page = doc[page_idx]
             scale = dpi / 72.0
             mat = fitz.Matrix(scale, scale)
@@ -132,33 +127,29 @@ def stage_ocr(law_id: int, pdf_path: str, dpi: int = 300, force: bool = False) -
             tmp = Path(tmp_name)
             pix.save(str(tmp))
             w_px, h_px = pix.width, pix.height
-        finally:
-            doc.close()
 
-        try:
-            # Text mode
-            res_txt = subprocess.run(
-                ["tesseract", str(tmp), "-", "-l", "heb", "--psm", "6"],
-                capture_output=True, text=True, check=True,
-            )
-            # TSV mode for layout
-            res_tsv = subprocess.run(
-                ["tesseract", str(tmp), "-", "-l", "heb", "--psm", "6", "tsv"],
-                capture_output=True, text=True, check=True,
-            )
-            all_text.append(res_txt.stdout)
-            words = _parse_tsv(res_tsv.stdout)
-            pages_layout.append({
-                "page": page_idx, "width_px": w_px, "height_px": h_px, "words": words,
-            })
-        except subprocess.CalledProcessError as e:
-            logging.error("tesseract failed page %d: %s", page_idx, e.stderr)
-            return False
-        finally:
             try:
-                tmp.unlink()
-            except OSError:
-                pass
+                res_txt = subprocess.run(
+                    ["tesseract", str(tmp), "-", "-l", "heb", "--psm", "6"],
+                    capture_output=True, text=True, check=True,
+                )
+                res_tsv = subprocess.run(
+                    ["tesseract", str(tmp), "-", "-l", "heb", "--psm", "6", "tsv"],
+                    capture_output=True, text=True, check=True,
+                )
+                all_text.append(res_txt.stdout)
+                words = _parse_tsv(res_tsv.stdout)
+                pages_layout.append({
+                    "page": page_idx, "width_px": w_px, "height_px": h_px, "words": words,
+                })
+            except subprocess.CalledProcessError as e:
+                logging.error("tesseract failed page %d: %s", page_idx, e.stderr)
+                return False
+            finally:
+                try:
+                    tmp.unlink()
+                except OSError:
+                    pass
 
     txt_out.write_text("\f".join(all_text), encoding="utf-8")
     layout = {"law_id": law_id, "pdf": pdf_path, "dpi": dpi, "lang": "heb", "pages": pages_layout}
@@ -234,7 +225,7 @@ def stage_reconcile(entry: dict, force: bool = False) -> bool:
 def deploy() -> bool:
     """Build and deploy the Docusaurus site."""
     logging.info("Deploying site...")
-    env = dict(os.environ)
+    env = {**os.environ, "USE_SSH": "true", "GIT_USER": "Yuvaldv"}
     try:
         result = subprocess.run(
             ["npm", "run", "deploy"],
@@ -296,6 +287,18 @@ def print_status(manifest: list[dict], progress: dict) -> None:
     print(f"Total deployed:  {progress.get('total_deployed', 0)}")
 
 
+def _process_law(entry: dict, force: bool = False) -> bool:
+    """Run native → OCR → reconcile for one law. Returns True on full success."""
+    law_id = entry.get("law_id") or entry.get("bill_id")
+    pdf_path = entry["pdf_path"]
+    ok = stage_native(law_id, pdf_path, force=force)
+    if ok:
+        ok = stage_ocr(law_id, pdf_path, force=force)
+    if ok:
+        ok = stage_reconcile(entry, force=force)
+    return ok
+
+
 def run_batch(count: int = DEFAULT_BATCH, force: bool = False) -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
@@ -308,38 +311,86 @@ def run_batch(count: int = DEFAULT_BATCH, force: bool = False) -> int:
         print_status(manifest, progress)
         return 0
 
-    logging.info("Processing batch of %d laws...", len(batch))
-    newly_done = 0
+    # ── Phase 1: Convert the main batch ──────────────────────────────────────
+    logging.info("Phase 1: converting %d laws...", len(batch))
+    newly_done: list[dict] = []
 
     for entry in batch:
         law_id = entry.get("law_id") or entry.get("bill_id")
-        pdf_path = entry["pdf_path"]
         name = entry.get("name_he", "")
-        logging.info("--- Processing law %s: %s", law_id, name[:60])
-
-        success = True
-
-        if success:
-            success = stage_native(law_id, pdf_path, force=force)
-        if success:
-            success = stage_ocr(law_id, pdf_path, force=force)
-        if success:
-            success = stage_reconcile(entry, force=force)
-
-        if success:
+        logging.info("--- %s: %s", law_id, name[:60])
+        if _process_law(entry, force):
             progress["done"].append(law_id)
-            newly_done += 1
+            newly_done.append(entry)
             logging.info("  OK: %s", law_id)
         else:
             progress["failed"].append(law_id)
             logging.warning("  FAILED: %s", law_id)
-
         save_progress(progress)
 
+    if not newly_done:
+        print_status(manifest, progress)
+        return 0
+
+    # ── Phase 2: Link-resolve newly converted laws ────────────────────────────
+    try:
+        import link_resolver
+    except ImportError as exc:
+        logging.error("Cannot import link_resolver: %s", exc)
+        print_status(manifest, progress)
+        return 0
+
+    logging.info("Phase 2: link-resolving %d laws...", len(newly_done))
+    law_index = link_resolver.build_law_index(manifest)
+    converted_set = {str(i) for i in progress.get("done", [])}
+
+    all_unresolved: set[int] = set()
+    for entry in newly_done:
+        law_id = entry.get("law_id") or entry.get("bill_id")
+        out_path = LAWS_DIR / f"{law_id}.md"
+        if out_path.exists():
+            unresolved = link_resolver.resolve_one(out_path, law_index, converted_set)
+            all_unresolved.update(unresolved)
+
+    # ── Phase 3: Convert laws referenced by the batch (depth = 1) ────────────
+    done_set = {str(i) for i in progress.get("done", [])}
+    failed_set = {str(i) for i in progress.get("failed", [])}
+    unresolved_strs = {str(i) for i in all_unresolved}
+
+    ref_entries = [
+        e for e in manifest
+        if str(e.get("law_id") or e.get("bill_id") or "") in unresolved_strs
+        and str(e.get("law_id") or e.get("bill_id") or "") not in done_set
+        and str(e.get("law_id") or e.get("bill_id") or "") not in failed_set
+        and e.get("pdf_path") and Path(e["pdf_path"]).exists()
+    ]
+
+    if ref_entries:
+        logging.info("Phase 3: converting %d referenced laws...", len(ref_entries))
+        for entry in ref_entries:
+            law_id = entry.get("law_id") or entry.get("bill_id")
+            name = entry.get("name_he", "")
+            logging.info("  [ref] %s: %s", law_id, name[:60])
+            if _process_law(entry, force=False):
+                progress["done"].append(law_id)
+                converted_set.add(str(law_id))
+                logging.info("  OK: %s", law_id)
+            else:
+                progress["failed"].append(law_id)
+                logging.warning("  FAILED: %s", law_id)
+            save_progress(progress)
+
+        # ── Phase 4: Re-link main batch now that refs are available ───────────
+        logging.info("Phase 4: re-linking main batch with resolved refs...")
+        for entry in newly_done:
+            law_id = entry.get("law_id") or entry.get("bill_id")
+            out_path = LAWS_DIR / f"{law_id}.md"
+            if out_path.exists():
+                link_resolver.resolve_one(out_path, law_index, converted_set)
+
+    # ── Deploy check ──────────────────────────────────────────────────────────
     total_done = len(progress.get("done", []))
     prev_deployed = progress.get("total_deployed", 0)
-
-    # Deploy every DEPLOY_EVERY laws
     deploy_threshold = (prev_deployed // DEPLOY_EVERY + 1) * DEPLOY_EVERY
     if total_done >= deploy_threshold:
         logging.info("Reached %d laws — triggering deploy...", total_done)

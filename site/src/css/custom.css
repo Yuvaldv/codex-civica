@@ -90,6 +90,16 @@
   border-bottom: 2px solid var(--brand-gold);
 }
 
+/* Anchor scroll offset — prevent navbar from hiding jump targets */
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 1.5rem);
+}
+
 /* Margin notes */
 .markdown blockquote {
   border-right: 4px solid var(--brand-gold);

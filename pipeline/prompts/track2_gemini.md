@@ -199,9 +199,9 @@ After the body, in this order:
       - פנחס רוזן, שר המשפטים
       - יצחק בן-צבי, נשיא המדינה
 3. `---` horizontal rule.
-4. `## הערות שוליים` block, ONLY if the source actually contains
-   footnotes:
+4. Footnotes block, ONLY if the source actually contains footnotes:
     - Format: `[^N]: <footnote text>`, one per line, in numeric order.
+    - Do NOT add a heading for this block.
     - Do NOT include the law's title here. Do NOT include definitions
       here. ONLY include text that was an actual footnote in the source
       (typically asterisk-marked publication notes or numbered citations

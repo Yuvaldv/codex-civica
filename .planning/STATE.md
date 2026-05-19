@@ -18,16 +18,16 @@
 
 | Field | Value |
 |-------|-------|
-| Current phase | Phase 2: Content (factory import restarted) |
+| Current phase | Phase 2: Content (factory import in progress) |
 | Current plan | Factory-line import of all 718 Israeli laws with PDFs |
 | Phase status | In progress |
-| Last updated | 2026-05-15 |
+| Last updated | 2026-05-19 |
 
 **Progress:**
 
 ```
 Phase 1: Pipeline       [✓] Complete (pipeline operational)
-Phase 2: Content        [▶] Restarted — 0/718 laws imported (fresh start)
+Phase 2: Content        [▶] 10/718 laws imported and live
 Phase 3: Site Foundation[ ] Not started
 Phase 4: Search         [ ] Not started
 Phase 5: Custom UI      [ ] Not started
@@ -73,27 +73,24 @@ Overall: 1/6 phases complete
 
 ## Session Continuity
 
-**Last session summary (2026-05-15):** Refactored entire site to remove hardcoded law IDs. Deleted all 71 law markdowns and reset import progress to restart fresh.
+**Last session summary (2026-05-19):** Refactored pipeline bugs; anchor scroll offset fixed on site.
 
 **What was built this session:**
-- **Deleted**: All 71 law markdowns in `laws/israel/` — fresh start
-- **Reset**: `data/raw/israel/import_progress.json` → `{done:[], failed:[], total_deployed:0}`
-- **`site/src/theme/DocItem/Content/index.jsx`**: Removed hardcoded MINISTER_BY_ID, STATUS_BY_ID, CATEGORY_HE. Now imports GENERATED_LAW_META and looks up current law by bill_id/law_id. Fully dynamic.
-- **`site/docusaurus.config.ts`**: Navbar 🇮🇱 flag now links to `/laws` (the index), not a hardcoded law ID
-- **`site/src/pages/index.tsx`**: Israel card on homepage now links to `/laws`
-- **`laws/israel/placeholder.md`**: Added so Docusaurus builds with an empty law library
-- **Build confirmed passing** — git push failed (no auth in session); needs manual push
+- **`site/src/css/custom.css`**: Added `scroll-margin-top: calc(var(--ifm-navbar-height) + 1.5rem)` on `.markdown h1–h6` — in-document anchor links now land above the heading instead of hidden behind the navbar
+- **`pipeline/batch_import.py`**: Fixed OCR stage — doc was reopened for every page; now uses single `with fitz.open()` context
+- **`pipeline/batch_import.py`**: Removed duplicate `sys.path.insert` call (was inserted twice for link_resolver import)
+- **`pipeline/batch_import.py`**: `deploy()` now explicitly sets `USE_SSH=true` and `GIT_USER=Yuvaldv` in env so auto-deploy (every 25 laws) works without WSL2 HTTPS auth failure
 
 **Current import state:**
-- 1,076 total valid laws | 718 with PDFs | 0 converted | 718 pending
+- 1,076 total valid laws | 718 with PDFs | 10 converted | 708 pending
 - Progress tracked in `data/raw/israel/import_progress.json`
-- Auto-deploy triggers every 25 laws
+- Auto-deploy triggers every 25 laws (now SSH-safe)
+- 10 laws deployed and live on GitHub Pages
 
 **Next-session actions:**
-1. Push current main branch: `git push origin main`
-2. Start factory import: `source ~/.venv-codex/bin/activate && python pipeline/batch_import.py --count 25`
-3. Check status: `python pipeline/batch_import.py --status`
-4. After import completes (718 laws), delete `laws/israel/placeholder.md` and redeploy
+1. Continue factory import: `source ~/.venv-codex/bin/activate && python pipeline/batch_import.py --count 25`
+2. Check status: `python pipeline/batch_import.py --status`
+3. After import completes (718 laws), delete `laws/israel/placeholder.md` and redeploy
 
 **Files to review on re-entry:**
 - `pipeline/batch_import.py` — main factory loop
@@ -104,4 +101,4 @@ Overall: 1/6 phases complete
 
 ---
 
-*Last updated: 2026-05-15*
+*Last updated: 2026-05-19*
