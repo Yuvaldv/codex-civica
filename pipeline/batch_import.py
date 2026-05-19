@@ -341,52 +341,11 @@ def run_batch(count: int = DEFAULT_BATCH, force: bool = False) -> int:
         return 0
 
     logging.info("Phase 2: link-resolving %d laws...", len(newly_done))
-    law_index = link_resolver.build_law_index(manifest)
-    converted_set = {str(i) for i in progress.get("done", [])}
-
-    all_unresolved: set[int] = set()
     for entry in newly_done:
         law_id = entry.get("law_id") or entry.get("bill_id")
         out_path = LAWS_DIR / f"{law_id}.md"
         if out_path.exists():
-            unresolved = link_resolver.resolve_one(out_path, law_index, converted_set)
-            all_unresolved.update(unresolved)
-
-    # ── Phase 3: Convert laws referenced by the batch (depth = 1) ────────────
-    done_set = {str(i) for i in progress.get("done", [])}
-    failed_set = {str(i) for i in progress.get("failed", [])}
-    unresolved_strs = {str(i) for i in all_unresolved}
-
-    ref_entries = [
-        e for e in manifest
-        if str(e.get("law_id") or e.get("bill_id") or "") in unresolved_strs
-        and str(e.get("law_id") or e.get("bill_id") or "") not in done_set
-        and str(e.get("law_id") or e.get("bill_id") or "") not in failed_set
-        and e.get("pdf_path") and Path(e["pdf_path"]).exists()
-    ]
-
-    if ref_entries:
-        logging.info("Phase 3: converting %d referenced laws...", len(ref_entries))
-        for entry in ref_entries:
-            law_id = entry.get("law_id") or entry.get("bill_id")
-            name = entry.get("name_he", "")
-            logging.info("  [ref] %s: %s", law_id, name[:60])
-            if _process_law(entry, force=False):
-                progress["done"].append(law_id)
-                converted_set.add(str(law_id))
-                logging.info("  OK: %s", law_id)
-            else:
-                progress["failed"].append(law_id)
-                logging.warning("  FAILED: %s", law_id)
-            save_progress(progress)
-
-        # ── Phase 4: Re-link main batch now that refs are available ───────────
-        logging.info("Phase 4: re-linking main batch with resolved refs...")
-        for entry in newly_done:
-            law_id = entry.get("law_id") or entry.get("bill_id")
-            out_path = LAWS_DIR / f"{law_id}.md"
-            if out_path.exists():
-                link_resolver.resolve_one(out_path, law_index, converted_set)
+            link_resolver.resolve_one(out_path)
 
     # ── Deploy check ──────────────────────────────────────────────────────────
     total_done = len(progress.get("done", []))
