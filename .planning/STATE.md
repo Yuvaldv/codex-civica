@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
 status: planning
-last_updated: "2026-08-09T00:00:00.000Z"
-last_activity: 2026-08-09
+last_updated: "2026-08-09T13:33:51.515Z"
+last_activity: 2026-08-09 -- Phase 7 planning complete
 progress:
   total_phases: 7
   completed_phases: 0
-  total_plans: 0
+  total_plans: 7
   completed_plans: 0
   percent: 0
 ---
@@ -33,9 +33,9 @@ progress:
 
 Phase: 7 — Shared Pipeline Core (not started)
 Plan: —
-Status: Roadmap complete, awaiting phase planning
+Status: Ready to execute
 Progress: 0/7 phases complete (0%) — [░░░░░░░░░░] v1.1
-Last activity: 2026-08-09 — Milestone v1.1 roadmap created (Phases 7–13, 23/23 requirements mapped)
+Last activity: 2026-08-09 -- Phase 7 planning complete
 
 ## Accumulated Context
 
@@ -88,6 +88,7 @@ Last activity: 2026-08-09 — Milestone v1.1 roadmap created (Phases 7–13, 23/
 - Stale `pipeline/requirements.txt` (found during Phase 7 research): missing `python-dotenv` and `google-genai`, both imported by `reconcile.py`. A fresh env provisioned from `requirements.txt` alone cannot import `reconcile`. Out of scope for Phase 7; needs a follow-up fix.
 - Open design call for Phase 11 planning: nation segment lives in the path (`laws/uk/england/`) per UKSITE-02 — confirm the Docusaurus sidebar/routing shape against the installed Docusaurus version at implementation time
 - Pin/verify `@docusaurus/plugin-client-redirects` against the installed Docusaurus version before Phase 10 implementation
+- **GSD tooling bug (found 2026-08-09):** `gsd-tools.cjs state planned-phase --phase 7 --name "Shared Pipeline Core" --plans 7` corrupted STATE.md frontmatter — set `milestone_name` to a garbage roadmap-checkbox string, `status: executing` despite nothing having executed, and invented `progress` totals (`total_phases: 13`, `total_plans: 10`, `completed_plans: 1`) with no basis. Manually corrected back to `milestone_name: UK Laws`, `status: planning`, `total_phases: 7`, `total_plans: 7`, `completed_plans: 0`. Worth a bug report against the GSD CLI if this recurs.
 
 ### Blockers
 
