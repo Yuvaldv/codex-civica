@@ -62,6 +62,7 @@ Overall: 4/6 phases complete
 | 2026-05-19 | Paused factory import at 111/718 — ~100 laws is enough for now | User call, not a technical blocker. Don't resume `batch_import.py` proactively; wait for explicit next steps |
 | 2026-05-19 | SEO: deterministic (no-LLM) `title`/`description` frontmatter, not Gemini-generated | Both are metadata, not legal text, but templating from data already in the entry is faster, free, and consistent — matches the pipeline's deterministic-by-default posture |
 | 2026-05-19 | SEO: per-page `lang`/`dir`/`og:locale` fix via swizzled DocItem/Content Head, not full i18n locale routing | Real bug (found `lang=en dir=ltr` on 100%-Hebrew pages via an actual `npm run build`) but full i18n (`/he/` routes, translation JSON) is heavy for a site whose chrome is intentionally English; the lightweight fix is scoped to doc pages only and is fully SSR-verified |
+| 2026-08-09 | Legal pages (terms/privacy/accessibility) as plain `.md` under `src/pages`, not React/Layout components | Matches Docusaurus's built-in MDXPage wrapper, no styling code needed; content is honest about current state (no analytics/cookies exist, no formal a11y audit done) rather than aspirational boilerplate |
 
 ### Known Constraints
 
@@ -120,8 +121,10 @@ Overall: 4/6 phases complete
 - `site/src/theme/DocItem/Content/index.jsx` — per-law metadata bubbles + SEO head tags
 - `pipeline/fix_2000595_tail.py` — tail-fix pattern (reuse if another long law truncates)
 
-**Deploy status:** Pushed `main` → `origin/main` (up through `b41930f`) and deployed to GitHub Pages (`gh-pages`, based on `b41930f`). Live at https://Yuvaldv.github.io/codex-civica/. Working tree clean, nothing pending.
+**Deploy status:** Pushed `main` → `origin/main` (up through `3389d5c`) and deployed to GitHub Pages (`gh-pages`, based on `3389d5c`). Live at https://Yuvaldv.github.io/codex-civica/. Working tree clean, nothing pending.
+
+**Session 9 (2026-08-09):** Added Terms & Conditions, Privacy Policy, and Accessibility Policy pages (`site/src/pages/{terms,privacy,accessibility}.md`) plus a "Legal" footer column linking to them (`site/docusaurus.config.ts`). Verified via `npm run typecheck` and a full `npm run build` (111 laws, pages render at `/terms`, `/privacy`, `/accessibility`). Committed as `3389d5c`, pushed, deployed via `USE_SSH=true GIT_USER=Yuvaldv npm run deploy`. Import remains paused at 111/718 — untouched this session.
 
 ---
 
-*Last updated: 2026-05-19 (session 8) — SEO pass shipped and deployed, import still paused at 111/718, awaiting next steps*
+*Last updated: 2026-08-09 (session 9) — legal/footer pages shipped and deployed, import still paused at 111/718, awaiting next steps*
