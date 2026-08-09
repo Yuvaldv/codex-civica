@@ -126,5 +126,1274 @@ export const GENERATED_LAW_META = {
       "ביטחון",
       "חוק-יסוד"
     ]
+  },
+  "2000042": {
+    "year": 1984,
+    "categoryLabel": "Basic Laws",
+    "categoryLabelHe": "חוקי יסוד",
+    "minister": "Unknown",
+    "ministerHe": null,
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חוק-יסוד",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000044": {
+    "year": 1994,
+    "categoryLabel": "Basic Laws",
+    "categoryLabelHe": "חוקי יסוד",
+    "minister": "Unknown",
+    "ministerHe": null,
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חוק-יסוד"
+    ]
+  },
+  "2000045": {
+    "year": 1980,
+    "categoryLabel": "Basic Laws",
+    "categoryLabelHe": "חוקי יסוד",
+    "minister": "Unknown",
+    "ministerHe": null,
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חוק-יסוד"
+    ]
+  },
+  "2000046": {
+    "year": 1992,
+    "categoryLabel": "Basic Laws",
+    "categoryLabelHe": "חוקי יסוד",
+    "minister": "Unknown",
+    "ministerHe": null,
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חוק-יסוד"
+    ]
+  },
+  "2000047": {
+    "year": 1988,
+    "categoryLabel": "Basic Laws",
+    "categoryLabelHe": "חוקי יסוד",
+    "minister": "Unknown",
+    "ministerHe": null,
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חוק-יסוד"
+    ]
+  },
+  "2000048": {
+    "year": 1960,
+    "categoryLabel": "Basic Laws",
+    "categoryLabelHe": "חוקי יסוד",
+    "minister": "Unknown",
+    "ministerHe": null,
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חוק-יסוד",
+      "מקרקעין"
+    ]
+  },
+  "2000049": {
+    "year": 1975,
+    "categoryLabel": "Basic Laws",
+    "categoryLabelHe": "חוקי יסוד",
+    "minister": "Unknown",
+    "ministerHe": null,
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חוק-יסוד",
+      "תקציב"
+    ]
+  },
+  "2000050": {
+    "year": 1964,
+    "categoryLabel": "Basic Laws",
+    "categoryLabelHe": "חוקי יסוד",
+    "minister": "Unknown",
+    "ministerHe": null,
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חוק-יסוד",
+      "ראשי המדינה"
+    ]
+  },
+  "2000056": {
+    "year": 1985,
+    "categoryLabel": "Taxation",
+    "categoryLabelHe": "מיסוי",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מיסוי",
+      "מסחר ותעשייה"
+    ]
+  },
+  "2000057": {
+    "year": 1969,
+    "categoryLabel": "Maritime",
+    "categoryLabelHe": "ים ומשפט ימי",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ספנות",
+      "תשתיות"
+    ]
+  },
+  "2000058": {
+    "year": 1994,
+    "categoryLabel": "Taxation",
+    "categoryLabelHe": "מיסוי",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מיסוי",
+      "מסחר ותעשייה"
+    ]
+  },
+  "2000059": {
+    "year": 1955,
+    "categoryLabel": "Local Government",
+    "categoryLabelHe": "רשויות מקומיות",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "רשויות מקומיות"
+    ]
+  },
+  "2000072": {
+    "year": 1974,
+    "categoryLabel": "Housing",
+    "categoryLabelHe": "דיור ובנייה",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בינוי ושיכון",
+      "קליטת עלייה"
+    ]
+  },
+  "2000075": {
+    "year": 1981,
+    "categoryLabel": "Personal Status",
+    "categoryLabelHe": "מעמד אישי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מעמד אישי",
+      "משפט אזרחי"
+    ]
+  },
+  "2000077": {
+    "year": 1993,
+    "categoryLabel": "Environment",
+    "categoryLabelHe": "איכות הסביבה",
+    "minister": "Justice",
+    "ministerHe": "שר המשפטים",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "הגנת הסביבה"
+    ]
+  },
+  "2000080": {
+    "year": 1993,
+    "categoryLabel": "Welfare",
+    "categoryLabelHe": "רווחה",
+    "minister": "Education",
+    "ministerHe": "שר החינוך",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "רווחה"
+    ]
+  },
+  "2000081": {
+    "year": 1962,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות",
+      "חקלאות"
+    ]
+  },
+  "2000082": {
+    "year": 1983,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Communications",
+    "ministerHe": "שר התקשורת",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות"
+    ]
+  },
+  "2000083": {
+    "year": 1986,
+    "categoryLabel": "Criminal Law",
+    "categoryLabelHe": "משפט פלילי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט פלילי"
+    ]
+  },
+  "2000086": {
+    "year": 1998,
+    "categoryLabel": "Security",
+    "categoryLabelHe": "ביטחון הציבור",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ביטחון הפנים",
+      "משפט פלילי"
+    ]
+  },
+  "2000088": {
+    "year": 1999,
+    "categoryLabel": "Health",
+    "categoryLabelHe": "בריאות",
+    "minister": "Police",
+    "ministerHe": "שר לביטחון הפנים",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בריאות",
+      "מדע"
+    ]
+  },
+  "2000089": {
+    "year": 1965,
+    "categoryLabel": "Civil Law",
+    "categoryLabelHe": "משפט אזרחי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט אזרחי"
+    ]
+  },
+  "2000091": {
+    "year": 1997,
+    "categoryLabel": "Environment",
+    "categoryLabelHe": "איכות הסביבה",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "הגנת הסביבה",
+      "תחבורה ובטיחות בדרכים"
+    ]
+  },
+  "2000093": {
+    "year": 1997,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות",
+      "מועדים"
+    ]
+  },
+  "2000095": {
+    "year": 1958,
+    "categoryLabel": "Foreign Affairs",
+    "categoryLabelHe": "יחסי חוץ",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חוץ",
+      "משפט אזרחי",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000096": {
+    "year": 1954,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים",
+      "חוץ"
+    ]
+  },
+  "2000097": {
+    "year": 1991,
+    "categoryLabel": "Foreign Affairs",
+    "categoryLabelHe": "יחסי חוץ",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חוץ",
+      "מעמד אישי",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000098": {
+    "year": 1960,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים",
+      "חוץ"
+    ]
+  },
+  "2000100": {
+    "year": 1976,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים",
+      "חוץ"
+    ]
+  },
+  "2000101": {
+    "year": 1986,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים",
+      "חוץ",
+      "פיתוח והשקעות"
+    ]
+  },
+  "2000102": {
+    "year": 1956,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים",
+      "חוץ"
+    ]
+  },
+  "2000104": {
+    "year": 1954,
+    "categoryLabel": "Employment",
+    "categoryLabelHe": "תעסוקה",
+    "minister": "Strategic Affairs",
+    "ministerHe": "שר לענינים אסטרטגיים",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תעסוקה"
+    ]
+  },
+  "2000107": {
+    "year": 1950,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תאגידים"
+    ]
+  },
+  "2000108": {
+    "year": 1950,
+    "categoryLabel": "Criminal Law",
+    "categoryLabelHe": "משפט פלילי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט פלילי"
+    ]
+  },
+  "2000110": {
+    "year": 1954,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בחירות"
+    ]
+  },
+  "2000111": {
+    "year": 1994,
+    "categoryLabel": "Health",
+    "categoryLabelHe": "בריאות",
+    "minister": "Police",
+    "ministerHe": "שר לביטחון הפנים",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בריאות"
+    ]
+  },
+  "2000112": {
+    "year": 1989,
+    "categoryLabel": "Health",
+    "categoryLabelHe": "בריאות",
+    "minister": "Police",
+    "ministerHe": "שר לביטחון הפנים",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בריאות",
+      "רווחה"
+    ]
+  },
+  "2000113": {
+    "year": 1997,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "פנסיה, ביטוח ושוק ההון",
+      "תחבורה ובטיחות בדרכים"
+    ]
+  },
+  "2000115": {
+    "year": 1950,
+    "categoryLabel": "Criminal Law",
+    "categoryLabelHe": "משפט פלילי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט פלילי"
+    ]
+  },
+  "2000116": {
+    "year": 1965,
+    "categoryLabel": "Housing",
+    "categoryLabelHe": "דיור ובנייה",
+    "minister": "Religious Affairs",
+    "ministerHe": "שר לשירותי דת",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בינוי ושיכון",
+      "מקרקעין"
+    ]
+  },
+  "2000117": {
+    "year": 1969,
+    "categoryLabel": "Judiciary",
+    "categoryLabelHe": "שפיטה",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ערכאות שיפוטיות",
+      "תעסוקה"
+    ]
+  },
+  "2000118": {
+    "year": 1952,
+    "categoryLabel": "Maritime",
+    "categoryLabelHe": "ים ומשפט ימי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ספנות",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000119": {
+    "year": 1995,
+    "categoryLabel": "Personal Status",
+    "categoryLabelHe": "מעמד אישי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מעמד אישי",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000120": {
+    "year": 1976,
+    "categoryLabel": "Education",
+    "categoryLabelHe": "חינוך",
+    "minister": "Sports",
+    "ministerHe": "שר הספורט",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חינוך",
+      "חקלאות"
+    ]
+  },
+  "2000136": {
+    "year": 1963,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות",
+      "מעמד אישי",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000156": {
+    "year": 1998,
+    "categoryLabel": "Environment",
+    "categoryLabelHe": "איכות הסביבה",
+    "minister": "Defense",
+    "ministerHe": "שר הביטחון",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "הגנת הסביבה",
+      "תיירות"
+    ]
+  },
+  "2000193": {
+    "year": 1980,
+    "categoryLabel": "Welfare",
+    "categoryLabelHe": "רווחה",
+    "minister": "Labor & Welfare",
+    "ministerHe": "שר העבודה והרווחה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "רווחה"
+    ]
+  },
+  "2000238": {
+    "year": 1958,
+    "categoryLabel": "Employment",
+    "categoryLabelHe": "תעסוקה",
+    "minister": "Labor & Welfare",
+    "ministerHe": "שר העבודה והרווחה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תעסוקה"
+    ]
+  },
+  "2000243": {
+    "year": 1955,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Communications",
+    "ministerHe": "שר התקשורת",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות",
+      "מעמד אישי",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000249": {
+    "year": 1967,
+    "categoryLabel": "Civil Law",
+    "categoryLabelHe": "משפט אזרחי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט אזרחי",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000291": {
+    "year": 1975,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תאגידים"
+    ]
+  },
+  "2000302": {
+    "year": 1949,
+    "categoryLabel": "Defense",
+    "categoryLabelHe": "ביטחון",
+    "minister": "Defense",
+    "ministerHe": "שר הביטחון",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ביטחון",
+      "תעסוקה"
+    ]
+  },
+  "2000322": {
+    "year": 1965,
+    "categoryLabel": "Personal Status",
+    "categoryLabelHe": "מעמד אישי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מעמד אישי",
+      "משפט אזרחי"
+    ]
+  },
+  "2000324": {
+    "year": 1952,
+    "categoryLabel": "Citizenship",
+    "categoryLabelHe": "אזרחות",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "אזרחות, תושבות וכניסה לישראל"
+    ]
+  },
+  "2000326": {
+    "year": 1962,
+    "categoryLabel": "Personal Status",
+    "categoryLabelHe": "מעמד אישי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מעמד אישי"
+    ]
+  },
+  "2000349": {
+    "year": 1973,
+    "categoryLabel": "Agriculture",
+    "categoryLabelHe": "חקלאות",
+    "minister": "Regional Development",
+    "ministerHe": "שר לפיתוח הנגב והגליל",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חקלאות"
+    ]
+  },
+  "2000350": {
+    "year": 1963,
+    "categoryLabel": "Agriculture",
+    "categoryLabelHe": "חקלאות",
+    "minister": "Regional Development",
+    "ministerHe": "שר לפיתוח הנגב והגליל",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חקלאות"
+    ]
+  },
+  "2000355": {
+    "year": 1972,
+    "categoryLabel": "Personal Status",
+    "categoryLabelHe": "מעמד אישי",
+    "minister": "Labor & Welfare",
+    "ministerHe": "שר העבודה והרווחה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מעמד אישי",
+      "רווחה"
+    ]
+  },
+  "2000390": {
+    "year": 1968,
+    "categoryLabel": "Real Estate",
+    "categoryLabelHe": "מקרקעין",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מקרקעין",
+      "משפט אזרחי"
+    ]
+  },
+  "2000396": {
+    "year": 1980,
+    "categoryLabel": "Taxation",
+    "categoryLabelHe": "מיסוי",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מיסוי"
+    ]
+  },
+  "2000397": {
+    "year": 1949,
+    "categoryLabel": "Knesset",
+    "categoryLabelHe": "כנסת",
+    "minister": "Transport",
+    "ministerHe": "שר התחבורה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "כנסת"
+    ]
+  },
+  "2000416": {
+    "year": 1969,
+    "categoryLabel": "Real Estate",
+    "categoryLabelHe": "מקרקעין",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מקרקעין",
+      "משפט אזרחי"
+    ]
+  },
+  "2000434": {
+    "year": 1960,
+    "categoryLabel": "Welfare",
+    "categoryLabelHe": "רווחה",
+    "minister": "Education",
+    "ministerHe": "שר החינוך",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "רווחה"
+    ]
+  },
+  "2000455": {
+    "year": 1964,
+    "categoryLabel": "Environment",
+    "categoryLabelHe": "איכות הסביבה",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "הגנת הסביבה",
+      "רשויות מקומיות"
+    ]
+  },
+  "2000459": {
+    "year": 1957,
+    "categoryLabel": "Employment",
+    "categoryLabelHe": "תעסוקה",
+    "minister": "Labor & Welfare",
+    "ministerHe": "שר העבודה והרווחה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תעסוקה"
+    ]
+  },
+  "2000468": {
+    "year": 1960,
+    "categoryLabel": "Maritime",
+    "categoryLabelHe": "ים ומשפט ימי",
+    "minister": "Agriculture",
+    "ministerHe": "שר החקלאות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ספנות"
+    ]
+  },
+  "2000475": {
+    "year": 1985,
+    "categoryLabel": "Administrative Law",
+    "categoryLabelHe": "דיני מינהל",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט מינהלי",
+      "משפט פלילי"
+    ]
+  },
+  "2000490": {
+    "year": 1978,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Minorities",
+    "ministerHe": "שר למיעוטים",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תרבות"
+    ]
+  },
+  "2000499": {
+    "year": 1958,
+    "categoryLabel": "Consumer Protection",
+    "categoryLabelHe": "הגנת הצרכן",
+    "minister": "Strategic Affairs",
+    "ministerHe": "שר לענינים אסטרטגיים",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "צרכנות"
+    ]
+  },
+  "2000514": {
+    "year": 1961,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות",
+      "מעמד אישי",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000524": {
+    "year": 1957,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים"
+    ]
+  },
+  "2000542": {
+    "year": 1956,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות",
+      "רשויות מקומיות"
+    ]
+  },
+  "2000587": {
+    "year": 1950,
+    "categoryLabel": "Citizenship",
+    "categoryLabelHe": "אזרחות",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "אזרחות, תושבות וכניסה לישראל",
+      "קליטת עלייה"
+    ]
+  },
+  "2000588": {
+    "year": 1973,
+    "categoryLabel": "Civil Law",
+    "categoryLabelHe": "משפט אזרחי",
+    "minister": "Interior",
+    "ministerHe": "שר הפנים",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט אזרחי"
+    ]
+  },
+  "2000595": {
+    "year": 1955,
+    "categoryLabel": "Defense",
+    "categoryLabelHe": "ביטחון",
+    "minister": "Defense",
+    "ministerHe": "שר הביטחון",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ביטחון",
+      "ערכאות שיפוטיות"
+    ]
+  },
+  "2000607": {
+    "year": 1970,
+    "categoryLabel": "Defense",
+    "categoryLabelHe": "ביטחון",
+    "minister": "Labor & Welfare",
+    "ministerHe": "שר העבודה והרווחה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ביטחון",
+      "רווחה"
+    ]
+  },
+  "2000630": {
+    "year": 1969,
+    "categoryLabel": "Administrative Law",
+    "categoryLabelHe": "דיני מינהל",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט מינהלי"
+    ]
+  },
+  "2000658": {
+    "year": 1951,
+    "categoryLabel": "Employment",
+    "categoryLabelHe": "תעסוקה",
+    "minister": "Labor & Welfare",
+    "ministerHe": "שר העבודה והרווחה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תעסוקה"
+    ]
+  },
+  "2000670": {
+    "year": 1951,
+    "categoryLabel": "Knesset",
+    "categoryLabelHe": "כנסת",
+    "minister": "Transport",
+    "ministerHe": "שר התחבורה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "כנסת",
+      "ראשי המדינה"
+    ]
+  },
+  "2000687": {
+    "year": 1957,
+    "categoryLabel": "Employment",
+    "categoryLabelHe": "תעסוקה",
+    "minister": "Labor & Welfare",
+    "ministerHe": "שר העבודה והרווחה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תעסוקה"
+    ]
+  },
+  "2000780": {
+    "year": 1959,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "פיתוח והשקעות",
+      "תיירות"
+    ]
+  },
+  "2000786": {
+    "year": 1950,
+    "categoryLabel": "Criminal Law",
+    "categoryLabelHe": "משפט פלילי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "משפט פלילי"
+    ]
+  },
+  "2000800": {
+    "year": 1959,
+    "categoryLabel": "Personal Status",
+    "categoryLabelHe": "מעמד אישי",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מעמד אישי"
+    ]
+  },
+  "2001068": {
+    "year": 1976,
+    "categoryLabel": "Taxation",
+    "categoryLabelHe": "מיסוי",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מיסוי"
+    ]
+  },
+  "2001072": {
+    "year": 1963,
+    "categoryLabel": "Taxation",
+    "categoryLabelHe": "מיסוי",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מיסוי",
+      "מקרקעין"
+    ]
+  },
+  "2001077": {
+    "year": 1949,
+    "categoryLabel": "Taxation",
+    "categoryLabelHe": "מיסוי",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מיסוי"
+    ]
+  },
+  "2001098": {
+    "year": 1950,
+    "categoryLabel": "Defense",
+    "categoryLabelHe": "ביטחון",
+    "minister": "Defense",
+    "ministerHe": "שר הביטחון",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ביטחון",
+      "רווחה"
+    ]
+  },
+  "2001104": {
+    "year": 1968,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "פנסיה, ביטוח ושוק ההון"
+    ]
+  },
+  "2001106": {
+    "year": 1954,
+    "categoryLabel": "Immigration",
+    "categoryLabelHe": "עלייה וקליטה",
+    "minister": "Prime Minister",
+    "ministerHe": "ראש הממשלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "קליטת עלייה",
+      "רווחה"
+    ]
+  },
+  "2001134": {
+    "year": 1953,
+    "categoryLabel": "Employment",
+    "categoryLabelHe": "תעסוקה",
+    "minister": "Labor & Welfare",
+    "ministerHe": "שר העבודה והרווחה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תעסוקה"
+    ]
+  },
+  "2001162": {
+    "year": 1963,
+    "categoryLabel": "Employment",
+    "categoryLabelHe": "תעסוקה",
+    "minister": "Labor & Welfare",
+    "ministerHe": "שר העבודה והרווחה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תעסוקה"
+    ]
+  },
+  "2001189": {
+    "year": 1968,
+    "categoryLabel": "Commerce & Industry",
+    "categoryLabelHe": "מסחר ותעשייה",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מסחר ותעשייה",
+      "רשויות מקומיות"
+    ]
+  },
+  "2001204": {
+    "year": 1961,
+    "categoryLabel": "Maritime",
+    "categoryLabelHe": "ים ומשפט ימי",
+    "minister": "Agriculture",
+    "ministerHe": "שר החקלאות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ספנות"
+    ]
+  },
+  "2001206": {
+    "year": 1989,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Minorities",
+    "ministerHe": "שר למיעוטים",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תרבות"
+    ]
+  },
+  "2001269": {
+    "year": 1978,
+    "categoryLabel": "Health",
+    "categoryLabelHe": "בריאות",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בריאות"
+    ]
+  },
+  "2001393": {
+    "year": 1959,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Prime Minister",
+    "ministerHe": "ראש הממשלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "שירות הציבור"
+    ]
+  },
+  "2001395": {
+    "year": 1959,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Prime Minister",
+    "ministerHe": "ראש הממשלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בחירות",
+      "שירות הציבור"
+    ]
+  },
+  "2001397": {
+    "year": 1969,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "שירות הציבור"
+    ]
+  },
+  "2001398": {
+    "year": 1979,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Economy",
+    "ministerHe": "שר הכלכלה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "שירות הציבור"
+    ]
+  },
+  "2001403": {
+    "year": 1959,
+    "categoryLabel": "Employment",
+    "categoryLabelHe": "תעסוקה",
+    "minister": "Strategic Affairs",
+    "ministerHe": "שר לענינים אסטרטגיים",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תעסוקה"
+    ]
+  },
+  "2001414": {
+    "year": 1958,
+    "categoryLabel": "Welfare",
+    "categoryLabelHe": "רווחה",
+    "minister": "Education",
+    "ministerHe": "שר החינוך",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "רווחה"
+    ]
   }
 };
