@@ -106,19 +106,39 @@ def _strip_year(title: str) -> str:
     return _YEAR_RE.sub("", title).strip()
 
 
+def build_seo_description(title: str, pub_date: str, law_validity: str | None) -> str:
+    """Deterministic (no-LLM) meta description — templated from data already in frontmatter."""
+    year = pub_date[:4] if pub_date else ""
+    status = law_validity or "תקף"
+    year_part = f" ({year})" if year else ""
+    return (
+        f'{title}{year_part} — חוק ישראלי, {status}. '
+        "הטקסט המלא, מסעיף לסעיף עם קישורים פנימיים, לקריאה חינם ב-Codex Civica."
+    )
+
+
 def build_frontmatter(entry: dict) -> str:
     """YAML frontmatter for provenance. Hebrew strings are double-quoted."""
     title = _strip_year(entry.get("name_he") or "").replace('"', '\\"')
     pub_date = (entry.get("publication_date") or "")[:10]
     pdf_url = entry.get("pdf_url") or ""
     now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    law_validity = entry.get("law_validity")
+    description = build_seo_description(title, pub_date, law_validity).replace('"', '\\"')
 
     # Determine ID field: prefer law_id (IsraelLaw system), fall back to bill_id
     law_id = entry.get("law_id")
     bill_id = entry.get("bill_id")
     id_line = f"law_id: {law_id}" if law_id else f"bill_id: {bill_id}"
 
-    lines = ["---", id_line, f'title_he: "{title}"', f'sidebar_label: "{title}"', "hide_table_of_contents: true"]
+    lines = [
+        "---", id_line,
+        f'title: "{title}"',
+        f'title_he: "{title}"',
+        f'sidebar_label: "{title}"',
+        f'description: "{description}"',
+        "hide_table_of_contents: true",
+    ]
 
     if pub_date:
         lines.append(f"publication_date: {pub_date}")
