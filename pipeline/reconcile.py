@@ -25,6 +25,7 @@ import datetime as dt
 import json
 import logging
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -97,11 +98,19 @@ def call_gemini(client: genai.Client, request: str) -> str:
     return text.strip()
 
 
+_YEAR_RE = re.compile(r',\s*ה?תש[א-ת]*"[א-ת]-\d{4}$')
+
+
+def _strip_year(title: str) -> str:
+    """Remove the Hebrew/Gregorian year suffix (e.g. ', התשנ"ו-1996') from a law title."""
+    return _YEAR_RE.sub("", title).strip()
+
+
 def build_frontmatter(entry: dict) -> str:
     """YAML frontmatter for provenance. Hebrew strings are double-quoted."""
-    title = (entry.get("name_he") or "").replace('"', '\\"')
+    title = _strip_year(entry.get("name_he") or "").replace('"', '\\"')
     pub_date = (entry.get("publication_date") or "")[:10]
-    pdf_path = entry.get("pdf_path") or ""
+    pdf_url = entry.get("pdf_url") or ""
     now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # Determine ID field: prefer law_id (IsraelLaw system), fall back to bill_id
@@ -109,7 +118,7 @@ def build_frontmatter(entry: dict) -> str:
     bill_id = entry.get("bill_id")
     id_line = f"law_id: {law_id}" if law_id else f"bill_id: {bill_id}"
 
-    lines = ["---", id_line, f'title_he: "{title}"']
+    lines = ["---", id_line, f'title_he: "{title}"', f'sidebar_label: "{title}"', "hide_table_of_contents: true"]
 
     if pub_date:
         lines.append(f"publication_date: {pub_date}")
@@ -145,7 +154,7 @@ def build_frontmatter(entry: dict) -> str:
         lines.append(f"ministry_ids: {json.dumps(ministry_ids)}")
 
     lines += [
-        f"source_pdf: {pdf_path}",
+        f"source_pdf: {pdf_url}",
         "generated_by: pipeline/reconcile.py",
         f"model: {MODEL}",
         f"generated_at: {now}",
@@ -237,6 +246,9 @@ def main(
         if md is None:
             continue
 
+        src_url = entry.get("pdf_url") or ""
+        if src_url:
+            md = md.rstrip() + f'\n\n---\n\n[![מסמך PDF](/img/pdf-icon.svg)]({src_url}) [מסמך המקור באתר הכנסת]({src_url})\n'
         out_path.write_text(md, encoding="utf-8")
         logging.info("  wrote %s (%d chars)", out_path.name, len(md))
         successes += 1

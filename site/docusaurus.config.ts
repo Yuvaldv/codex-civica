@@ -73,7 +73,7 @@ const config: Config = {
         },
         {
           href: 'https://justsocial.io',
-          label: 'JustSocial',
+          label: 'by JustSocial',
           position: 'left',
         },
         {

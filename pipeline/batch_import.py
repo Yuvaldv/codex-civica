@@ -48,7 +48,7 @@ def load_progress() -> dict:
     if PROGRESS_PATH.exists():
         with open(PROGRESS_PATH, encoding="utf-8") as f:
             return json.load(f)
-    return {"done": [], "failed": [], "total_deployed": 0}
+    return {"done": [], "failed": [], "total_deployed": 0, "priority": []}
 
 
 def save_progress(progress: dict) -> None:
@@ -212,6 +212,10 @@ def stage_reconcile(entry: dict, force: bool = False) -> bool:
         logging.error("Empty Gemini response for law %s", law_id)
         return False
 
+    src_url = entry.get("pdf_url") or ""
+    if src_url:
+        md = md.rstrip() + f'\n\n---\n\n[![מסמך PDF](/img/pdf-icon.svg)]({src_url}) [מסמך המקור באתר הכנסת]({src_url})\n'
+
     LAWS_DIR.mkdir(parents=True, exist_ok=True)
     out_path.write_text(md, encoding="utf-8")
     logging.info("  reconcile: wrote %s (%d chars)", out_path.name, len(md))
@@ -249,10 +253,29 @@ def deploy() -> bool:
 # ---------------------------------------------------------------------------
 
 def get_next_batch(manifest: list[dict], progress: dict, count: int) -> list[dict]:
-    """Return next N unprocessed laws that have PDFs."""
+    """Return next N unprocessed laws that have PDFs. Priority queue is drained first."""
     done_set = set(str(x) for x in progress.get("done", []))
     failed_set = set(str(x) for x in progress.get("failed", []))
-    batch = []
+    priority_ids = [str(x) for x in progress.get("priority", [])
+                    if str(x) not in done_set and str(x) not in failed_set]
+
+    # Build a lookup by law_id for fast access
+    by_id = {str(e.get("law_id") or e.get("bill_id")): e for e in manifest}
+
+    batch: list[dict] = []
+
+    # Drain priority queue first
+    for pid in priority_ids:
+        if len(batch) >= count:
+            break
+        entry = by_id.get(pid)
+        if not entry:
+            continue
+        if not entry.get("pdf_path") or not Path(entry["pdf_path"]).exists():
+            continue
+        batch.append(entry)
+
+    # Fill remaining slots from manifest in order
     for entry in manifest:
         if len(batch) >= count:
             break
@@ -261,9 +284,12 @@ def get_next_batch(manifest: list[dict], progress: dict, count: int) -> list[dic
             continue
         if str(law_id) in done_set or str(law_id) in failed_set:
             continue
+        if any(e is entry for e in batch):
+            continue
         if not entry.get("pdf_path") or not Path(entry["pdf_path"]).exists():
             continue
         batch.append(entry)
+
     return batch
 
 
@@ -322,6 +348,8 @@ def run_batch(count: int = DEFAULT_BATCH, force: bool = False) -> int:
         if _process_law(entry, force):
             progress["done"].append(law_id)
             newly_done.append(entry)
+            # Remove from priority queue once converted
+            progress["priority"] = [p for p in progress.get("priority", []) if str(p) != str(law_id)]
             logging.info("  OK: %s", law_id)
         else:
             progress["failed"].append(law_id)
@@ -341,11 +369,44 @@ def run_batch(count: int = DEFAULT_BATCH, force: bool = False) -> int:
         return 0
 
     logging.info("Phase 2: link-resolving %d laws...", len(newly_done))
+    pdf_map = link_resolver.build_inter_law_index(LAWS_DIR)
     for entry in newly_done:
         law_id = entry.get("law_id") or entry.get("bill_id")
         out_path = LAWS_DIR / f"{law_id}.md"
         if out_path.exists():
-            link_resolver.resolve_one(out_path)
+            link_resolver.resolve_one(out_path, pdf_map)
+
+    # ── Phase 3: Cross-link (inter-law references via Gemini) ─────────────────
+    try:
+        import cross_linker
+        import reconcile as _reconcile
+        from google import genai as _genai  # type: ignore
+        _cl_client = _genai.Client(api_key=_reconcile.load_api_key())
+    except ImportError as exc:
+        logging.warning("cross_linker unavailable, skipping: %s", exc)
+        _cl_client = None
+
+    if _cl_client is not None:
+        logging.info("Phase 3: cross-linking %d laws...", len(newly_done))
+        priority_set = set(str(x) for x in progress.get("priority", []))
+        new_priority: list[str] = []
+
+        for entry in newly_done:
+            law_id = entry.get("law_id") or entry.get("bill_id")
+            out_path = LAWS_DIR / f"{law_id}.md"
+            if not out_path.exists():
+                continue
+            unresolved = cross_linker.cross_link_one(out_path, _cl_client, manifest)
+            for uid in unresolved:
+                if uid not in priority_set and uid not in set(str(x) for x in progress.get("done", [])):
+                    new_priority.append(uid)
+                    priority_set.add(uid)
+
+        if new_priority:
+            progress.setdefault("priority", [])
+            progress["priority"].extend(new_priority)
+            logging.info("Phase 3: queued %d referenced laws for priority conversion", len(new_priority))
+            save_progress(progress)
 
     # ── Deploy check ──────────────────────────────────────────────────────────
     total_done = len(progress.get("done", []))

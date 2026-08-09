@@ -91,12 +91,14 @@
 }
 
 /* Anchor scroll offset — prevent navbar from hiding jump targets */
+/* Also covers inline <span id="section-N"> anchors used as section targets */
 .markdown h1,
 .markdown h2,
 .markdown h3,
 .markdown h4,
 .markdown h5,
-.markdown h6 {
+.markdown h6,
+.markdown span[id] {
   scroll-margin-top: calc(var(--ifm-navbar-height) + 1.5rem);
 }
 
@@ -210,15 +212,11 @@ aside.theme-doc-sidebar-container {
   border-left: 1px solid var(--ifm-toc-border-color);
 }
 
-/* Remove TOC panel on desktop and mobile */
+/* TOC is disabled per-doc via hide_table_of_contents: true frontmatter.
+   This safety rule silences it in case a doc slips through without the flag. */
 .theme-doc-toc-desktop,
 .theme-doc-toc-mobile {
   display: none !important;
-}
-
-/* Expand content to fill the space left by the hidden TOC */
-[class*='docItemCol'] {
-  max-width: 100% !important;
 }
 
 /* Group-by on mobile: keep in the top navbar bar, NOT in the hamburger */
@@ -227,11 +225,6 @@ aside.theme-doc-sidebar-container {
   .navbar__inner .navbar-groupby-item {
     display: flex !important;
     align-items: center;
-  }
-
-  /* Drop the "Group by" label — only the select fits on mobile */
-  .navbar__inner .navbar-sortby__label {
-    display: none;
   }
 
   /* Reset desktop spacing so it sits tight next to the hamburger */

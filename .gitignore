@@ -25,3 +25,7 @@ desktop.ini
 # MemPalace per-project files (issue #185)
 mempalace.yaml
 entities.json
+
+# Local scratch / runtime artifacts
+.firecrawl/
+.claude/scheduled_tasks.lock
