@@ -17,6 +17,8 @@ import logging
 import re
 from pathlib import Path
 
+from common.frontmatter import split_frontmatter as _split_frontmatter
+
 PIPELINE_DIR = Path(__file__).parent
 PROJECT_DIR = PIPELINE_DIR.parent
 LAWS_DIR = PROJECT_DIR / "laws" / "israel"
@@ -198,18 +200,6 @@ def linkify_body(body: str, resolved: list[dict]) -> str:
 
 
 # ─── Main entry ──────────────────────────────────────────────────────────────
-
-def _split_frontmatter(text: str) -> tuple[str, str]:
-    if not text.startswith('---'):
-        return '', text
-    end = text.find('\n---', 3)
-    if end == -1:
-        return '', text
-    split = end + 4
-    if split < len(text) and text[split] == '\n':
-        split += 1
-    return text[:split], text[split:]
-
 
 def cross_link_one(md_path: Path, client, manifest: list[dict]) -> list[str]:
     """Cross-link one law file in-place. Returns law_ids in manifest but not yet converted."""

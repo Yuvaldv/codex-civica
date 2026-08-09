@@ -17,23 +17,11 @@ import logging
 import re
 from pathlib import Path
 
+from common.frontmatter import split_frontmatter
+
 PIPELINE_DIR = Path(__file__).parent
 LAWS_DIR = PIPELINE_DIR.parent / "laws" / "israel"
 MANIFEST_PATH = PIPELINE_DIR.parent / "data" / "raw" / "israel" / "manifest_laws.json"
-
-
-# ─── Frontmatter ─────────────────────────────────────────────────────────────
-
-def split_frontmatter(text: str) -> tuple[str, str]:
-    if not text.startswith("---"):
-        return "", text
-    end = text.find("\n---", 3)
-    if end == -1:
-        return "", text
-    split = end + 4
-    if split < len(text) and text[split] == "\n":
-        split += 1
-    return text[:split], text[split:]
 
 
 # ─── Pass 1: Section anchors ─────────────────────────────────────────────────
