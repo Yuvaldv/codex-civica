@@ -109,6 +109,8 @@ Overall: 4/6 phases complete
 - `site/scripts/generate-law-meta.js` — metadata generator (runs as predeploy hook)
 - `pipeline/fix_2000595_tail.py` — tail-fix pattern (reuse if another long law truncates)
 
+**Deploy status:** Pushed `main` → `origin/main` (8 commits, up through `9602be5`) and deployed to GitHub Pages (`gh-pages`, based on `9602be5`). Live at https://Yuvaldv.github.io/codex-civica/. Working tree clean, nothing pending.
+
 ---
 
-*Last updated: 2026-05-19 (session 8) — awaiting next steps*
+*Last updated: 2026-05-19 (session 8) — pushed + deployed, awaiting next steps*
