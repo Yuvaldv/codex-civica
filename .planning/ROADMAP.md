@@ -178,7 +178,16 @@
   2. Re-running the Israel pipeline over already-converted laws produces byte-identical files — `git diff --stat laws/israel/` is empty
   3. `python pipeline/batch_import.py --status` still reports the true import state (111/718 converted, 0 failed) through the shared progress module
   4. A new country package can read/write law frontmatter and progress without copying a single line of Israel-specific code
-**Plans**: TBD
+**Plans**: 7 plans in 7 sequential waves (each extraction must clear the golden gate before the next begins)
+
+Plans:
+- [ ] 07-01-PLAN.md — Safety net: off-repo backup of gitignored import state + capture the four BEFORE fingerprints
+- [ ] 07-02-PLAN.md — Build the gate (`verify_golden.py`), proven green on unmodified source and red under perturbation
+- [ ] 07-03-PLAN.md — Extract `split_frontmatter` into `common/frontmatter.py` (risk: none — AST-identical duplicate)
+- [ ] 07-04-PLAN.md — Extract progress load/save, `get_next_batch`, `print_status` into `common/progress.py`
+- [ ] 07-05-PLAN.md — Extract `deploy()` into `common/deploy.py` + lock down the `common/` security boundary
+- [ ] 07-06-PLAN.md — Extract `render_frontmatter`/`quote`; delegate fence-wrapping from `reconcile.build_frontmatter` (highest risk, last)
+- [ ] 07-07-PLAN.md — Close-out: country-blindness probe, structural gate on, PIPELINE.md + STATE.md
 
 ### Phase 8: UK Acquisition
 **Goal**: England-applicable Acts are on disk as trustworthy CLML XML, with empty stubs and wrong-version documents rejected before they can reach conversion
