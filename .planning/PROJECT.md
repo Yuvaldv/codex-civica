@@ -19,6 +19,7 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 - Build the pipeline (fetch/convert/validate) and convert a small starter batch of England-applicable legislation to Markdown
 - A law directory for England content, wired into the same Docusaurus site as `laws/israel/`, structured to leave room for other UK nations later
 - 🇬🇧 (or England-specific) entry added to the homepage "Pick a country" grid and navbar, matching the existing Israel pattern
+- Amendments linked proactively, two directions: (1) every amendment affecting a document is listed at the **end of the original document**, not inline mid-text; (2) each amendment document links **inline, at the specific point in its own text**, back to the original provision it amends. CLML's `Commentary`/`CommentaryRef` and `ukm:UnappliedEffect` elements (found by the pitfalls research) are the likely data source for this — needs its own requirement/design pass, not assumed solved by cross-linking.
 
 **Note:** Milestone v1.0 (Israeli Basic Laws) is not yet complete — Phase 4 (Content, 111/718 laws) is paused by user request and Phase 6 (Search) hasn't started. v1.1 proceeds in parallel by deliberate choice; v1.0's remaining phases stay in the roadmap and will be resumed later, not abandoned.
 
@@ -41,6 +42,8 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 - [ ] Starter batch of England laws converted to Markdown with complete frontmatter, committed to the law directory
 - [ ] Law directory wired into Docusaurus alongside `laws/israel/`, structured so Scotland/Wales/NI can be added later without a reshuffle
 - [ ] 🇬🇧 (or England-specific) entry added to homepage country grid and navbar country picker
+- [ ] Amendments listed at the end of the original document they affect (user-requested 2026-08-09; not the same as passive cross-referencing)
+- [ ] Each amendment document links inline, at the specific point in its own text, back to the original provision it amends (user-requested 2026-08-09)
 
 **Pipeline (Israel, v1.0 — carried over, unchanged)**
 - [ ] `pipeline/convert.py` — `.docx` → Markdown with frontmatter generation (via Pandoc + python-docx)
@@ -111,6 +114,7 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 | UK starter batch scope, not full corpus | Mirrors the Israel Basic-Laws-first approach: validate the pipeline end-to-end on a small set before scaling to the full Acts/SI corpus | — Pending |
 | Same Docusaurus site, new UK section | Matches the homepage's existing "Pick a country" multi-country pattern; no separate deploy needed | — Pending |
 | v1.1 scoped to England only, not the whole UK | UK is four distinct legal jurisdictions (England & Wales courts, Scots law, NI law) with separate devolved legislatures; user explicit call to start with one nation and expand later rather than build UK-wide from day one | — Pending |
+| Rebase Docusaurus routes now: `/laws/israel` + `/laws/england`, with redirects for the 111 existing URLs | User chose symmetric structure over leaving Israel's route as-is; cheaper to do now while the corpus and search-index footprint are small than to retrofit later. Requires `@docusaurus/plugin-client-redirects` so the 111 already-SEO-indexed URLs 301 instead of breaking | — Pending |
 
 ## Evolution
 
