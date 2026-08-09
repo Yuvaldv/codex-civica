@@ -8,6 +8,18 @@ An open, markdown-parsed, interlinked repository of laws — starting with Israe
 
 Anyone — lawyer, student, or citizen — can find and read any Israeli law in plain, readable form in under 30 seconds.
 
+## Current Milestone: v1.1 UK Laws — Pipeline + Law Directory
+
+**Goal:** Stand up a UK legislation pipeline and law directory alongside the existing Israel work, with a source-appropriate architecture — legislation.gov.uk offers structured XML/Atom feeds, unlike Knesset's scanned PDFs — starting with a small high-value batch.
+
+**Target features:**
+- Research legislation.gov.uk's data source (API/XML schema) and design a pipeline architecture suited to structured input, rather than reusing the Israel OCR/Gemini pipeline as-is
+- Build the UK pipeline (fetch/convert/validate) and convert a small starter batch of UK legislation to Markdown
+- `laws/uk/` directory wired into the same Docusaurus site as `laws/israel/`
+- 🇬🇧 UK entry added to the homepage "Pick a country" grid and navbar, matching the existing Israel pattern
+
+**Note:** Milestone v1.0 (Israeli Basic Laws) is not yet complete — Phase 4 (Content, 111/718 laws) is paused by user request and Phase 6 (Search) hasn't started. v1.1 proceeds in parallel by deliberate choice; v1.0's remaining phases stay in the roadmap and will be resumed later, not abandoned.
+
 ## Requirements
 
 ### Validated
@@ -21,7 +33,14 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 
 ### Active
 
-**Pipeline**
+**UK Laws (v1.1)**
+- [ ] Research legislation.gov.uk data source (XML/Atom API schema, coverage, rate limits) and propose pipeline architecture
+- [ ] `pipeline_uk/` (or equivalent): fetch → convert → validate for a small starter batch of UK legislation
+- [ ] Starter batch of UK laws converted to Markdown with complete frontmatter, committed to `laws/uk/`
+- [ ] `laws/uk/` wired into Docusaurus alongside `laws/israel/`
+- [ ] 🇬🇧 UK added to homepage country grid and navbar country picker
+
+**Pipeline (Israel, v1.0 — carried over, unchanged)**
 - [ ] `pipeline/convert.py` — `.docx` → Markdown with frontmatter generation (via Pandoc + python-docx)
 - [ ] `pipeline/validate.py` — frontmatter completeness + internal link integrity checks
 - [ ] Manual download workflow documented for Knesset .docx files (WSL2 IP blocked by Reblaze)
@@ -54,7 +73,8 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 - `pipeline/fetch.py` OData API ingestion — Phase 2 (manual download workflow for Phase 1)
 - Algolia DocSearch — Phase 2 (local search sufficient for Basic Laws volume)
 - Non-Basic-Law categories — Phase 2+ (volume and pipeline validation first)
-- Jordan, other countries — future milestone
+- UK legislation beyond the v1.1 starter batch (full Acts corpus, Statutory Instruments) — future milestone, scope after starter batch validates the pipeline
+- Jordan, other countries beyond UK — future milestone
 
 ## Context
 
@@ -83,6 +103,10 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 | Manual .docx download workflow | WSL2 blocked by Knesset WAF — no automated fix available | — Pending |
 | Public-first UI aesthetic | Target audience is citizens, not just lawyers | — Pending |
 | Flat file structure, categories via frontmatter | Simpler than nested dirs; Docusaurus sidebars handle grouping | — Pending |
+| v1.1 UK milestone proceeds in parallel with unfinished v1.0 | User explicitly chose "new milestone" over pausing Israel work or a separate workstream; v1.0 Phase 4/6 remain in the roadmap, not abandoned | — Pending |
+| UK pipeline architecture: research first, don't reuse Israel's OCR/Gemini pipeline blindly | legislation.gov.uk exposes structured XML/Atom feeds, unlike Knesset's scanned PDFs — the noise-reconciliation assumptions in CLAUDE.md's LAYER1-3 design may not apply | — Pending |
+| UK starter batch scope, not full corpus | Mirrors the Israel Basic-Laws-first approach: validate the pipeline end-to-end on a small set before scaling to the full Acts/SI corpus | — Pending |
+| Same Docusaurus site, `laws/uk/` new section | Matches the homepage's existing "Pick a country" multi-country pattern; no separate deploy needed | — Pending |
 
 ## Evolution
 
@@ -102,4 +126,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-05-08 after initialization*
+*Last updated: 2026-08-09 after starting milestone v1.1 (UK Laws)*

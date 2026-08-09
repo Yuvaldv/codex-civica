@@ -1,3 +1,18 @@
+---
+gsd_state_version: 1.0
+milestone: v1.1
+milestone_name: UK Laws
+status: planning
+last_updated: "2026-08-09T09:34:15.350Z"
+last_activity: 2026-08-09
+progress:
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
+---
+
 # State — Codex Civica
 
 > Project memory. Updated at phase transitions and plan completions.
@@ -8,35 +23,18 @@
 
 **Core value:** Anyone — lawyer, student, or citizen — can find and read any Israeli law in plain, readable form in under 30 seconds.
 
-**Current milestone:** Milestone 1 — Israeli Basic Laws on a live, searchable site.
+**Current milestone:** v1.1 — UK Laws: Pipeline + Law Directory.
 
-**Current focus:** Phase 4 — Content (factory import in progress)
+**Current focus:** Defining requirements (v1.0 Israel work — Phase 4 Content 111/718, Phase 6 Search — remains open in parallel, not abandoned)
 
 ---
 
 ## Current Position
 
-| Field | Value |
-|-------|-------|
-| Current phase | Phase 4: Content (factory import in progress) |
-| Current plan | Factory-line import of all 718 Israeli laws with PDFs |
-| Phase status | In progress |
-| Last updated | 2026-05-19 |
-
-**Progress:**
-
-```
-Phase 1: Pipeline        [✓] Complete
-Phase 2: Site Foundation [✓] Complete (Docusaurus + RTL + sidebar live)
-Phase 3: Custom UI       [✓] Complete (navbar, metadata bubbles, grouping)
-Phase 4: Content         [▶] In progress — 111/718 laws imported, paused (SEO-hardened)
-Phase 5: Deployment      [✓] Complete (GitHub Pages + auto-deploy)
-Phase 6: Search          [ ] Not started
-
-Overall: 4/6 phases complete
-```
-
----
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-08-09 — Milestone v1.1 started
 
 ## Accumulated Context
 
@@ -88,18 +86,21 @@ Overall: 4/6 phases complete
 **Last session summary (2026-05-19, session 8):** Found this repo with 125 dirty files — a full uncommitted batch (111 converted laws, up from 81) plus a pipeline rewrite that had partially reverted commit `4281447` (which had dropped inter-law linking entirely) without anyone committing the reversal. Reviewed and committed everything in two commits: `3648584` (pipeline: Gemini cross_linker restored as Phase 3 in batch_import.py, new deterministic Pass 4 URL-upgrader in link_resolver.py, reconcile.py frontmatter fixes) and `d0212de` (content: 101 new + 11 backfilled laws, 111/718 total). Added `.firecrawl/` and `.claude/scheduled_tasks.lock` to `.gitignore` — local scratch, never should have been trackable. Then ran `cross_linker.relink_all()` across all 111 laws to backfill cross-links that Phase 3 missed mid-batch (it only sees laws converted-so-far when it runs per-batch, so early laws in a batch miss citations to laws converted later in the same run) — 44 files gained new citation links, committed as `b87ab4e`.
 
 **Current inter-law linking architecture** (see commits `3648584`, `d0212de`):
+
 - Passes 1–3 (`link_resolver.py`): section anchors, intra-law section refs, margin-note index — unchanged, deterministic, LLM-free
 - Phase 3 (`batch_import.py` → `cross_linker.py`): Gemini extracts every external law reference per doc, resolves against `manifest_laws.json`, writes `./law_id.md` for converted targets or a knesset PDF fallback link otherwise. Runs on `newly_done` laws after every batch.
 - Pass 4 (`link_resolver.py` → `upgrade_pdf_links()`): deterministic, no LLM — swaps an *existing* knesset PDF link for `./law_id.md` once that exact URL's target law is converted. Purely an upgrader, can't discover new references on its own.
 - Unresolved references (target in manifest but not yet converted) get queued in `progress["priority"]`, drained first by `get_next_batch()` on the next run — replaces the old inline "auto-convert referenced laws" step.
 
 **Current import state:**
+
 - 1,076 total valid laws | 718 with PDFs | 111 converted | 0 failed — **paused here by user request**, not resuming without explicit go-ahead
 - Working tree is clean
 - All 111 laws cross-linked consistently (per-batch Phase 3 + full relink_all backfill)
 - 2000595 confirmed complete (from prior session) ✓
 
 **SEO pass (same session, after the import pause):** Found via an actual `npm run build` — not just source review — that law pages served `<html lang=en dir=ltr>` on 100%-Hebrew content, and meta description auto-scraped the first line of body text (one law's description was literally the word "פירושים" / "definitions"). Fixed:
+
 - `pipeline/reconcile.py`: `build_frontmatter()` now emits `title` + `description` (deterministic, templated from title/pub_date/law_validity already in the entry — no LLM call, no legal text touched)
 - `pipeline/backfill_seo_meta.py`: one-time backfill of `title`+`description` onto all 111 already-converted laws
 - `site/src/theme/DocItem/Content/index.jsx`: swizzled wrapper now also renders `<html lang="he" dir="rtl">`, `og:locale=he_IL`, and a `schema.org/Legislation` JSON-LD block — scoped to doc pages only, homepage/chrome stay `en`/`ltr`
@@ -107,11 +108,13 @@ Overall: 4/6 phases complete
 - Commits: `51ad88f` (pipeline+site code), `b41930f` (content backfill)
 
 **Next-session actions:**
+
 1. Do NOT resume factory import (`batch_import.py`) unless explicitly asked — paused intentionally at 111/718
 2. If import does resume: commit after every batch (don't let converted laws sit uncommitted for a full session again), and periodically re-run `cross_linker.relink_all()` (or wire it as an end-of-run step) so cross-batch citations don't accumulate as a manual-backfill chore
 3. SEO follow-ups if asked: category/index-page descriptions, Search Console verification+submission
 
 **Files to review on re-entry:**
+
 - `pipeline/batch_import.py` — main factory loop (Phase 1 convert, Phase 2 link_resolver, Phase 3 cross_linker)
 - `pipeline/cross_linker.py` — Gemini inter-law reference extractor/linker
 - `pipeline/link_resolver.py` — Pass 1–4 (3 intra-law + 1 deterministic inter-law upgrader)
