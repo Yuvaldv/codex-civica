@@ -29,7 +29,7 @@
 Phase 1: Pipeline        [✓] Complete
 Phase 2: Site Foundation [✓] Complete (Docusaurus + RTL + sidebar live)
 Phase 3: Custom UI       [✓] Complete (navbar, metadata bubbles, grouping)
-Phase 4: Content         [▶] In progress — 10/718 laws imported
+Phase 4: Content         [▶] In progress — 111/718 laws imported
 Phase 5: Deployment      [✓] Complete (GitHub Pages + auto-deploy)
 Phase 6: Search          [ ] Not started
 
@@ -51,6 +51,14 @@ Overall: 4/6 phases complete
 | 2026-05-08 | Flat file structure, categories via frontmatter | Simpler than nested dirs; Docusaurus sidebars handle grouping |
 | 2026-05-15 | Dynamic metadata generation via prebuild script | All per-law metadata (category, tags, ministry, status, year) lives in .md frontmatter; generate-law-meta.js reads it at build time |
 | 2026-05-15 | Full codebase refactor — no hardcoded law IDs | Removed MINISTER_BY_ID, STATUS_BY_ID, CATEGORY_HE hardcoded maps; DocItem/Content now reads from GENERATED_LAW_META; navbar/homepage link to /laws not a specific ID |
+| 2026-05-19 | Inter-law cross-linking via Gemini (Pass 4) | Gemini extracts external law refs per doc; internal link if target converted, Knesset PDF fallback otherwise; referenced-but-unconverted laws queued as priority for next batch |
+| 2026-05-19 | Knesset source link at bottom of every law .md | Added automatically by reconcile.py; backfilled on all 40 existing laws |
+| 2026-05-19 | Fixed source link missing from batch_import path | stage_reconcile() bypassed reconcile.main(); now appends link directly |
+| 2026-05-19 | Fixed NameError reconcile in Phase 3 cross-linker | Added `import reconcile as _reconcile` inside the cross-linker try block |
+| 2026-05-19 | Full-body cross-linking (was 12k char truncation) | cross_linker.extract_refs now chunks at 80k chars; long laws get all refs found |
+| 2026-05-19 | Full relink_all + link_resolver re-pass on 81 laws | All section anchors, intra-law citations, and inter-law links refreshed |
+| 2026-05-19 | Dropped inter-law linking (commit 4281447), then restored it same day | Regex-based citation matcher (old Pass 3 in link_resolver.py) removed for good — superseded by Gemini; Gemini cross_linker.py re-wired into batch_import.py as Phase 3, plus a new deterministic Pass 4 in link_resolver.py that upgrades existing knesset PDF links to internal links via manifest lookup (no LLM call, safe to re-run) |
+| 2026-05-19 | Referenced-but-unconverted laws go into a priority queue, not auto-converted inline | `progress["priority"]` drained first by `get_next_batch()` each run — simpler and safer than the old inline auto-convert-during-linking step |
 
 ### Known Constraints
 
@@ -73,32 +81,32 @@ Overall: 4/6 phases complete
 
 ## Session Continuity
 
-**Last session summary (2026-05-19):** Refactored pipeline bugs; anchor scroll offset fixed on site.
+**Last session summary (2026-05-19, session 8):** Found this repo with 125 dirty files — a full uncommitted batch (111 converted laws, up from 81) plus a pipeline rewrite that had partially reverted commit `4281447` (which had dropped inter-law linking entirely) without anyone committing the reversal. Reviewed and committed everything in two commits: `3648584` (pipeline: Gemini cross_linker restored as Phase 3 in batch_import.py, new deterministic Pass 4 URL-upgrader in link_resolver.py, reconcile.py frontmatter fixes) and `d0212de` (content: 101 new + 11 backfilled laws, 111/718 total). Added `.firecrawl/` and `.claude/scheduled_tasks.lock` to `.gitignore` — local scratch, never should have been trackable.
 
-**What was built this session:**
-- **`site/src/css/custom.css`**: Added `scroll-margin-top: calc(var(--ifm-navbar-height) + 1.5rem)` on `.markdown h1–h6` — in-document anchor links now land above the heading instead of hidden behind the navbar
-- **`pipeline/batch_import.py`**: Fixed OCR stage — doc was reopened for every page; now uses single `with fitz.open()` context
-- **`pipeline/batch_import.py`**: Removed duplicate `sys.path.insert` call (was inserted twice for link_resolver import)
-- **`pipeline/batch_import.py`**: `deploy()` now explicitly sets `USE_SSH=true` and `GIT_USER=Yuvaldv` in env so auto-deploy (every 25 laws) works without WSL2 HTTPS auth failure
+**Current inter-law linking architecture** (see commits `3648584`, `d0212de`):
+- Passes 1–3 (`link_resolver.py`): section anchors, intra-law section refs, margin-note index — unchanged, deterministic, LLM-free
+- Phase 3 (`batch_import.py` → `cross_linker.py`): Gemini extracts every external law reference per doc, resolves against `manifest_laws.json`, writes `./law_id.md` for converted targets or a knesset PDF fallback link otherwise. Runs on `newly_done` laws after every batch.
+- Pass 4 (`link_resolver.py` → `upgrade_pdf_links()`): deterministic, no LLM — swaps an *existing* knesset PDF link for `./law_id.md` once that exact URL's target law is converted. Purely an upgrader, can't discover new references on its own.
+- Unresolved references (target in manifest but not yet converted) get queued in `progress["priority"]`, drained first by `get_next_batch()` on the next run — replaces the old inline "auto-convert referenced laws" step.
 
 **Current import state:**
-- 1,076 total valid laws | 718 with PDFs | 10 converted | 708 pending
-- Progress tracked in `data/raw/israel/import_progress.json`
-- Auto-deploy triggers every 25 laws (now SSH-safe)
-- 10 laws deployed and live on GitHub Pages
+- 1,076 total valid laws | 718 with PDFs | 111 converted | 0 failed
+- Working tree is clean as of commit `d0212de`
+- 2000595 confirmed complete (from prior session) ✓
 
 **Next-session actions:**
 1. Continue factory import: `source ~/.venv-codex/bin/activate && python pipeline/batch_import.py --count 25`
-2. Check status: `python pipeline/batch_import.py --status`
+2. Commit after every batch — do not let converted laws sit uncommitted for a full session again
 3. After import completes (718 laws), delete `laws/israel/placeholder.md` and redeploy
 
 **Files to review on re-entry:**
-- `pipeline/batch_import.py` — main factory loop
-- `data/raw/israel/import_progress.json` — current progress
+- `pipeline/batch_import.py` — main factory loop (Phase 1 convert, Phase 2 link_resolver, Phase 3 cross_linker)
+- `pipeline/cross_linker.py` — Gemini inter-law reference extractor/linker
+- `pipeline/link_resolver.py` — Pass 1–4 (3 intra-law + 1 deterministic inter-law upgrader)
+- `data/raw/israel/import_progress.json` — progress + priority queue
 - `site/scripts/generate-law-meta.js` — metadata generator (runs as predeploy hook)
-- `site/src/clientModules/lawSort.js` — group-by sidebar logic
-- `site/src/theme/DocItem/Content/index.jsx` — dynamic metadata bubbles
+- `pipeline/fix_2000595_tail.py` — tail-fix pattern (reuse if another long law truncates)
 
 ---
 
-*Last updated: 2026-05-19*
+*Last updated: 2026-05-19 (session 8)*
