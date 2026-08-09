@@ -212,7 +212,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 07-02-PLAN.md — Build the gate (`verify_golden.py`), proven green on unmodified source and red under perturbation
+- [x] 07-02-PLAN.md — Build the gate (`verify_golden.py`), proven green on unmodified source and red under perturbation
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
