@@ -38,8 +38,8 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 
 **UK Laws (v1.1, England only)**
 - [ ] Research legislation.gov.uk data source (XML/Atom API schema, coverage, rate limits) and propose pipeline architecture
-- [ ] `pipeline_uk/` (or equivalent): fetch → convert → validate for a small starter batch of England-applicable legislation
-- [ ] Starter batch of England laws converted to Markdown with complete frontmatter, committed to the law directory
+- [ ] `pipeline_uk/` (or equivalent): fetch → convert → validate for a small starter batch of England-applicable legislation (capped at 10 Acts or fewer for the initial fetch — user-requested 2026-08-09)
+- [ ] Starter batch (≤10 Acts) of England laws converted to Markdown with complete frontmatter, committed to the law directory
 - [ ] Law directory wired into Docusaurus alongside `laws/israel/`, structured so Scotland/Wales/NI can be added later without a reshuffle
 - [ ] 🇬🇧 (or England-specific) entry added to homepage country grid and navbar country picker
 - [ ] Amendments listed at the end of the original document they affect (user-requested 2026-08-09; not the same as passive cross-referencing)
@@ -115,6 +115,7 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 | Same Docusaurus site, new UK section | Matches the homepage's existing "Pick a country" multi-country pattern; no separate deploy needed | — Pending |
 | v1.1 scoped to England only, not the whole UK | UK is four distinct legal jurisdictions (England & Wales courts, Scots law, NI law) with separate devolved legislatures; user explicit call to start with one nation and expand later rather than build UK-wide from day one | — Pending |
 | Rebase Docusaurus routes now: `/laws/israel` + `/laws/england`, with redirects for the 111 existing URLs | User chose symmetric structure over leaving Israel's route as-is; cheaper to do now while the corpus and search-index footprint are small than to retrofit later. Requires `@docusaurus/plugin-client-redirects` so the 111 already-SEO-indexed URLs 301 instead of breaking | — Pending |
+| v1.1 initial England fetch capped at 10 Acts or fewer | User constraint given at roadmap approval — even smaller than the 13-Act Tier A batch the Features research proposed. Keeps the first real run of the UK pipeline small and easy to review before scaling up | — Pending |
 
 ## Evolution
 

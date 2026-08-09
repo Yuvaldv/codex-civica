@@ -79,13 +79,36 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (populated by roadmap creation) | | |
+| UKFETCH-01 | Phase 8 — UK Acquisition | Pending |
+| UKFETCH-02 | Phase 8 — UK Acquisition | Pending |
+| UKFETCH-03 | Phase 8 — UK Acquisition | Pending |
+| UKCONV-01 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKCONV-02 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKCONV-03 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKCONV-04 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKCONV-05 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKCONV-06 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKCONV-07 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKCONV-08 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKCONV-09 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKCONV-10 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKVALID-01 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKVALID-02 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKSITE-01 | Phase 10 — Site: Route Rebase | Pending |
+| UKSITE-02 | Phase 11 — Site: England Instance | Pending |
+| UKSITE-03 | Phase 11 — Site: England Instance | Pending |
+| UKSITE-04 | Phase 11 — Site: England Instance | Pending |
+| UKSITE-05 | Phase 11 — Site: England Instance | Pending |
+| UKLINK-01 | Phase 12 — Cross-Reference + Amendment Linking | Pending |
+| UKLINK-02 | Phase 12 — Cross-Reference + Amendment Linking | Pending |
+| UKLINK-03 | Phase 12 — Cross-Reference + Amendment Linking | Pending |
 
 **Coverage:**
 - v1.1 requirements: 23 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 23 ⚠️ (expected — roadmap not yet created)
+- Mapped to phases: 23 ✓
+- Unmapped: 0
+- Phases 7 (Shared Pipeline Core) and 13 (Starter Batch + Deploy) carry no requirement of their own — Phase 7 is a zero-behavior-change enabling refactor, Phase 13 is the integration/deploy phase that proves Phases 8–12 at batch scale. Both have their own observable exit criteria in ROADMAP.md.
 
 ---
 *Requirements defined: 2026-08-09*
-*Last updated: 2026-08-09 after milestone v1.1 requirements definition*
+*Last updated: 2026-08-09 — traceability populated from milestone v1.1 roadmap (Phases 7–13)*
