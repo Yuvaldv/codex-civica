@@ -29,7 +29,7 @@
 Phase 1: Pipeline        [✓] Complete
 Phase 2: Site Foundation [✓] Complete (Docusaurus + RTL + sidebar live)
 Phase 3: Custom UI       [✓] Complete (navbar, metadata bubbles, grouping)
-Phase 4: Content         [▶] In progress — 111/718 laws imported
+Phase 4: Content         [▶] In progress — 111/718 laws imported, paused (SEO-hardened)
 Phase 5: Deployment      [✓] Complete (GitHub Pages + auto-deploy)
 Phase 6: Search          [ ] Not started
 
@@ -60,6 +60,8 @@ Overall: 4/6 phases complete
 | 2026-05-19 | Dropped inter-law linking (commit 4281447), then restored it same day | Regex-based citation matcher (old Pass 3 in link_resolver.py) removed for good — superseded by Gemini; Gemini cross_linker.py re-wired into batch_import.py as Phase 3, plus a new deterministic Pass 4 in link_resolver.py that upgrades existing knesset PDF links to internal links via manifest lookup (no LLM call, safe to re-run) |
 | 2026-05-19 | Referenced-but-unconverted laws go into a priority queue, not auto-converted inline | `progress["priority"]` drained first by `get_next_batch()` each run — simpler and safer than the old inline auto-convert-during-linking step |
 | 2026-05-19 | Paused factory import at 111/718 — ~100 laws is enough for now | User call, not a technical blocker. Don't resume `batch_import.py` proactively; wait for explicit next steps |
+| 2026-05-19 | SEO: deterministic (no-LLM) `title`/`description` frontmatter, not Gemini-generated | Both are metadata, not legal text, but templating from data already in the entry is faster, free, and consistent — matches the pipeline's deterministic-by-default posture |
+| 2026-05-19 | SEO: per-page `lang`/`dir`/`og:locale` fix via swizzled DocItem/Content Head, not full i18n locale routing | Real bug (found `lang=en dir=ltr` on 100%-Hebrew pages via an actual `npm run build`) but full i18n (`/he/` routes, translation JSON) is heavy for a site whose chrome is intentionally English; the lightweight fix is scoped to doc pages only and is fully SSR-verified |
 
 ### Known Constraints
 
@@ -72,6 +74,7 @@ Overall: 4/6 phases complete
 
 - Factory import paused at 111/718 by user request (2026-05-19) — do not resume until asked
 - Ministry name resolution: legacy IDs 1–50 are best-effort mapped in `generate-law-meta.js`; may need refinement for accuracy
+- SEO follow-ups not yet done: homepage/`/laws` index meta description is still the generic "Laws of the world..." tagline (fine for now, scope is Israel-only); no per-category landing-page descriptions; Google Search Console not yet verified/submitted (site is brand new, low priority until there's traffic to check)
 
 ### Blockers
 
@@ -90,27 +93,35 @@ Overall: 4/6 phases complete
 - Unresolved references (target in manifest but not yet converted) get queued in `progress["priority"]`, drained first by `get_next_batch()` on the next run — replaces the old inline "auto-convert referenced laws" step.
 
 **Current import state:**
-- 1,076 total valid laws | 718 with PDFs | 111 converted | 0 failed
-- Working tree is clean as of commit `b87ab4e`
+- 1,076 total valid laws | 718 with PDFs | 111 converted | 0 failed — **paused here by user request**, not resuming without explicit go-ahead
+- Working tree is clean
 - All 111 laws cross-linked consistently (per-batch Phase 3 + full relink_all backfill)
 - 2000595 confirmed complete (from prior session) ✓
 
+**SEO pass (same session, after the import pause):** Found via an actual `npm run build` — not just source review — that law pages served `<html lang=en dir=ltr>` on 100%-Hebrew content, and meta description auto-scraped the first line of body text (one law's description was literally the word "פירושים" / "definitions"). Fixed:
+- `pipeline/reconcile.py`: `build_frontmatter()` now emits `title` + `description` (deterministic, templated from title/pub_date/law_validity already in the entry — no LLM call, no legal text touched)
+- `pipeline/backfill_seo_meta.py`: one-time backfill of `title`+`description` onto all 111 already-converted laws
+- `site/src/theme/DocItem/Content/index.jsx`: swizzled wrapper now also renders `<html lang="he" dir="rtl">`, `og:locale=he_IL`, and a `schema.org/Legislation` JSON-LD block — scoped to doc pages only, homepage/chrome stay `en`/`ltr`
+- `site/static/robots.txt`: added (sitemap.xml itself was already auto-generated and working — 113 URLs, verified)
+- Commits: `51ad88f` (pipeline+site code), `b41930f` (content backfill)
+
 **Next-session actions:**
-1. Continue factory import: `source ~/.venv-codex/bin/activate && python pipeline/batch_import.py --count 25`
-2. Commit after every batch — do not let converted laws sit uncommitted for a full session again
-3. Periodically re-run `cross_linker.relink_all()` (or wire it as an end-of-run step in batch_import.py) so cross-batch citations don't accumulate as a manual-backfill chore
-4. After import completes (718 laws), delete `laws/israel/placeholder.md` and redeploy
+1. Do NOT resume factory import (`batch_import.py`) unless explicitly asked — paused intentionally at 111/718
+2. If import does resume: commit after every batch (don't let converted laws sit uncommitted for a full session again), and periodically re-run `cross_linker.relink_all()` (or wire it as an end-of-run step) so cross-batch citations don't accumulate as a manual-backfill chore
+3. SEO follow-ups if asked: category/index-page descriptions, Search Console verification+submission
 
 **Files to review on re-entry:**
 - `pipeline/batch_import.py` — main factory loop (Phase 1 convert, Phase 2 link_resolver, Phase 3 cross_linker)
 - `pipeline/cross_linker.py` — Gemini inter-law reference extractor/linker
 - `pipeline/link_resolver.py` — Pass 1–4 (3 intra-law + 1 deterministic inter-law upgrader)
+- `pipeline/reconcile.py` — `build_seo_description()` + `build_frontmatter()` for the SEO fields
 - `data/raw/israel/import_progress.json` — progress + priority queue
 - `site/scripts/generate-law-meta.js` — metadata generator (runs as predeploy hook)
+- `site/src/theme/DocItem/Content/index.jsx` — per-law metadata bubbles + SEO head tags
 - `pipeline/fix_2000595_tail.py` — tail-fix pattern (reuse if another long law truncates)
 
-**Deploy status:** Pushed `main` → `origin/main` (8 commits, up through `9602be5`) and deployed to GitHub Pages (`gh-pages`, based on `9602be5`). Live at https://Yuvaldv.github.io/codex-civica/. Working tree clean, nothing pending.
+**Deploy status:** Pushed `main` → `origin/main` (up through `b41930f`) and deployed to GitHub Pages (`gh-pages`, based on `b41930f`). Live at https://Yuvaldv.github.io/codex-civica/. Working tree clean, nothing pending.
 
 ---
 
-*Last updated: 2026-05-19 (session 8) — pushed + deployed, import paused at 111/718 by user request, awaiting next steps*
+*Last updated: 2026-05-19 (session 8) — SEO pass shipped and deployed, import still paused at 111/718, awaiting next steps*
