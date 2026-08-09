@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
-status: planning
-last_updated: "2026-08-09T13:33:51.515Z"
-last_activity: 2026-08-09 -- Phase 7 planning complete
+status: executing
+last_updated: "2026-08-09T13:42:00.000Z"
+last_activity: 2026-08-09 -- Phase 7 plan 01 complete (safety net + BEFORE fingerprints)
 progress:
   total_phases: 7
   completed_phases: 0
@@ -25,17 +25,17 @@ progress:
 
 **Current milestone:** v1.1 — UK Laws: Pipeline + Law Directory (England only).
 
-**Current focus:** Roadmap created — Phases 7–13. Next: plan Phase 7 (Shared Pipeline Core). (v1.0 Israel work — Phase 4 Content 111/718 paused, Phase 6 Search not started — remains open in parallel, not abandoned.)
+**Current focus:** Phase 7 — Shared Pipeline Core
 
 ---
 
 ## Current Position
 
-Phase: 7 — Shared Pipeline Core (not started)
-Plan: —
-Status: Ready to execute
-Progress: 0/7 phases complete (0%) — [░░░░░░░░░░] v1.1
-Last activity: 2026-08-09 -- Phase 7 planning complete
+Phase: 7 (Shared Pipeline Core) — EXECUTING
+Plan: 2 of 7 (07-01 complete — Wave 1 safety net done)
+Status: Executing Phase 7
+Progress: 0/7 phases complete (0%) — [░░░░░░░░░░] v1.1 · Phase 7: 1/7 plans
+Last activity: 2026-08-09 -- Phase 7 plan 01 complete (safety net + BEFORE fingerprints)
 
 ## Accumulated Context
 
@@ -66,6 +66,8 @@ Last activity: 2026-08-09 -- Phase 7 planning complete
 | 2026-08-09 | UK pipeline is a sibling of Israel's, not a shared framework | Two data sources is not evidence for an abstraction (CLAUDE.md: "do not over-abstract"); only the ~150 genuinely country-blind lines (frontmatter split, progress tracking, deploy) move to `pipeline/common/` in Phase 7 |
 | 2026-08-09 | Rebase Israel route `/laws` → `/laws/israel` now, with client redirects for the 111 indexed URLs (Phase 10) | User decision. Symmetric structure for every downstream consumer; cheaper now (111/718 corpus, no search feature yet) than retrofitting later. Isolated into its own phase so the highest-blast-radius site change is separated from the additive second-country change |
 | 2026-08-09 | UK validation is round-trip fidelity, not Israel's inference validators | Israel's numbering-continuity/orphan-subsection checks would false-positive-flood on CLML's legitimate gaps (repealed sections, `19A` inserted numbers, `BlockAmendment` quoted text). UK uses verbatim `<Text>`-node conservation as the hard phase-exit gate |
+| 2026-08-09 | Phase 7 gate is a before/after differential, not `git diff` vs HEAD | The prescribed gate fails on a clean HEAD today (`link_resolver --all` mutates 8 files: pre-existing staleness + the deferred `_STRIP_MG_INDEX` bug). The captured `link_resolver_all.diff` (8 files, 22+/22−) is the baseline the refactor must reproduce byte-for-byte |
+| 2026-08-09 | Characterization harness is stdlib-only; pytest deliberately not installed | Zero new dependencies in a zero-behaviour-change refactor; the frozen-clock shim lives in the harness so `reconcile.py` never gains an injectable clock |
 | 2026-08-09 | v1.1 roadmap = Phases 7–13, continuing v1.0's numbering | v1.0 Phases 1–6 stay open and untouched (Phase 4 paused at 111/718, Phase 6 not started); v1.1 runs in parallel per user's explicit "new milestone" choice |
 
 ### Known Constraints
@@ -86,9 +88,10 @@ Last activity: 2026-08-09 -- Phase 7 planning complete
 - Open design call for Phase 9 planning: amendment-markup rendering policy is set to bracket-and-footnote (per UKCONV-06), but `Tabular`/`Figure` edge cases still need a decision during planning
 - **Pre-existing bug (found during Phase 7 research, 2026-08-09), fix deferred by user request:** `link_resolver.py`'s `_STRIP_MG_INDEX` regex (lines 122-124) fails to strip the sidenotes index when a note's text contains a nested Markdown link — corrupts 4 law files (`2000326`, `2000390`, `2000416`, `2000595`) a little more on every `--all` re-run. Nothing in the repo is corrupted today (reproduced from a clean `HEAD`, not present in committed history); this is latent and would trigger on the next factory-import resume. Not fixed in Phase 7 (would break its byte-identity verification gate). Track as v1.0 Phase 4 follow-up work.
 - Stale `pipeline/requirements.txt` (found during Phase 7 research): missing `python-dotenv` and `google-genai`, both imported by `reconcile.py`. A fresh env provisioned from `requirements.txt` alone cannot import `reconcile`. Out of scope for Phase 7; needs a follow-up fix.
+- Phase 7 off-repo backup of the gitignored import state lives at `$HOME/codex-civica-backups/phase07/` (checksums in `MANIFEST.sha256`). Restore with `cp $HOME/codex-civica-backups/phase07/import_progress.json data/raw/israel/`
 - Open design call for Phase 11 planning: nation segment lives in the path (`laws/uk/england/`) per UKSITE-02 — confirm the Docusaurus sidebar/routing shape against the installed Docusaurus version at implementation time
 - Pin/verify `@docusaurus/plugin-client-redirects` against the installed Docusaurus version before Phase 10 implementation
-- **GSD tooling bug (found 2026-08-09):** `gsd-tools.cjs state planned-phase --phase 7 --name "Shared Pipeline Core" --plans 7` corrupted STATE.md frontmatter — set `milestone_name` to a garbage roadmap-checkbox string, `status: executing` despite nothing having executed, and invented `progress` totals (`total_phases: 13`, `total_plans: 10`, `completed_plans: 1`) with no basis. Manually corrected back to `milestone_name: UK Laws`, `status: planning`, `total_phases: 7`, `total_plans: 7`, `completed_plans: 0`. Worth a bug report against the GSD CLI if this recurs.
+- **GSD tooling bug, confirmed recurring (found 2026-08-09):** both `gsd-tools.cjs state planned-phase` and `state begin-phase` corrupt STATE.md frontmatter the same way every time they run — `milestone_name` gets overwritten with a garbage roadmap-checkbox string (also seen in `init.execute-phase`'s JSON output, so it's a shared derivation bug, not per-command), and `progress` totals get invented numbers (e.g. `total_phases: 13`, `total_plans: 10`) unrelated to the actual milestone scope. Body text (Current Position, Current focus) is written correctly — only the YAML frontmatter is affected. Manually corrected twice so far. Worth a bug report against the GSD CLI; until fixed, re-check STATE.md frontmatter after every `state` subcommand invocation in this milestone.
 
 ### Blockers
 

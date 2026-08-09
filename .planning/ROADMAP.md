@@ -208,7 +208,7 @@
 Plans:
 **Wave 1**
 
-- [ ] 07-01-PLAN.md — Safety net: off-repo backup of gitignored import state + capture the four BEFORE fingerprints
+- [x] 07-01-PLAN.md — Safety net: off-repo backup of gitignored import state + capture the four BEFORE fingerprints
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
