@@ -90,6 +90,7 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 - **Reference project:** QLC at https://yuvaldv.github.io/qlc/ — same philosophy (Git + Markdown + static site), different stack (Hugo). Codex Civica uses Docusaurus for richer cross-referencing.
 - **Docusaurus is scaffolded but contains boilerplate** (`site/blog/`, `site/docs/tutorial-*`). Phase 1 must clean this up.
 - **Basic Laws:** Israel has ~14 Basic Laws (חוקי יסוד) — the constitutional-tier legislation. They're small, well-known, and high-value as a first batch.
+- **Multi-level jurisdiction hierarchy (forward-looking, not v1.1 scope):** Some future countries aren't flat — the USA has federal + state law, the EU has supranational + member-state law, the UK has nations (England/Scotland/Wales/NI). The `laws/uk/england/` directory decision for v1.1 should be validated as an instance of a general **country → subdivision → law** pattern (both on disk and in the Docusaurus site's visual hierarchy — homepage country picker, navbar, sidebar), not built as a UK-only special case. Israel and most countries will only ever use the top level (no subdivision), so the pattern must degrade cleanly to a flat single-level structure when there's no subdivision — it shouldn't force every country through a redundant subdivision layer. This should inform Phase 11's (Site — England Instance) design even though USA/EU are not being built now.
 
 ## Constraints
 

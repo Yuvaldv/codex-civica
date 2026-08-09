@@ -232,6 +232,7 @@
   5. Every England law page displays the OGL v3 attribution, using the alternate wording where `dc:publisher` requires it
 **Plans**: TBD
 **UI hint**: yes
+**Design note (added 2026-08-09, not new scope):** `laws/uk/england/` and its site hierarchy should be designed as one instance of a general **country → subdivision → law** pattern — the same shape will eventually be needed for USA (federal + state), the EU (supranational + member state), and other UK nations — rather than UK-specific special-casing. Countries with no subdivision (Israel, most others) must degrade cleanly to the existing flat structure, not be forced through a redundant empty subdivision layer. USA/EU are not being built now; this only affects how Phase 11's country/subdivision plumbing is shaped.
 
 ### Phase 12: Cross-Reference + Amendment Linking
 **Goal**: A reader can follow any citation and can see, from both directions, how a law has been amended
