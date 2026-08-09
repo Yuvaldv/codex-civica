@@ -10,13 +10,15 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 
 ## Current Milestone: v1.1 UK Laws — Pipeline + Law Directory
 
-**Goal:** Stand up a UK legislation pipeline and law directory alongside the existing Israel work, with a source-appropriate architecture — legislation.gov.uk offers structured XML/Atom feeds, unlike Knesset's scanned PDFs — starting with a small high-value batch.
+**Goal:** Stand up a UK legislation pipeline and law directory alongside the existing Israel work, with a source-appropriate architecture — legislation.gov.uk offers structured XML/Atom feeds, unlike Knesset's scanned PDFs — starting with England only and a small high-value batch.
+
+**Scope for v1.1: England only.** The UK is not one legal jurisdiction — Scotland, Wales, and Northern Ireland each have devolved legislation with different bodies, extents, and (for Scotland/NI) different legal systems. v1.1 covers England-applicable legislation only (Westminster Acts and instruments that extend to England, primarily England & Wales / UK-wide Acts read for their England extent). Scotland, Wales, and Northern Ireland are explicit future milestones, not a v1.1 concern — directory/data structure should leave room for them (e.g. a `uk/` umbrella with `england/` as the first nation) without being built out now.
 
 **Target features:**
 - Research legislation.gov.uk's data source (API/XML schema) and design a pipeline architecture suited to structured input, rather than reusing the Israel OCR/Gemini pipeline as-is
-- Build the UK pipeline (fetch/convert/validate) and convert a small starter batch of UK legislation to Markdown
-- `laws/uk/` directory wired into the same Docusaurus site as `laws/israel/`
-- 🇬🇧 UK entry added to the homepage "Pick a country" grid and navbar, matching the existing Israel pattern
+- Build the pipeline (fetch/convert/validate) and convert a small starter batch of England-applicable legislation to Markdown
+- A law directory for England content, wired into the same Docusaurus site as `laws/israel/`, structured to leave room for other UK nations later
+- 🇬🇧 (or England-specific) entry added to the homepage "Pick a country" grid and navbar, matching the existing Israel pattern
 
 **Note:** Milestone v1.0 (Israeli Basic Laws) is not yet complete — Phase 4 (Content, 111/718 laws) is paused by user request and Phase 6 (Search) hasn't started. v1.1 proceeds in parallel by deliberate choice; v1.0's remaining phases stay in the roadmap and will be resumed later, not abandoned.
 
@@ -33,12 +35,12 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 
 ### Active
 
-**UK Laws (v1.1)**
+**UK Laws (v1.1, England only)**
 - [ ] Research legislation.gov.uk data source (XML/Atom API schema, coverage, rate limits) and propose pipeline architecture
-- [ ] `pipeline_uk/` (or equivalent): fetch → convert → validate for a small starter batch of UK legislation
-- [ ] Starter batch of UK laws converted to Markdown with complete frontmatter, committed to `laws/uk/`
-- [ ] `laws/uk/` wired into Docusaurus alongside `laws/israel/`
-- [ ] 🇬🇧 UK added to homepage country grid and navbar country picker
+- [ ] `pipeline_uk/` (or equivalent): fetch → convert → validate for a small starter batch of England-applicable legislation
+- [ ] Starter batch of England laws converted to Markdown with complete frontmatter, committed to the law directory
+- [ ] Law directory wired into Docusaurus alongside `laws/israel/`, structured so Scotland/Wales/NI can be added later without a reshuffle
+- [ ] 🇬🇧 (or England-specific) entry added to homepage country grid and navbar country picker
 
 **Pipeline (Israel, v1.0 — carried over, unchanged)**
 - [ ] `pipeline/convert.py` — `.docx` → Markdown with frontmatter generation (via Pandoc + python-docx)
@@ -74,7 +76,8 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 - Algolia DocSearch — Phase 2 (local search sufficient for Basic Laws volume)
 - Non-Basic-Law categories — Phase 2+ (volume and pipeline validation first)
 - UK legislation beyond the v1.1 starter batch (full Acts corpus, Statutory Instruments) — future milestone, scope after starter batch validates the pipeline
-- Jordan, other countries beyond UK — future milestone
+- Scotland, Wales, Northern Ireland legislation — future milestone; different legal systems/devolved bodies, deliberately deferred so v1.1 stays scoped to one England-only starter batch
+- Jordan, other countries beyond the UK — future milestone
 
 ## Context
 
@@ -106,7 +109,8 @@ Anyone — lawyer, student, or citizen — can find and read any Israeli law in 
 | v1.1 UK milestone proceeds in parallel with unfinished v1.0 | User explicitly chose "new milestone" over pausing Israel work or a separate workstream; v1.0 Phase 4/6 remain in the roadmap, not abandoned | — Pending |
 | UK pipeline architecture: research first, don't reuse Israel's OCR/Gemini pipeline blindly | legislation.gov.uk exposes structured XML/Atom feeds, unlike Knesset's scanned PDFs — the noise-reconciliation assumptions in CLAUDE.md's LAYER1-3 design may not apply | — Pending |
 | UK starter batch scope, not full corpus | Mirrors the Israel Basic-Laws-first approach: validate the pipeline end-to-end on a small set before scaling to the full Acts/SI corpus | — Pending |
-| Same Docusaurus site, `laws/uk/` new section | Matches the homepage's existing "Pick a country" multi-country pattern; no separate deploy needed | — Pending |
+| Same Docusaurus site, new UK section | Matches the homepage's existing "Pick a country" multi-country pattern; no separate deploy needed | — Pending |
+| v1.1 scoped to England only, not the whole UK | UK is four distinct legal jurisdictions (England & Wales courts, Scots law, NI law) with separate devolved legislatures; user explicit call to start with one nation and expand later rather than build UK-wide from day one | — Pending |
 
 ## Evolution
 
@@ -126,4 +130,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-08-09 after starting milestone v1.1 (UK Laws)*
+*Last updated: 2026-08-09 after scoping milestone v1.1 to England only*
