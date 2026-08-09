@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yuvaldv.github.io/codex-civica/sitemap.xml
