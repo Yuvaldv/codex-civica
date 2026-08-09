@@ -748,19 +748,19 @@ Phase 7 carries no `REQUIREMENTS.md` IDs. Mapping is against the four ROADMAP su
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Should Phase 7 fix the Class-B idempotency bug?**
+1. **RESOLVED (user decision, 2026-08-09): defer.** Should Phase 7 fix the Class-B idempotency bug?
    - What we know: it is reproducible, isolated to `link_resolver._STRIP_MG_INDEX` (lines 122-124) interacting with Pass 2's re-linkification of previously-emitted Sidenotes bullets, and it corrupts 4 law files a little more on every run.
    - What's unclear: whether the user wants it fixed now (it is live-site-visible content corruption on 4 pages) or tracked as v1.0 content work.
    - **Recommendation:** **do not fix it in Phase 7.** Fixing it changes `laws/israel/` content, which destroys the only property that makes this refactor verifiable. Add it to `STATE.md` Todos and to the v1.0 Phase 4 track. If the user wants it fixed first, do it as a **separate commit landed before Wave 0**, then re-capture the golden fingerprints.
 
-2. **Is `render_frontmatter` worth extracting now, or should it wait for Phase 9?**
+2. **RESOLVED (planner, per research recommendation): extract now, land last.** Is `render_frontmatter` worth extracting now, or should it wait for Phase 9?
    - What we know: success criterion 1 names it explicitly; it is also the highest-risk extraction (111-file blast radius, 6 value styles) and the only one with no existing duplication to justify it.
    - What's unclear: the UK frontmatter field list is not frozen until Phase 9 (`ARCHITECTURE.md` build order, Phase 3 step 2).
    - **Recommendation:** extract it, but keep it deliberately thin (fence-wrapping + `quote()` only) and land it **last**, so a descope decision costs nothing already banked.
 
-3. **`--status` reports `Pending: 607` — is that the number the criterion means?**
+3. **RESOLVED (planner, per research recommendation): exact 6-line stdout is the golden fixture.** `--status` reports `Pending: 607` — is that the number the criterion means?
    - What we know: criterion 3 says "111/718 converted, 0 failed"; actual output is `Total laws: 1076 / With PDF: 718 / Converted: 111 / Failed: 0 / Pending: 607 / Total deployed: 111` (718 − 111 = 607 ✓, internally consistent).
    - **Recommendation:** treat the *exact 6-line stdout* as the golden fixture rather than paraphrasing individual numbers — that is both stricter and unambiguous.
 
