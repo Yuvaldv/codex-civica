@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
 status: executing
-last_updated: "2026-08-09T14:05:00.000Z"
-last_activity: 2026-08-09 -- Phase 7 plan 02 complete (verify_golden.py gate: green on unmodified source, red under perturbation)
+last_updated: "2026-08-09T14:30:00.000Z"
+last_activity: 2026-08-09 -- Phase 7 plan 03 complete (pipeline/common/ created; split_frontmatter extracted, both duplicates deleted, full gate 6/6 green)
 progress:
   total_phases: 7
   completed_phases: 0
@@ -32,10 +32,10 @@ progress:
 ## Current Position
 
 Phase: 7 (Shared Pipeline Core) — EXECUTING
-Plan: 3 of 7 (07-02 complete — Wave 2 gate done)
+Plan: 4 of 7 (07-03 complete — Wave 3 extraction done)
 Status: Executing Phase 7
-Progress: 0/7 phases complete (0%) — [░░░░░░░░░░] v1.1 · Phase 7: 2/7 plans
-Last activity: 2026-08-09 -- Phase 7 plan 02 complete (verify_golden.py gate: green on unmodified source, red under perturbation)
+Progress: 0/7 phases complete (0%) — [░░░░░░░░░░] v1.1 · Phase 7: 3/7 plans
+Last activity: 2026-08-09 -- Phase 7 plan 03 complete (pipeline/common/ created; split_frontmatter extracted, both duplicates deleted, full gate 6/6 green)
 
 ## Accumulated Context
 
@@ -69,6 +69,8 @@ Last activity: 2026-08-09 -- Phase 7 plan 02 complete (verify_golden.py gate: gr
 | 2026-08-09 | Phase 7 gate is a before/after differential, not `git diff` vs HEAD | The prescribed gate fails on a clean HEAD today (`link_resolver --all` mutates 8 files: pre-existing staleness + the deferred `_STRIP_MG_INDEX` bug). The captured `link_resolver_all.diff` (8 files, 22+/22−) is the baseline the refactor must reproduce byte-for-byte |
 | 2026-08-09 | Phase 7 gate `--structure` asserts *delegation*, not absence, for `batch_import`'s four moved symbols | 07-PATTERNS.md mandates same-named thin wrappers there so the 12 call sites stay untouched; a literal `^def NAME` absence check could never pass, and a permanently-red check is a dead check. `link_resolver`/`cross_linker` still get the strict absence check (their defs really are deleted) |
 | 2026-08-09 | A refactor gate is not accepted until it has been observed FAILING | Two one-line production perturbations (`reconcile.py` `generated_by`, `batch_import.py` `With PDF` label) each drove `verify_golden.py` to exit 1 with a specific message before being reverted — proof the gate discriminates rather than always passing |
+| 2026-08-09 | `pipeline/common/` is a package reached via `sys.path[0]`; no `pipeline/__init__.py` is ever created | `sys.path[0]` is the executed script's own directory, so `python pipeline/X.py` makes `pipeline/` the import root — cwd-independent (verified empirically from a foreign cwd). Creating `pipeline/__init__.py` would turn `pipeline` into a package and break every documented entry point |
+| 2026-08-09 | `cross_linker.py` imports the shared splitter **aliased** (`as _split_frontmatter`) rather than renaming its call site | `cross_link_one()` needs a live Gemini client, so a missed rename would surface as a runtime `NameError` only during a real API run — long after the gate went green. The alias is also the smaller diff and keeps `--split`'s two-name differential meaningful |
 | 2026-08-09 | Characterization harness is stdlib-only; pytest deliberately not installed | Zero new dependencies in a zero-behaviour-change refactor; the frozen-clock shim lives in the harness so `reconcile.py` never gains an injectable clock |
 | 2026-08-09 | v1.1 roadmap = Phases 7–13, continuing v1.0's numbering | v1.0 Phases 1–6 stay open and untouched (Phase 4 paused at 111/718, Phase 6 not started); v1.1 runs in parallel per user's explicit "new milestone" choice |
 
@@ -91,6 +93,7 @@ Last activity: 2026-08-09 -- Phase 7 plan 02 complete (verify_golden.py gate: gr
 - **Pre-existing bug (found during Phase 7 research, 2026-08-09), fix deferred by user request:** `link_resolver.py`'s `_STRIP_MG_INDEX` regex (lines 122-124) fails to strip the sidenotes index when a note's text contains a nested Markdown link — corrupts 4 law files (`2000326`, `2000390`, `2000416`, `2000595`) a little more on every `--all` re-run. Nothing in the repo is corrupted today (reproduced from a clean `HEAD`, not present in committed history); this is latent and would trigger on the next factory-import resume. Not fixed in Phase 7 (would break its byte-identity verification gate). Track as v1.0 Phase 4 follow-up work.
 - Stale `pipeline/requirements.txt` (found during Phase 7 research): missing `python-dotenv` and `google-genai`, both imported by `reconcile.py`. A fresh env provisioned from `requirements.txt` alone cannot import `reconcile`. Out of scope for Phase 7; needs a follow-up fix.
 - Phase 7 off-repo backup of the gitignored import state lives at `$HOME/codex-civica-backups/phase07/` (checksums in `MANIFEST.sha256`). Restore with `cp $HOME/codex-civica-backups/phase07/import_progress.json data/raw/israel/`
+- Phase 7 extraction progress: `--structure` was 11 errors at 07-02, now **7** after 07-03 (all four `split_frontmatter` errors cleared). Remaining: `common/progress.py` + `common/deploy.py` missing, and `batch_import`'s five symbols (`load_progress`, `save_progress`, `get_next_batch`, `print_status`, `deploy`) still implemented locally — 07-04 and 07-05 clear these
 - Phase 7 sampling contract (in force for plans 07-03..07-07): `~/.venv-codex/bin/python pipeline/tests/verify_golden.py --quick` after every task commit (~2.4s, mutates nothing); full suite `~/.venv-codex/bin/python pipeline/tests/verify_golden.py` (~8s) before closing each plan. `--structure` is opt-in and red by design until 07-06; its error list is the remaining-extraction checklist
 - Open design call for Phase 11 planning: nation segment lives in the path (`laws/uk/england/`) per UKSITE-02 — confirm the Docusaurus sidebar/routing shape against the installed Docusaurus version at implementation time
 - Pin/verify `@docusaurus/plugin-client-redirects` against the installed Docusaurus version before Phase 10 implementation

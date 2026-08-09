@@ -216,7 +216,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 07-03-PLAN.md — Extract `split_frontmatter` into `common/frontmatter.py` (risk: none — AST-identical duplicate)
+- [x] 07-03-PLAN.md — Extract `split_frontmatter` into `common/frontmatter.py` (risk: none — AST-identical duplicate)
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
