@@ -59,6 +59,7 @@ Overall: 4/6 phases complete
 | 2026-05-19 | Full relink_all + link_resolver re-pass on 81 laws | All section anchors, intra-law citations, and inter-law links refreshed |
 | 2026-05-19 | Dropped inter-law linking (commit 4281447), then restored it same day | Regex-based citation matcher (old Pass 3 in link_resolver.py) removed for good — superseded by Gemini; Gemini cross_linker.py re-wired into batch_import.py as Phase 3, plus a new deterministic Pass 4 in link_resolver.py that upgrades existing knesset PDF links to internal links via manifest lookup (no LLM call, safe to re-run) |
 | 2026-05-19 | Referenced-but-unconverted laws go into a priority queue, not auto-converted inline | `progress["priority"]` drained first by `get_next_batch()` each run — simpler and safer than the old inline auto-convert-during-linking step |
+| 2026-05-19 | Paused factory import at 111/718 — ~100 laws is enough for now | User call, not a technical blocker. Don't resume `batch_import.py` proactively; wait for explicit next steps |
 
 ### Known Constraints
 
@@ -69,8 +70,7 @@ Overall: 4/6 phases complete
 
 ### Todos
 
-- Run batch import: `source ~/.venv-codex/bin/activate && python pipeline/batch_import.py --count 25`
-- After pipeline finishes, remove `laws/israel/placeholder.md`
+- Factory import paused at 111/718 by user request (2026-05-19) — do not resume until asked
 - Ministry name resolution: legacy IDs 1–50 are best-effort mapped in `generate-law-meta.js`; may need refinement for accuracy
 
 ### Blockers
@@ -113,4 +113,4 @@ Overall: 4/6 phases complete
 
 ---
 
-*Last updated: 2026-05-19 (session 8) — pushed + deployed, awaiting next steps*
+*Last updated: 2026-05-19 (session 8) — pushed + deployed, import paused at 111/718 by user request, awaiting next steps*
