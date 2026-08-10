@@ -1,15 +1,61 @@
 # UK Pipeline — Human Guide
 
-Acquisition stage for England-applicable UK legislation, sourced as CLML XML from
-legislation.gov.uk. Conversion (CLML → Markdown), validation, and site integration are later
-phases — not built yet.
+Acquisition + conversion for England-applicable UK legislation, sourced as CLML XML from
+legislation.gov.uk. No LLM anywhere in this path — CLML is a single authoritative witness, not a
+noisy one, so there is nothing to reconcile. Site integration is a later phase — not built yet.
 
 ```
 legislation.gov.uk (CLML XML)
       │
       ▼
  pipeline/uk/fetch_uk.py   → cached XML + manifest_uk.json
+      │
+      ▼
+ pipeline/uk/clml.py       → XML -> IR (pipeline/uk/ir.py)
+      │
+      ▼
+ pipeline/uk/render.py     → IR -> Markdown + frontmatter
+      │
+      ▼
+ pipeline/uk/validate.py   → round-trip + numbering checks (the phase-exit gate)
+      │
+      ▼
+ laws/uk/england/<slug>.md
 ```
+
+## Converting
+
+```bash
+~/.venv-codex/bin/python pipeline/uk/convert.py             # every fetched manifest entry
+~/.venv-codex/bin/python pipeline/uk/convert.py --slug ukpga-1998-42
+```
+
+Deterministic tree walk, byte-for-byte reproducible from the cached XML — safe to re-run any time.
+Two validators gate every conversion and fail the run (exit 1) on any error, never silently:
+
+- **Round-trip losslessness** (`validate.check_round_trip`) — every source `<Text>` node's content,
+  normalised for whitespace and the renderer's own bracket/footnote/anchor decoration, must appear
+  somewhere in the rendered Markdown.
+- **UK numbering** (`validate.check_numbering`) — alphanumeric/Roman provision numbers and duplicate-id
+  detection. Deliberately NOT a port of Israel's dense-sequence gap validator: UK gaps (repealed
+  sections, `19A`-style inserted numbers) are legitimate and never flagged.
+
+**What's preserved, not just parsed:**
+- Repealed/prospective provisions stay in the output, explicitly marked `**[REPEALED]**` /
+  `**[NOT YET IN FORCE — prospective]**` — never silently dropped.
+- Amendment markup (`Addition`/`Substitution`/`Repeal`) renders bracket-and-footnote style, citing
+  the amending instrument via the source's own `Commentary` text.
+- `BlockAmendment`/`BlockText` (quoted text from another Act) renders as a marked blockquote, excluded
+  from this document's own numbering.
+- Per-provision territorial extent (`RestrictExtent`) is annotated wherever it differs from the
+  document-level extent.
+- Schedules keep their `Reference` back-link to the enabling section, and get their own short-form
+  anchor namespace (`schedule-1-paragraph-2`, not the section-length full id).
+- Every `ukm:UnappliedEffect` becomes a visible banner with a count — never silently incorporated as
+  if it were already-applied current law.
+- A defined-term index (`<Term>` elements) and any `Commentary` not already cited inline both surface
+  at the bottom of the file, so round-trip losslessness holds even for editorial notes with no inline
+  amendment marker.
 
 ## Running
 
