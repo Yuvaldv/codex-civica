@@ -33,6 +33,8 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
+from common.frontmatter import render_frontmatter
+
 PIPELINE_DIR = Path(__file__).parent
 DATA_DIR = PIPELINE_DIR.parent / "data" / "raw" / "israel"
 OUT_DIR = PIPELINE_DIR.parent / "laws" / "israel"
@@ -132,7 +134,7 @@ def build_frontmatter(entry: dict) -> str:
     id_line = f"law_id: {law_id}" if law_id else f"bill_id: {bill_id}"
 
     lines = [
-        "---", id_line,
+        id_line,
         f'title: "{title}"',
         f'title_he: "{title}"',
         f'sidebar_label: "{title}"',
@@ -178,10 +180,8 @@ def build_frontmatter(entry: dict) -> str:
         "generated_by: pipeline/reconcile.py",
         f"model: {MODEL}",
         f"generated_at: {now}",
-        "---",
-        "",
     ]
-    return "\n".join(lines)
+    return render_frontmatter(lines)
 
 
 def _id_key(entry: dict) -> str:
