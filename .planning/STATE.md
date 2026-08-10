@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
 status: executing
-last_updated: "2026-08-10T05:00:00.000Z"
-last_activity: 2026-08-10 -- Phase 8 COMPLETE: pipeline/uk/fetch_uk.py built and run live, all 10 Tier A Acts fetched (3 aep, 7 ukpga), both gates proven against live data, manifest_uk.json + UK_PIPELINE.md written
+last_updated: "2026-08-10T06:00:00.000Z"
+last_activity: 2026-08-10 -- Phase 9 COMPLETE: pipeline/uk/{ir,clml,render,validate,convert}.py built; all 10 fetched Acts converted to laws/uk/england/*.md with 0 round-trip and 0 numbering errors
 progress:
   total_phases: 7
-  completed_phases: 1
+  completed_phases: 3
   total_plans: 7
   completed_plans: 7
-  percent: 14
+  percent: 43
 ---
 
 # State — Codex Civica
@@ -31,10 +31,10 @@ progress:
 
 ## Current Position
 
-Phase: 8 (UK Acquisition) — COMPLETE
-Status: Phase 7 and 8 complete. Next: Phase 9 (CLML → Markdown Conversion)
-Progress: 2/7 phases complete — [██░░░░░░░░] v1.1
-Last activity: 2026-08-10 -- Phase 8 COMPLETE: pipeline/uk/fetch_uk.py built and run live, all 10 Tier A Acts fetched (3 aep, 7 ukpga), both gates proven against live data, manifest_uk.json + UK_PIPELINE.md written
+Phase: 9 (CLML → Markdown Conversion) — COMPLETE
+Status: Phases 7, 8, 9 complete. Next: Phase 10 (Site — Route Rebase) or Phase 11/12 (independent of 10)
+Progress: 3/7 phases complete — [███░░░░░░░] v1.1
+Last activity: 2026-08-10 -- Phase 9 COMPLETE: pipeline/uk/{ir,clml,render,validate,convert}.py built; all 10 fetched Acts converted to laws/uk/england/*.md with 0 round-trip and 0 numbering errors
 
 **Note on process (2026-08-10 user feedback):** the user asked to stop producing meticulous
 per-phase PLAN.md/SUMMARY.md documents with full XML task/threat-model ceremony — ROADMAP.md's 13
@@ -83,6 +83,11 @@ otherwise. See [[feedback_lightweight_phase_execution]] in memory.
 | 2026-08-10 | Phase 8 planned without spawning gsd-phase-researcher | The milestone-level research (`.planning/research/{ARCHITECTURE,FEATURES,PITFALLS,STACK}.md`, HIGH confidence, live-verified 2026-08-09) already answered every Phase-8-scoped question — API URLs, rate limits, User-Agent string, the two hard gates, manifest schema, file layout, and even the Tier A candidate table. `08-RESEARCH.md` is a phase-scoped distillation of that existing material plus the one new decision (the 10-of-13 cut) rather than a fresh agent research pass, avoiding redundant re-discovery |
 | 2026-08-10 | Phase 8 fetch batch is a hardcoded Python list, not a CSV-crawl enumerator | ARCHITECTURE.md's per-year `data.csv` discovery path is Tier B/general-crawl machinery; the ≤10-Act starter batch is a fixed, named list, so building a general enumerator now would be speculative generality against CLAUDE.md's "do not over-abstract" |
 | 2026-08-10 | Phase 8 skips `requests-cache` (STACK.md called it "recommended, optional") | A manual `dest_path.exists()` skip-on-rerun — the same idiom `pipeline/fetch.py`'s `download_pdf` already uses — gets equivalent caching for a 10-item one-shot batch without a new pip dependency |
+| 2026-08-10 | Phase 9 built directly (no PLAN.md/RESEARCH.md/SUMMARY.md ceremony) at user's explicit request | See [[feedback_lightweight_phase_execution]]. Still substantial: 1,263 lines across ir.py/clml.py/render.py/validate.py/convert.py, all 10 fetched Acts converted with 0 validation errors |
+| 2026-08-10 | A single numbered CLML provision (`<P1>` etc.) can carry MULTIPLE sibling `<Pnpara>` elements, not just one | Found live on Union with Scotland Act 1706 s.II: 7 sibling `<P1para>` elements under one `<P1>`, each a separate prose paragraph. A `.find()` (singular) silently dropped 6 of them — switched to `.findall()` and merge all paragraphs' leading/children/trailing into the provision, with a blank-line separator between paragraphs. `pipeline/uk/clml.py:_find_para_children` |
+| 2026-08-10 | `shortId` is only trustworthy as an anchor inside Schedules, not in the Body | Found live on Computer Misuse Act 1990 s.5(2): two genuinely distinct `<P3>` elements (different full `@id`, different `DocumentURI`) share the same `shortId="section-5-2-b"` — a real TNA data quirk, not a parser bug. `clml.py` now prefers `shortId` only when walking `ScheduleBody` (`prefer_short=True`), and the always-unique full `@id` everywhere else |
+| 2026-08-10 | Per-provision `RestrictExtent` can live on the `<P1group>` wrapper, not on the `<P1>` it contains | Found live on Computer Misuse Act 1990 (Scotland/N.I.-only provisions) — `_walk_group_or_block` now reads the group's `RestrictExtent` and propagates it onto the leaf provision unless the leaf already declared a more specific extent of its own |
+| 2026-08-10 | UKVALID-01's round-trip check normalises BOTH the rendered Markdown and the source `<Text>` needle before comparing (strips `[`, `]`, `**`, footnote refs, and the renderer's own synthetic `(repealed...)`/`[REPEALED]` annotations) | The bracket-and-footnote convention (UKCONV-06) and archaic-Act source text that itself contains literal square brackets (Magna Carta's editorially-supplied-word convention) both defeat a naive byte-exact substring check in opposite directions; symmetric normalisation resolves both without weakening what the gate actually verifies (that no word is silently dropped) |
 
 ### Known Constraints
 

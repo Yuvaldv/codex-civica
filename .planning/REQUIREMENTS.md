@@ -18,21 +18,21 @@
 
 ### UK — Conversion (CLML → Markdown)
 
-- [ ] **UKCONV-01**: User can run a convert script that parses CLML into Markdown preserving exact hierarchy (Part → Chapter → section → subsection → paragraph) and verbatim `<Pnumber>` numbering, including Roman numerals and inserted (`19A`-style) numbers
-- [ ] **UKCONV-02**: `P1group/Title` renders as the section heading directly (not as a floated Israel-style margin-note block)
-- [ ] **UKCONV-03**: Every converted law's frontmatter includes rich metadata from `ukm:Metadata` (title, long title, year, chapter number, enactment date, `DocumentMainType`, `DocumentStatus`, `dct:valid`), an "as at {date}" field, and an unapplied-amendment-count disclosure banner rendered whenever `ukm:UnappliedEffects` is non-empty
-- [ ] **UKCONV-04**: Territorial extent (`RestrictExtent`) is shown at the provision level whenever an Act carries mixed extents, even within the England-only starter batch
-- [ ] **UKCONV-05**: Repealed and prospective provisions (`@Status="Repealed"/"Prospective"`) are retained in the output and explicitly marked — never silently deleted or rendered as current law
-- [ ] **UKCONV-06**: Amendment markup (`Addition`/`Substitution`/`Repeal`) renders bracket-and-footnote style — exact inserted/repealed text shown inline with a footnote citing the amending instrument
-- [ ] **UKCONV-07**: `BlockAmendment` quoted text (text quoted from another Act) renders as clearly-marked quoted content — never as this document's own operative provisions or headings
-- [ ] **UKCONV-08**: Schedules render with their enabling-section back-link preserved as an explicit annotation
-- [ ] **UKCONV-09**: Stable per-provision anchors match legislation.gov.uk's own id scheme (e.g. `section-1-1-a`)
-- [ ] **UKCONV-10**: A defined-term index is generated per law from CLML's `<Term>` elements
+- [x] **UKCONV-01**: User can run a convert script that parses CLML into Markdown preserving exact hierarchy (Part → Chapter → section → subsection → paragraph) and verbatim `<Pnumber>` numbering, including Roman numerals and inserted (`19A`-style) numbers
+- [x] **UKCONV-02**: `P1group/Title` renders as the section heading directly (not as a floated Israel-style margin-note block)
+- [x] **UKCONV-03**: Every converted law's frontmatter includes rich metadata from `ukm:Metadata` (title, long title, year, chapter number, enactment date, `DocumentMainType`, `DocumentStatus`, `dct:valid`), an "as at {date}" field, and an unapplied-amendment-count disclosure banner rendered whenever `ukm:UnappliedEffects` is non-empty
+- [x] **UKCONV-04**: Territorial extent (`RestrictExtent`) is shown at the provision level whenever an Act carries mixed extents, even within the England-only starter batch
+- [x] **UKCONV-05**: Repealed and prospective provisions (`@Status="Repealed"/"Prospective"`) are retained in the output and explicitly marked — never silently deleted or rendered as current law
+- [x] **UKCONV-06**: Amendment markup (`Addition`/`Substitution`/`Repeal`) renders bracket-and-footnote style — exact inserted/repealed text shown inline with a footnote citing the amending instrument
+- [x] **UKCONV-07**: `BlockAmendment` quoted text (text quoted from another Act) renders as clearly-marked quoted content — never as this document's own operative provisions or headings
+- [x] **UKCONV-08**: Schedules render with their enabling-section back-link preserved as an explicit annotation
+- [x] **UKCONV-09**: Stable per-provision anchors match legislation.gov.uk's own id scheme (e.g. `section-1-1-a`)
+- [x] **UKCONV-10**: A defined-term index is generated per law from CLML's `<Term>` elements
 
 ### UK — Validation
 
-- [ ] **UKVALID-01**: User can run a validator that proves round-trip losslessness — every source `<Text>` node appears verbatim in the rendered output — as a hard phase-exit gate
-- [ ] **UKVALID-02**: Validator checks UK-specific numbering continuity that tolerates legitimate gaps (repealed sections) and alphanumeric suffixes, rather than reusing Israel's inference-based validator
+- [x] **UKVALID-01**: User can run a validator that proves round-trip losslessness — every source `<Text>` node appears verbatim in the rendered output — as a hard phase-exit gate
+- [x] **UKVALID-02**: Validator checks UK-specific numbering continuity that tolerates legitimate gaps (repealed sections) and alphanumeric suffixes, rather than reusing Israel's inference-based validator
 
 ### UK — Linking
 
@@ -82,18 +82,18 @@
 | UKFETCH-01 | Phase 8 — UK Acquisition | Pending |
 | UKFETCH-02 | Phase 8 — UK Acquisition | Pending |
 | UKFETCH-03 | Phase 8 — UK Acquisition | Pending |
-| UKCONV-01 | Phase 9 — CLML → Markdown Conversion | Pending |
-| UKCONV-02 | Phase 9 — CLML → Markdown Conversion | Pending |
-| UKCONV-03 | Phase 9 — CLML → Markdown Conversion | Pending |
-| UKCONV-04 | Phase 9 — CLML → Markdown Conversion | Pending |
-| UKCONV-05 | Phase 9 — CLML → Markdown Conversion | Pending |
-| UKCONV-06 | Phase 9 — CLML → Markdown Conversion | Pending |
-| UKCONV-07 | Phase 9 — CLML → Markdown Conversion | Pending |
-| UKCONV-08 | Phase 9 — CLML → Markdown Conversion | Pending |
-| UKCONV-09 | Phase 9 — CLML → Markdown Conversion | Pending |
-| UKCONV-10 | Phase 9 — CLML → Markdown Conversion | Pending |
-| UKVALID-01 | Phase 9 — CLML → Markdown Conversion | Pending |
-| UKVALID-02 | Phase 9 — CLML → Markdown Conversion | Pending |
+| UKCONV-01 | Phase 9 — CLML → Markdown Conversion | Complete |
+| UKCONV-02 | Phase 9 — CLML → Markdown Conversion | Complete |
+| UKCONV-03 | Phase 9 — CLML → Markdown Conversion | Complete |
+| UKCONV-04 | Phase 9 — CLML → Markdown Conversion | Complete |
+| UKCONV-05 | Phase 9 — CLML → Markdown Conversion | Complete |
+| UKCONV-06 | Phase 9 — CLML → Markdown Conversion | Complete |
+| UKCONV-07 | Phase 9 — CLML → Markdown Conversion | Complete |
+| UKCONV-08 | Phase 9 — CLML → Markdown Conversion | Complete |
+| UKCONV-09 | Phase 9 — CLML → Markdown Conversion | Complete |
+| UKCONV-10 | Phase 9 — CLML → Markdown Conversion | Complete |
+| UKVALID-01 | Phase 9 — CLML → Markdown Conversion | Complete |
+| UKVALID-02 | Phase 9 — CLML → Markdown Conversion | Complete |
 | UKSITE-01 | Phase 10 — Site: Route Rebase | Pending |
 | UKSITE-02 | Phase 11 — Site: England Instance | Pending |
 | UKSITE-03 | Phase 11 — Site: England Instance | Pending |
