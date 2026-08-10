@@ -44,6 +44,16 @@ _FOOTNOTE_REF_RE = re.compile(r"\[\^[^\]]+\]")
 _SPAN_RE = re.compile(r'<span id="[^"]*" */>')
 _REPEAL_NOTE_RE = re.compile(r" \(repealed(?: for [^)]+)?\)")
 _STATUS_MARKER_RE = re.compile(r" \[(REPEALED|NOT YET IN FORCE — prospective)\]")
+# Only matches genuine render.py-generated link targets (http(s) URL, our own
+# ./slug.md[#anchor], a bare #anchor, or the empty self-link) -- NOT any
+# "](...)" substring. Needed because the Addition/Substitution bracket-footnote
+# convention ([text][^flabel]) can, once the footnote ref is stripped above,
+# sit directly against unrelated literal parenthetical source text -- e.g.
+# "[Senior Courts Act 1981][^fc...] (maximum number of judges)" -- which would
+# otherwise look exactly like "](url)" and wrongly eat real source text.
+_MD_LINK_URL_RE = re.compile(
+    r"\]\((?:https?://[^)]*|\./[a-zA-Z0-9_-]+\.md(?:#[a-zA-Z0-9_-]+)?|#[a-zA-Z0-9_-]+|)\)"
+)
 
 
 def _normalize_rendered(markdown: str) -> str:
@@ -59,6 +69,11 @@ def _normalize_rendered(markdown: str) -> str:
     text = _SPAN_RE.sub("", text)
     text = _REPEAL_NOTE_RE.sub("", text)
     text = _STATUS_MARKER_RE.sub("", text)
+    # UKLINK-01 citation links ([text](url)) insert "(url)" mid-sentence -- e.g.
+    # a Commentary paragraph citing several sections in a row. Drop the "](url)"
+    # wholesale (not just the brackets) so linked source text stays contiguous
+    # with what follows it, exactly as it was before the link was added.
+    text = _MD_LINK_URL_RE.sub("", text)
     text = text.replace("[", "").replace("]", "").replace("**", "")
     # Renderer's MDX-safety escaping (render._mdx_escape) is a parser-facing
     # backslash, not a textual change -- undo it before comparing to source.
@@ -163,4 +178,43 @@ def validate(doc: LegalDoc, xml_bytes: bytes, rendered_markdown: str) -> list[Va
     errors.extend(check_round_trip(xml_bytes, rendered_markdown))
     errors.extend(check_numbering(doc))
     errors.extend(check_number_of_provisions_oracle(doc, _count_leaves(doc.body) + _count_leaves(doc.schedules)))
+    return errors
+
+
+# ---------------------------------------------------------------------------
+# UKLINK-01 -- cross-reference validator (batch-level, not per-document: needs
+# every rendered doc at once to know which internal links actually resolve)
+# ---------------------------------------------------------------------------
+
+_ANCHOR_ID_RE = re.compile(r'<span id="([^"]+)"')
+
+
+def _anchor_ids(markdown: str) -> set[str]:
+    return set(_ANCHOR_ID_RE.findall(markdown))
+
+
+def check_cross_references(rendered: dict[str, str],
+                            links_by_slug: dict[str, list[tuple[str, str | None]]]) -> list[ValidationError]:
+    """Every internal link render.py produced -- `(target_slug, target_anchor)`
+    pairs from render()'s own `internal_links` return value, one list per
+    source doc -- must actually resolve: the target slug must have been
+    rendered, and any anchor must exist on that target page.
+
+    Deliberately NOT a regex scan of the rendered Markdown: this doc's own
+    bracket-footnote convention (`[text][^flabel]`) can sit directly against
+    unrelated literal parenthetical source text -- e.g. `[^fc18877541](maximum
+    number of judges)`, where the trailing `(...)` is source prose, not a
+    link -- which makes a `](...)`-shaped regex produce false positives.
+    Reading render.py's own structured record of what it linked, rather than
+    re-deriving it from the text, has no such ambiguity."""
+    errors: list[ValidationError] = []
+    anchors_by_slug = {slug: _anchor_ids(md) for slug, md in rendered.items()}
+    for slug, links in links_by_slug.items():
+        for target_slug, anchor in links:
+            if target_slug not in rendered:
+                errors.append(ValidationError(
+                    "BROKEN_INTERNAL_LINK", f"{slug}: links to {target_slug!r}, not rendered in this batch"))
+            elif anchor and anchor not in anchors_by_slug[target_slug]:
+                errors.append(ValidationError(
+                    "BROKEN_ANCHOR", f"{slug}: links to {target_slug}#{anchor}, no matching anchor there"))
     return errors

@@ -36,9 +36,9 @@
 
 ### UK — Linking
 
-- [ ] **UKLINK-01**: `Citation`/`CitationSubRef` elements resolve to a local slug when the target is in the converted batch, or an explicit external legislation.gov.uk link otherwise — never a silent broken reference
-- [ ] **UKLINK-02**: Every amendment affecting a given document is listed at the end of that original document
-- [ ] **UKLINK-03**: Each amendment document links inline, at the specific point in its own text, back to the original provision it amends
+- [x] **UKLINK-01**: `Citation`/`CitationSubRef` elements resolve to a local slug when the target is in the converted batch, or an explicit external legislation.gov.uk link otherwise — never a silent broken reference
+- [x] **UKLINK-02**: Every amendment affecting a given document is listed at the end of that original document
+- [x] **UKLINK-03**: Each amendment document links inline, at the specific point in its own text, back to the original provision it amends
 
 ### UK — Site Integration
 
@@ -99,9 +99,9 @@
 | UKSITE-03 | Phase 11 — Site: England Instance | Complete |
 | UKSITE-04 | Phase 11 — Site: England Instance | Complete |
 | UKSITE-05 | Phase 11 — Site: England Instance | Complete |
-| UKLINK-01 | Phase 12 — Cross-Reference + Amendment Linking | Pending |
-| UKLINK-02 | Phase 12 — Cross-Reference + Amendment Linking | Pending |
-| UKLINK-03 | Phase 12 — Cross-Reference + Amendment Linking | Pending |
+| UKLINK-01 | Phase 12 — Cross-Reference + Amendment Linking | Complete |
+| UKLINK-02 | Phase 12 — Cross-Reference + Amendment Linking | Complete |
+| UKLINK-03 | Phase 12 — Cross-Reference + Amendment Linking | Complete |
 
 **Coverage:**
 - v1.1 requirements: 23 total

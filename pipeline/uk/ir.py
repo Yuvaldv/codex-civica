@@ -16,6 +16,7 @@ class Run:
     text: str
     kind: str = "plain"  # plain|term|citation|addition|substitution|repeal|emphasis
     uri: str | None = None
+    target_anchor: str | None = None  # Citation/CitationSubRef @SectionRef — precise anchor at the target, when known
     retain_text: bool = False  # Repeal RetainText="true" — repealed but text kept for another extent
     extent: str | None = None  # per-Run extent override (e.g. Repeal Extent="S")
     commentary_ref: str | None = None
@@ -50,6 +51,7 @@ class Commentary:
     id: str
     kind: str  # the Commentary/@Type, e.g. "F", "C", "I"
     text: str
+    runs: list[Run] = field(default_factory=list)  # structured version of `text` — carries Citation URIs for UKLINK-01/02
 
 
 @dataclass

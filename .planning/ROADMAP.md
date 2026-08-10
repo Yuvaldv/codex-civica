@@ -185,7 +185,7 @@
 - [x] **Phase 9: CLML → Markdown Conversion** — The core: CLML → typed IR → deterministic Markdown + frontmatter, with amendment/extent/status fidelity and a round-trip validator
 - [x] **Phase 10: Site — Route Rebase** — Israel moves `/laws` → `/laws/israel` with redirects covering all 111 already-indexed URLs
 - [x] **Phase 11: Site — England Instance** — Second docs instance at `/laws/england` (`laws/uk/england/` on disk), country discriminator, homepage + navbar entry
-- [ ] **Phase 12: Cross-Reference + Amendment Linking** — Citation resolution, end-of-document amendment lists, inline back-links from amending provisions
+- [x] **Phase 12: Cross-Reference + Amendment Linking** — Citation resolution, end-of-document amendment lists, inline back-links from amending provisions
 - [ ] **Phase 13: Starter Batch + Deploy** — Full England starter batch converted, validated, linked, built, and live
 
 ## Phase Details — v1.1
@@ -319,6 +319,7 @@ Plans:
   3. In an amending Act, each amending provision links inline, at that exact point in its own text, back to the specific provision it amends
   4. Re-running the linker is idempotent — no duplicated links and no churn in `git diff`
 
+**Status**: Complete
 **Plans**: TBD
 
 ### Phase 13: Starter Batch + Deploy
@@ -347,7 +348,7 @@ Plans:
 | 9. CLML → Markdown Conversion | 0/? | Not started | - |
 | 10. Site — Route Rebase | 0/? | Not started | - |
 | 11. Site — England Instance | -/- | Done | 2026-08-10 |
-| 12. Cross-Reference + Amendment Linking | 0/? | Not started | - |
+| 12. Cross-Reference + Amendment Linking | -/- | Done | 2026-08-10 |
 | 13. Starter Batch + Deploy | 0/? | Not started | - |
 
 ---

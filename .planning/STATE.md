@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
 status: executing
-last_updated: "2026-08-10T10:30:00.000Z"
-last_activity: 2026-08-10 -- Phase 11 COMPLETE: England docs instance live at /laws/england (10 Acts), country-discriminator refactor of DocItem/Content + generate-law-meta.js + lawSort.js, RTL CSS scoped to html[dir=rtl], OGL v3 attribution, npm run build zero errors/broken links
+last_updated: "2026-08-10T12:00:00.000Z"
+last_activity: 2026-08-10 -- Phase 12 COMPLETE: UKLINK-01/02/03 -- render.py resolves Citation/CitationSubRef/ExternalLink to internal links when the target is in the batch, structured internal_links returned for a new batch-level cross-reference validator, end-of-document footnotes now link back to the provision(s) they affect, all 10 Acts re-converted with 0 validation errors, deterministic re-run confirmed
 progress:
   total_phases: 7
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 7
   completed_plans: 7
-  percent: 71
+  percent: 86
 ---
 
 # State — Codex Civica
@@ -25,16 +25,16 @@ progress:
 
 **Current milestone:** v1.1 — UK Laws: Pipeline + Law Directory (England only).
 
-**Current focus:** Phase 12 — Cross-Reference + Amendment Linking
+**Current focus:** Phase 13 — Starter Batch + Deploy
 
 ---
 
 ## Current Position
 
-Phase: 11 (Site — England Instance) — COMPLETE
-Status: Phases 7, 8, 9, 10, 11 complete. Next: Phase 12 (Cross-Reference + Amendment Linking)
-Progress: 5/7 phases complete — [███████░░░] v1.1
-Last activity: 2026-08-10 -- Phase 11 COMPLETE: England docs instance live at /laws/england (10 Acts), country-discriminator refactor, RTL CSS scoped, OGL attribution, npm run build zero errors/broken links
+Phase: 12 (Cross-Reference + Amendment Linking) — COMPLETE
+Status: Phases 7, 8, 9, 10, 11, 12 complete. Next: Phase 13 (Starter Batch + Deploy) — the only phase left in v1.1
+Progress: 6/7 phases complete — [████████░░] v1.1
+Last activity: 2026-08-10 -- Phase 12 COMPLETE: citation/amendment cross-reference linking (UKLINK-01/02/03), batch-level cross-reference validator, all 10 Acts re-converted with 0 errors, deterministic
 
 **Note on process (2026-08-10 user feedback):** the user asked to stop producing meticulous
 per-phase PLAN.md/SUMMARY.md documents with full XML task/threat-model ceremony — ROADMAP.md's 13
@@ -95,6 +95,12 @@ otherwise. See [[feedback_lightweight_phase_execution]] in memory.
 | 2026-08-10 | RTL CSS rules (direction, blockquote/list border-side, sidebar order, docMainContainer padding) rewritten LTR-first with `html[dir='rtl']` overrides, instead of being scoped by an England-specific class | `<html dir>` is already set per-doc by `LawSeoHead` from `countryConfig.js`, so this piggybacks on an existing, tested mechanism; also correctly degrades any *future* LTR jurisdiction with zero further CSS changes |
 | 2026-08-10 | `dc:publisher` captured into `DocMeta`/frontmatter (`pipeline/uk/ir.py`, `clml.py`, `render.py`) to drive UKSITE-05's OGL attribution | Real, sourced conditional wording (verbatim from https://www.legislation.gov.uk/contributors) for "Westlaw UK" and "British History Online" publisher values, on top of the always-shown standard OGL v3 line. All 10 current Acts have `dc:publisher = "Statute Law Database"` (standard line only) — the alternate branches are real but not yet exercised by data. **Not implemented:** a distinct EU/EUR-Lex branch — the contributors page's suggested EU-acknowledgement wording exists, but nothing in the fetched CLML indicates what `dc:publisher` value (if any) marks EU-derived content, and none of the current batch is EU-derived; fabricating a trigger string would violate CLAUDE.md's no-hallucination rule. Revisit if/when an EU-originating Act enters the batch |
 | 2026-08-10 | Added `laws/uk/england/index.md` (England's docs-instance root, `slug: /`, mirrors `laws/israel/index.md`'s role but with England-appropriate English-language content) | Without it, `npm run build` reported the homepage's `/laws/england` link as broken — a Docusaurus multi-instance docs plugin has no default root page. Content is a "how to read this Act" guide grounded in `render.py`'s actual output conventions (unapplied-effects banner, REPEALED/prospective markers, amendment brackets, extent notes, OGL attribution), not a copy of Israel's Hebrew guide |
+| 2026-08-10 | Phase 12 built directly (no PLAN.md/RESEARCH.md/SUMMARY.md ceremony), same as Phases 8–11 | See [[feedback_lightweight_phase_execution]] |
+| 2026-08-10 | Cross-reference validator reads render()'s own structured `internal_links` return value, not a regex scan of the rendered Markdown | Found live: this doc's own bracket-footnote convention (`[text][^flabel]`) can sit directly against unrelated literal parenthetical source text once the footnote ref is stripped — e.g. `[Senior Courts Act 1981][^fc18877541](maximum number of judges)`, where `(maximum number of judges)` is source prose, not a link URL. A text-based `](...)` regex cannot tell these apart reliably; reading render.py's own record of what it actually linked has no such ambiguity. Cost: `render()`'s return type changed from `str` to `(str, list[tuple[slug, anchor]])` — convert.py is the only other caller, updated alongside |
+| 2026-08-10 | Same fix needed in `validate.check_round_trip`'s normalizer for a different reason | UKLINK-01 citation links insert `(url)` mid-sentence (e.g. a Commentary paragraph citing several sections in a row: `[s. 144](url), [Sch. 10 para. 19](url)`); naive `[`/`]` stripping left the URL glued onto the following text, breaking substring matching against the source needle. Fixed by stripping the whole `](url)` span first -- but only when the parenthesized content is actually URL-shaped (`https?://...`, `./slug.md#anchor`, `#anchor`, or empty), for the same "don't confuse it with unrelated source parens" reason as the validator fix above |
+| 2026-08-10 | Self-citation anchors are checked against the document's own known ids (`RenderContext.known_anchors`) before being trusted; cross-document anchors are not | legislation.gov.uk's own `SectionRef` can name a compound citation (`S. 8(2)(6)(b)` -> one ref spanning three sibling subsections) or a virtual location (`introduction`) with no single matching provision in the parsed tree -- found live across 6 self-citations in the batch. A doc can cheaply verify its own anchors (one extra tree walk); it cannot verify another doc's at render time (`render()` is a pure per-document function). Self-refs degrade gracefully (drop the anchor, or drop the link entirely if there's nothing else to link to -- avoids an MDX "empty URL" lint warning); cross-doc refs still emit the anchor optimistically and rely on `check_cross_references` to catch it. Zero real in-batch cross-citations exist in the current 10-Act batch (verified by grep) so this asymmetry is untested against live data -- proven synthetically in `pipeline/uk/tests/test_link_resolution.py` |
+| 2026-08-10 | Crossheadings now get a `<span id>` anchor (previously the only Provision kind that didn't) | A self-citation whose SectionRef points at a crossheading (e.g. Bribery Act 2010 Sch. 1's per-amended-Act crossheadings) was otherwise unfixably broken -- there was no anchor to link to at all, regardless of the known-anchors safety check. No documented reason found for the original omission (checked STATE.md and all three pipeline/uk/*.py files); treated as an oversight, not a deliberate policy, and fixing it also directly serves UKCONV-01's "every provision reachable by a stable anchor" |
+| 2026-08-10 | `pipeline/uk/tests/test_link_resolution.py` added, stdlib-only, no pytest | Same precedent as `pipeline/tests/test_country_blind.py` (Phase 7). Necessary specifically because the live batch has zero real in-batch citations to exercise UKLINK-01/03's in-batch branch against -- without a synthetic test, that code path would be structurally present but never actually proven to work, the same blind spot Phase 11's OGL Westlaw/British-History-Online branches have (documented there, same category of gap) |
 
 ### Known Constraints
 
@@ -122,6 +128,8 @@ otherwise. See [[feedback_lightweight_phase_execution]] in memory.
 - **Landmine (found during Phase 11's first real `npm run build`, 2026-08-10):** Docusaurus's MDX (acorn) parser fails the whole build on a literal `{`/`}` in source legal text — hit on Bribery Act 2010's Editorial Notes ("by {S.I. 2011/1418}, art. 2"), a real UK citation convention, not malformed data. `render.py` already knew about this class of bug (`<span id>` chosen over `{#id}` specifically to avoid it) but missed that raw `<Text>`/`Commentary` content can contain the same characters. Fixed generically in `pipeline/uk/render.py` (`_mdx_escape()`, applied at every raw-text emission point: Run leaves, Commentary text, preamble) with the matching un-escape added to `validate.py`'s `_normalize_rendered()` so the round-trip gate isn't fooled by the renderer's own escape backslashes. **Any future UK batch growth (Phase 13+) should assume this will recur** — it's a property of UK citation text, not a one-off
 - **Landmine (found during Phase 11 build-verification, 2026-08-10):** Docusaurus's `useDoc().metadata.permalink` includes the site's `baseUrl` (e.g. `/codex-civica/laws/israel/2000001`, not `/laws/israel/2000001`). A first-pass `countryForPath()` using `.startsWith(prefix)` silently matched *nothing* — including for Israel, which regressed `lang`/`dir`/JSON-LD/bubbles back to Docusaurus's `en`/`ltr` default until caught by explicitly grepping the built HTML (not just checking for build success). Fixed with `.includes()`/`.endsWith()` instead of anchored `.startsWith()`. **Any future path-prefix matching against `metadata.permalink` in this codebase must account for `baseUrl`** — build success and zero broken-links do NOT prove per-doc `<html>`/JSON-LD overrides are actually firing; grep the rendered HTML directly
 - **GSD tooling bug, confirmed recurring (found 2026-08-09):** both `gsd-tools.cjs state planned-phase` and `state begin-phase` corrupt STATE.md frontmatter the same way every time they run — `milestone_name` gets overwritten with a garbage roadmap-checkbox string (also seen in `init.execute-phase`'s JSON output, so it's a shared derivation bug, not per-command), and `progress` totals get invented numbers (e.g. `total_phases: 13`, `total_plans: 10`) unrelated to the actual milestone scope. Body text (Current Position, Current focus) is written correctly — only the YAML frontmatter is affected. Manually corrected twice so far. Worth a bug report against the GSD CLI; until fixed, re-check STATE.md frontmatter after every `state` subcommand invocation in this milestone.
+- **Phase 12 CLOSED (2026-08-10):** UKLINK-01/02/03 all live — see the five Phase 12 decision rows above (structured `internal_links` over regex, the two round-trip/validator fixes it required, self- vs cross-doc anchor-safety asymmetry, crossheading anchors). `pipeline/uk/tests/test_link_resolution.py` (10 checks, stdlib-only) proves the in-batch resolution path since the live 10-Act batch has zero real in-batch citations to exercise it against.
+- **Known gap carried into Phase 13, not a Phase 12 defect:** cross-document self-citation anchors (a compound/virtual `SectionRef` pointing at *another* batch doc, not this one) are not pre-verified at render time the way same-document ones are — `render()` is a pure per-document function with no visibility into another doc's provision tree. If Phase 13 grows the batch and introduces a real in-batch amendment relationship, `check_cross_references` will catch any resulting broken anchor and fail the build loudly (safe), but won't auto-degrade it gracefully the way self-citations do. Extending `known_anchors`-style verification cross-document would need a two-pass convert.py (parse everything first to collect every doc's anchor set, then render) — worth doing once there's real data to verify against, not speculatively now.
 
 ### Blockers
 
@@ -181,19 +189,24 @@ Pipeline touched too: `pipeline/uk/{ir,clml,render}.py` now capture `dc:publishe
 
 Two real landmines found via an actual `npm run build` (not just source review — see Todos above for both): the MDX/acorn parser breaking on literal `{}` in UK citation text (fixed generically in `render.py` + `validate.py`), and `metadata.permalink` including `baseUrl` (broke country-detection for Israel too, until caught by grepping built HTML directly rather than trusting a green build). Final build: zero errors, zero broken links; verified in the actual build output (not just review) that Israel is pixel-for-pixel unchanged (`lang=he dir=rtl`, Hebrew bubbles, Israel JSON-LD) and England is correct (`lang=en dir=ltr`, English bubbles, UK JSON-LD, OGL attribution, no Hebrew/RTL leakage). Could not get an actual browser screenshot — no `chromium-cli` or Playwright available in this environment; verification is built-HTML/CSS-based, not visual. `.planning/ROADMAP.md` and `.planning/REQUIREMENTS.md` (UKSITE-02..05) checked off. Not deployed — user hasn't asked for a push/deploy this session.
 
+**Session 12 (2026-08-10) — Phase 12 (Cross-Reference + Amendment Linking) closed:** Built directly from ROADMAP.md, no PLAN.md ceremony. `Citation`/`CitationSubRef`/`ExternalLink` now capture their `SectionRef`/`URI` structurally (`ir.Run.target_anchor`, new `ExternalLink` handling in `clml.py`); `Commentary` gained a parsed `runs` field alongside its flat `text` (walks each `Para/Text`, multi-paragraph commentaries joined with a plain space — up to 14 paragraphs seen live, never a blank line, since footnote bodies must stay one continuous Markdown block). `render.py` gained a `RenderContext` (doc + own_slug + batch_slugs + known_anchors, computed once via `__post_init__`) threaded through the render call chain instead of bare `doc`, plus an `anchor` parameter threaded alongside the existing `path_label` so every footnote invocation knows which provision it's attached to. `_resolve_link` is the single UKLINK-01 resolver: in-batch citation → relative link (self → `#anchor`, other doc → `./slug.md#anchor`); out-of-batch → external `legislation.gov.uk` link, same as before Phase 12. UKLINK-03 needed zero new code — an amending Act's own body-text citations already go through the same resolver as everything else. UKLINK-02: the end-of-document footnote block now prefixes each entry with `[anchor](#anchor)` back-links to every provision that invoked it.
+
+`render()`'s return type changed from `str` to `(markdown, internal_links)` — `internal_links` is a structured `(target_slug, anchor)` list, and `convert.py`/`validate.check_cross_references` consume it directly instead of regex-scanning the rendered Markdown for `](...)` patterns, which turned out to be genuinely ambiguous (see the "structured internal_links" decision row above). Getting to a clean 10/10 conversion took three real rounds of live-data debugging, all recorded as decision rows above: the regex-ambiguity bug, the round-trip normalizer needing the same URL-shape-aware fix, and the self- vs cross-doc anchor-safety split (with crossheadings gaining anchors as a side effect). `pipeline/uk/tests/test_link_resolution.py` (new, stdlib-only, 10 checks) proves the in-batch/compound/self/external/footnote-backlink paths synthetically, since the live batch has zero real in-batch citations. Final state: all 10 Acts convert with 0 validation errors (round-trip + numbering + cross-reference, all three gates), re-run confirmed byte-identical (UKLINK-04's idempotency criterion), Israel's golden gate unaffected (5/5), and `npm run build` zero errors/warnings (including zero of the "empty URL" MDX lint warnings an earlier iteration introduced). `.planning/ROADMAP.md` and `.planning/REQUIREMENTS.md` (UKLINK-01..03) checked off, `pipeline/UK_PIPELINE.md` updated with the new validator and linking sections.
+
 **Next-session actions:**
 
-1. Phase 12 (Cross-Reference + Amendment Linking) or Phase 13 (Starter Batch + Deploy) — either is unblocked; Phase 13 also needs the combined-corpus `npm run build` check it names in its own success criteria
-2. If/when the England batch grows past the current 10 Acts (still capped per the 2026-08-09 constraint), watch for the MDX-brace landmine recurring on new content
-3. Consider an actual browser/visual pass (screenshot) of `/laws/england` and `/laws/israel` once browser tooling is available in-session — this session's verification was build-output-only
+1. Phase 13 (Starter Batch + Deploy) is the only phase left in v1.1 — it's an integration phase (verifies Phases 8–12 at batch scale, no new requirements of its own per the roadmap's coverage note)
+2. Known gap carried forward (see Known Constraints above): cross-document self-citation anchors aren't pre-verified at render time the way same-document ones are — watch for this if Phase 13's batch growth introduces a real in-batch amendment relationship (none exist in the current 10 Acts)
+3. If/when the England batch grows, watch for both Phase 11's MDX-brace landmine and Phase 12's regex-ambiguity class of bug recurring on new content — both are properties of UK citation text, not one-offs
+4. Consider an actual browser/visual pass (screenshot) of `/laws/england` once browser tooling (chromium-cli or Playwright) is available in-session — every session so far has verified via build output only
 
 **Files to review on re-entry:**
 
-- `site/src/countryConfig.js` — the new single source of truth for per-instance jurisdiction config
-- `site/src/theme/DocItem/Content/index.jsx` — country-branched SEO head, bubbles, OGL attribution
-- `pipeline/uk/render.py` — `_mdx_escape()` and the `dc:publisher` capture
-- `laws/uk/england/index.md` — England's docs-root landing page
+- `pipeline/uk/render.py` — `RenderContext`, `_resolve_link`, the anchor-threading through `_render_provision`
+- `pipeline/uk/validate.py` — `check_cross_references` (batch-level, called once after the full loop, not per-doc)
+- `pipeline/uk/convert.py` — computes `batch_slugs`, threads `internal_links` from `render()` into the validator
+- `pipeline/uk/tests/test_link_resolution.py` — the only place UKLINK-01/03's in-batch branch is actually exercised
 
 ---
 
-*Last updated: 2026-08-10 (session 11) — Phase 11 (Site: England Instance) complete; 5/7 v1.1 phases done*
+*Last updated: 2026-08-10 (session 12) — Phase 12 (Cross-Reference + Amendment Linking) complete; 6/7 v1.1 phases done, only Phase 13 remains*

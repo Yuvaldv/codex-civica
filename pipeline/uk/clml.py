@@ -81,6 +81,16 @@ def _walk_mixed_content(el) -> list[Run]:
         elif tag == "Term":
             runs.append(Run(text="".join(child.itertext()), kind="term", uri=child.get("id")))
         elif tag in ("Citation", "CitationSubRef"):
+            runs.append(Run(
+                text="".join(child.itertext()), kind="citation",
+                uri=child.get("URI"), target_anchor=child.get("SectionRef"),
+            ))
+        elif tag == "ExternalLink":
+            # A link to a non-legislation.gov.uk resource (e.g. The National
+            # Archives Discovery catalogue, another jurisdiction's statute book)
+            # seen in Commentary text. No SectionRef, and its URI never matches
+            # the legislation.gov.uk /id/ pattern, so it always resolves external
+            # -- reuses the citation render path rather than a new one.
             runs.append(Run(text="".join(child.itertext()), kind="citation", uri=child.get("URI")))
         elif tag == "CommentaryRef":
             # Standalone editorial reference marker (e.g. an ellipsis explained by a footnote) --
@@ -437,7 +447,19 @@ def _parse_commentaries(root) -> dict[str, Commentary]:
         # sentences routinely end in a <Citation> child (the amending instrument), which
         # a .text-only read silently truncates before.
         text = " ".join("".join(c.itertext()).split())
-        out[cid] = Commentary(id=cid, kind=c.get("Type") or "", text=text)
+        # Structured runs (for UKLINK-01/02 citation linking) -- a Commentary can carry
+        # several sibling <Para><Text> blocks (seen up to 14 in the batch); walk each and
+        # join with a plain space, never a blank line, since the rendered footnote text
+        # must stay one continuous Markdown footnote body.
+        runs: list[Run] = []
+        for i, para in enumerate(c.findall("leg:Para", NS)):
+            text_el = para.find("leg:Text", NS)
+            if text_el is None:
+                continue
+            if i > 0:
+                runs.append(Run(text=" "))
+            runs.extend(_walk_mixed_content(text_el))
+        out[cid] = Commentary(id=cid, kind=c.get("Type") or "", text=text, runs=runs)
     return out
 
 
