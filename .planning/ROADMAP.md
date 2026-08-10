@@ -97,7 +97,7 @@
   3. Cross-reference links (intra-law and inter-law) are resolved for all converted laws
   4. `python pipeline/batch_import.py --status` shows 718/718 converted with 0 failed
 
-**Status**: In progress (10/718)
+**Status**: In progress (121/718) — paused between batches by user request; each further batch needs an explicit go-ahead (most recently: 10 more, 2026-08-10)
 **Plans**: TBD
 
 ### Phase 5: Deployment
@@ -139,7 +139,7 @@
 | 1. Pipeline | 3/3 | Done | 2026-05-08 |
 | 2. Site Foundation | -/- | Done | 2026-05-15 |
 | 3. Custom UI | -/- | Done | 2026-05-15 |
-| 4. Content | -/- | In progress (10/718) | - |
+| 4. Content | -/- | In progress (121/718) | - |
 | 5. Deployment | -/- | Done | 2026-05-15 |
 | 6. Search | 0/? | Not started | - |
 
@@ -175,7 +175,7 @@
 
 > Goal: Stand up a legislation.gov.uk (CLML XML) pipeline and an England law directory alongside Israel, on the same Docusaurus site, with a small high-value starter batch.
 > Structure: Dependency-ordered — shared core → acquisition → conversion → site (route rebase, then second country) → linking → batch + deploy. Fine granularity.
-> Scope note: v1.0 (Phases 1–6) is still open — Phase 4 (Content, 111/718) is paused by user request and Phase 6 (Search) has not started. v1.1 runs in parallel by explicit user choice; v1.0 phases are untouched here.
+> Scope note: v1.0 (Phases 1–6) is still open — Phase 4 (Content, 121/718) is paused between explicit-go-ahead batches and Phase 6 (Search) has not started. v1.1 runs in parallel by explicit user choice; v1.0 phases are untouched here.
 > Numbering: v1.1 continues from v1.0's last phase — starts at Phase 7.
 
 ## Phases — v1.1
@@ -186,7 +186,7 @@
 - [x] **Phase 10: Site — Route Rebase** — Israel moves `/laws` → `/laws/israel` with redirects covering all 111 already-indexed URLs
 - [x] **Phase 11: Site — England Instance** — Second docs instance at `/laws/england` (`laws/uk/england/` on disk), country discriminator, homepage + navbar entry
 - [x] **Phase 12: Cross-Reference + Amendment Linking** — Citation resolution, end-of-document amendment lists, inline back-links from amending provisions
-- [ ] **Phase 13: Starter Batch + Deploy** — Full England starter batch converted, validated, linked, built, and live
+- [x] **Phase 13: Starter Batch + Deploy** — Full England starter batch converted, validated, linked, built, and live
 
 ## Phase Details — v1.1
 
@@ -254,6 +254,8 @@ Plans:
 **Wave 1**
 
 - [x] 08-01-PLAN.md — Build `pipeline/uk/fetch_uk.py` (User-Agent + 5s crawl-delay, stub gate, revised-version gate, hardcoded 10-item Tier A batch), run it live, document in `pipeline/UK_PIPELINE.md`
+
+**Extension (2026-08-10, explicit user go-ahead — "fetch 10 new laws for england"):** `BATCH` grown from 10 to 20 — the 3 remaining Tier A Acts originally dropped as redundant-with-a-kept-Act (Parliament Act 1911, Act of Settlement 1700, Habeas Corpus Act 1679), plus 7 new small/medium Acts (22KB–162KB XML, verified live) chosen to stay well clear of the >1MB page-splitting blocker. `fetch_uk.py` gained a cache-first check (skip the network GET, not just the disk write, for any URI already recorded `status: "fetched"` in the manifest) so re-running to grow the batch doesn't needlessly re-hit the 10 already-fetched URIs.
 
 ### Phase 9: CLML → Markdown Conversion
 
@@ -330,12 +332,14 @@ Plans:
 **Requirements**: None — integration phase; verifies Phases 8–12 requirements at batch scale (see Coverage note)
 **Success Criteria** (what must be TRUE):
 
-  1. The England starter batch (10 Acts or fewer, per the Phase 8 fetch cap) is converted, validated (round-trip, numbering, and link checks all clean), linked, and committed under `laws/uk/england/`
-  2. `npm run build` succeeds on the combined Israel + England corpus with zero broken links
-  3. The deployed site (`USE_SSH=true GIT_USER=Yuvaldv npm run deploy`) serves England laws at `/laws/england` while Israel's pre-rebase URLs still redirect correctly
-  4. A reader landing on the homepage can pick England, browse to a specific Act, and reach a specific section anchor without a dead end
+  1. The England starter batch (10 Acts or fewer, per the Phase 8 fetch cap) is converted, validated (round-trip, numbering, and link checks all clean), linked, and committed under `laws/uk/england/` — [x] already true from Phases 9/12 (10 `.md` files + `index.md` committed at `0395e7a`)
+  2. `npm run build` succeeds on the combined Israel + England corpus with zero broken links — [x] re-ran locally 2026-08-10: `[SUCCESS] Generated static files`, 122 generated-meta entries, zero broken-link/anchor warnings
+  3. The deployed site (`USE_SSH=true GIT_USER=Yuvaldv npm run deploy`) serves England laws at `/laws/england` while Israel's pre-rebase URLs still redirect correctly — [x] verified live: `gh-pages` HEAD already matches `0395e7a`; `GET /laws/england` → 200, `GET /laws/england/ukpga-1990-18` → 200, `GET /laws/2000001/` → meta-refresh redirect to `/laws/israel/2000001`
+  4. A reader landing on the homepage can pick England, browse to a specific Act, and reach a specific section anchor without a dead end — [x] verified via live HTML: homepage has working `Link` to `/laws/england`, England index lists all 10 Acts, each Act page's auto-generated TOC links to every section/subsection anchor (`#section-1-1-a` etc.)
 
-**Plans**: TBD
+**Post-closure extension (2026-08-10):** the England batch grew 10 → 20 Acts (see the Phase 8 extension note above) with an explicit user go-ahead. This surfaced the first real in-batch cross-document citation (Parliament Act 1911 → Fixed-term Parliaments Act 2011 s.7(2)) and, with it, the first real trigger of the cross-document anchor gap Phase 12 had documented but never exercised against live data — the cited subsection had since been omitted entirely from the revised text. Fixed generically (not a per-Act patch): `convert.py` now does a first pass parsing the whole fetched batch to compute every doc's `known_anchors` before rendering any of them, threaded through as `render.RenderContext.batch_known_anchors` — the same anchor-safety check self-citations already had, now extended to cross-document citations, degrading to a plain document link rather than a stale fragment. All 20 Acts convert with 0 validation errors; re-run confirmed byte-identical.
+
+**Plans**: None — closed directly as a verification phase (no code changes needed; Phases 9–12 had already produced a converted, linked, deployed batch). Verified 2026-08-10 against both a fresh local `npm run build` and the live GitHub Pages deployment.
 
 ---
 
@@ -349,7 +353,7 @@ Plans:
 | 10. Site — Route Rebase | 0/? | Not started | - |
 | 11. Site — England Instance | -/- | Done | 2026-08-10 |
 | 12. Cross-Reference + Amendment Linking | -/- | Done | 2026-08-10 |
-| 13. Starter Batch + Deploy | 0/? | Not started | - |
+| 13. Starter Batch + Deploy | -/- | Done | 2026-08-10 |
 
 ---
 

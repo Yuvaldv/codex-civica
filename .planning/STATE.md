@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
-status: executing
-last_updated: "2026-08-10T12:00:00.000Z"
-last_activity: 2026-08-10 -- Phase 12 COMPLETE: UKLINK-01/02/03 -- render.py resolves Citation/CitationSubRef/ExternalLink to internal links when the target is in the batch, structured internal_links returned for a new batch-level cross-reference validator, end-of-document footnotes now link back to the provision(s) they affect, all 10 Acts re-converted with 0 validation errors, deterministic re-run confirmed
+status: complete
+last_updated: "2026-08-10T16:00:00.000Z"
+last_activity: 2026-08-10 -- post-milestone content growth: +10 Israel laws (111->121/718, 0 failed, commit 9fb906a) and +10 England Acts (10->20, 0 validation errors, commit 17506bd), both by explicit user go-ahead. Found and fixed a real cross-document anchor bug in the UK renderer (Parliament Act 1911 -> Fixed-term Parliaments Act 2011 s.7(2), since-omitted subsection). Golden fixtures re-baselined for the 121-law corpus, 8/8 green (commit 4d9f071). Push/deploy pending.
 progress:
   total_phases: 7
-  completed_phases: 6
+  completed_phases: 7
   total_plans: 7
   completed_plans: 7
-  percent: 86
+  percent: 100
 ---
 
 # State — Codex Civica
@@ -25,16 +25,16 @@ progress:
 
 **Current milestone:** v1.1 — UK Laws: Pipeline + Law Directory (England only).
 
-**Current focus:** Phase 13 — Starter Batch + Deploy
+**Current focus:** v1.1 UK Laws milestone COMPLETE — all 7 phases (7-13) done. Awaiting next milestone direction.
 
 ---
 
 ## Current Position
 
-Phase: 12 (Cross-Reference + Amendment Linking) — COMPLETE
-Status: Phases 7, 8, 9, 10, 11, 12 complete. Next: Phase 13 (Starter Batch + Deploy) — the only phase left in v1.1
-Progress: 6/7 phases complete — [████████░░] v1.1
-Last activity: 2026-08-10 -- Phase 12 COMPLETE: citation/amendment cross-reference linking (UKLINK-01/02/03), batch-level cross-reference validator, all 10 Acts re-converted with 0 errors, deterministic
+Phase: 13 (Starter Batch + Deploy) — COMPLETE
+Status: All 7 v1.1 phases (7-13) complete. Milestone v1.1 "UK Laws" done.
+Progress: 7/7 phases complete — [██████████] v1.1
+Last activity: 2026-08-10 -- Phase 13 COMPLETE: verification-only phase, no code changes -- confirmed all 4 success criteria live (build, deploy, redirects, homepage-to-anchor navigation)
 
 **Note on process (2026-08-10 user feedback):** the user asked to stop producing meticulous
 per-phase PLAN.md/SUMMARY.md documents with full XML task/threat-model ceremony — ROADMAP.md's 13
@@ -101,6 +101,13 @@ otherwise. See [[feedback_lightweight_phase_execution]] in memory.
 | 2026-08-10 | Self-citation anchors are checked against the document's own known ids (`RenderContext.known_anchors`) before being trusted; cross-document anchors are not | legislation.gov.uk's own `SectionRef` can name a compound citation (`S. 8(2)(6)(b)` -> one ref spanning three sibling subsections) or a virtual location (`introduction`) with no single matching provision in the parsed tree -- found live across 6 self-citations in the batch. A doc can cheaply verify its own anchors (one extra tree walk); it cannot verify another doc's at render time (`render()` is a pure per-document function). Self-refs degrade gracefully (drop the anchor, or drop the link entirely if there's nothing else to link to -- avoids an MDX "empty URL" lint warning); cross-doc refs still emit the anchor optimistically and rely on `check_cross_references` to catch it. Zero real in-batch cross-citations exist in the current 10-Act batch (verified by grep) so this asymmetry is untested against live data -- proven synthetically in `pipeline/uk/tests/test_link_resolution.py` |
 | 2026-08-10 | Crossheadings now get a `<span id>` anchor (previously the only Provision kind that didn't) | A self-citation whose SectionRef points at a crossheading (e.g. Bribery Act 2010 Sch. 1's per-amended-Act crossheadings) was otherwise unfixably broken -- there was no anchor to link to at all, regardless of the known-anchors safety check. No documented reason found for the original omission (checked STATE.md and all three pipeline/uk/*.py files); treated as an oversight, not a deliberate policy, and fixing it also directly serves UKCONV-01's "every provision reachable by a stable anchor" |
 | 2026-08-10 | `pipeline/uk/tests/test_link_resolution.py` added, stdlib-only, no pytest | Same precedent as `pipeline/tests/test_country_blind.py` (Phase 7). Necessary specifically because the live batch has zero real in-batch citations to exercise UKLINK-01/03's in-batch branch against -- without a synthetic test, that code path would be structurally present but never actually proven to work, the same blind spot Phase 11's OGL Westlaw/British-History-Online branches have (documented there, same category of gap) |
+| 2026-08-10 | Phase 13 closed as verification-only, zero code/content changes | Phases 9-12 had already converted, validated, linked, committed (`0395e7a`), and deployed (`gh-pages` HEAD already matched `0395e7a` before this phase started) the full 10-Act batch. Phase 13's ROADMAP success criteria are literally re-checkable against what already exists; re-running the pipeline or re-deploying would have been pure duplicate work with no behavior change |
+| 2026-08-10 | UK batch grown 10 -> 20 Acts, Israel corpus grown 111 -> 121/718, both by explicit user go-ahead ("fetch 10 new laws for Israel and 10 new laws for England") | Post-milestone content operations using the already-shipped pipelines, not a new roadmap phase — same precedent as v1.0's Phase 4 factory line, which has never been phase-gated per batch |
+| 2026-08-10 | UK extension batch (the new 10) picked conservatively: the 3 Tier-A Acts originally dropped as redundant, plus 7 new Acts all under 162KB XML (max seen: 641KB, deliberately excluded) | Stays well inside the >1MB page-splitting blocker (STATE.md Known Constraints) without needing to resolve that open design question first; sizes verified live via a 15-candidate probe fetch before finalizing `BATCH`, not guessed |
+| 2026-08-10 | `fetch_uk.py` gained a cache-first check (skip the network GET, not just the disk write, for any URI already `status: "fetched"` in the manifest with its XML still on disk) | The Phase 8 ROADMAP criterion always said "cache-first on re-runs" but the original code only skipped the disk *write*, still re-fetching over the network every re-run; growing the batch was the first real re-run scenario where hitting legislation.gov.uk for 10 URIs we already have would have been genuinely wasteful against their fair-use terms |
+| 2026-08-10 | Cross-document anchor safety extended from self-citations to cross-document citations (`convert.py` two-pass, `render.compute_known_anchors`, `RenderContext.batch_known_anchors`) | Triggered by real data the moment the batch grew: Parliament Act 1911 cites Fixed-term Parliaments Act 2011 s.7(2), but that subsection has since been omitted entirely from the revised text (only the enclosing `<P1>` survives as dot-leader text) — exactly the gap Phase 12 documented as "worth doing once there's real data to verify against, not speculatively now" ([[project_v11_uk_milestone]]). Degrades to a plain document link (the target doc is still real), never drops the link entirely the way a bad self-citation does. `check_cross_references` caught it immediately rather than silently shipping a dead fragment — the safety net worked exactly as designed even before the fix landed |
+| 2026-08-10 | `convert.py`'s new first pass wraps each doc's parse in its own `try/except UnknownElementError` rather than letting one batch-mate's parse failure abort the whole run | Needed because the first pass now parses every fetched doc (to build `batch_known_anchors`) even during a `--slug` single-doc re-run — without this, an unrelated batch-mate failing to parse would crash a targeted single-Act fix-up that has nothing to do with it |
+| 2026-08-10 | `pipeline/tests/verify_golden.py`'s hardcoded `EXPECTED_LAW_FILES` (112 -> 122) and `FRONTMATTER_SHA256` constants re-baselined via `capture_golden.py` after the Israel corpus grew 111 -> 121 | These pin one specific historical corpus snapshot as a regression proof (Phase 7's "did the refactor change behavior" check), not a permanent invariant of the pipeline — re-baselining after an intentional, requested content addition is expected maintenance, not a weakening of the gate. `capture_golden.py`'s own `link_resolver` capture step flagged a false-positive "not restored" against the 10 new *untracked* Israel `.md` files (its dirty-check doesn't distinguish pre-existing untracked content from files its own `--all` run touched) — verified the underlying `link_resolver_all.diff` artifact was still written correctly (17 tracked files, matching `git diff --stat`) before that false positive fired; resolves itself once the new laws are committed |
 
 ### Known Constraints
 
@@ -110,12 +117,13 @@ otherwise. See [[feedback_lightweight_phase_execution]] in memory.
 - Docusaurus requires at least one doc in the docs dir. `laws/israel/placeholder.md` fills this when the library is empty.
 - legislation.gov.uk enforces a mandatory 5s `Crawl-delay` and an identifying User-Agent; no bulk download exists and no concurrency is permitted. Fetch must be sequential and cache-first.
 - UK site content must carry OGL v3 attribution (with the conditional EU/Westlaw variant where `dc:publisher` requires it) — implemented in Phase 11 (`DocItem/Content`'s `OglAttribution`), see the Phase 11 decision row above for what is and isn't covered.
-- Large UK Acts (>1MB XML — e.g. Companies Act 2006 at 15MB, Data Protection Act 2018 at 5.8MB) are blocked on a page-splitting strategy; out of scope for the v1.1 Tier A starter batch, but a known constraint for any later expansion.
+- Large UK Acts (>1MB XML — e.g. Companies Act 2006 at 15MB, Data Protection Act 2018 at 5.8MB) are blocked on a page-splitting strategy; out of scope for the 20-Act England batch (2026-08-10), still a known constraint for any later expansion. The largest Act actually in the batch is 483KB (Interpretation Act 1978); a live probe found several more candidates under 700KB (Video Recordings Act 1984 483KB, Theft Act 1968 277KB, Protection from Harassment Act 1997 184KB, Public Order Act 1986 641KB, Football Spectators Act 1989 545KB) that passed both fetch gates but were left out of this round's final 10 in favor of smaller ones — good candidates for a future extension without needing the page-splitting decision first.
 
 ### Todos
 
-- Factory import paused at 111/718 by user request (2026-05-19) — do not resume until asked
+- Factory import at 121/718 (grew from 111 on 2026-08-10 by explicit user request, +10 laws) — paused again between batches; do not resume further without asked
 - Ministry name resolution: legacy IDs 1–50 are best-effort mapped in `generate-law-meta.js`; may need refinement for accuracy
+- **QA finding (2026-08-10, not fixed, out of scope for this session):** `category` frontmatter is missing (not empty — the key is absent entirely) on 21 of 121 converted Israel laws, including 2 of the 10 just added (`2000339` Museums Law, `2001168`). Root cause: `reconcile.py`'s `build_frontmatter` only emits `category` when `manifest_laws.json`'s own `entry.get("category")` is truthy (`pipeline/reconcile.py:161`) — for these 21 laws the manifest simply has `category: ""`, an upstream data gap, not a new bug from this batch (19 of the 21 predate this session). This directly fails Phase 4's own success criterion #2 ("every law file has all mandatory frontmatter fields filled ... category ..."). Not fixed here — deciding how to backfill categories (ministry-based inference? re-run Gemini classification? manual mapping?) is a design call beyond "convert N more laws," flagged for a future pass rather than fixed ad hoc
 - SEO follow-ups not yet done: homepage/`/laws` index meta description is still the generic "Laws of the world..." tagline; no per-category landing-page descriptions; Google Search Console not yet verified/submitted
 - Open design call for Phase 9 planning: amendment-markup rendering policy is set to bracket-and-footnote (per UKCONV-06), but `Tabular`/`Figure` edge cases still need a decision during planning
 - **Pre-existing bug (found during Phase 7 research, 2026-08-09), fix deferred by user request:** `link_resolver.py`'s `_STRIP_MG_INDEX` regex (lines 122-124) fails to strip the sidenotes index when a note's text contains a nested Markdown link — corrupts 4 law files (`2000326`, `2000390`, `2000416`, `2000595`) a little more on every `--all` re-run. Nothing in the repo is corrupted today (reproduced from a clean `HEAD`, not present in committed history); this is latent and would trigger on the next factory-import resume. Not fixed in Phase 7 (would break its byte-identity verification gate). Track as v1.0 Phase 4 follow-up work.
@@ -193,20 +201,41 @@ Two real landmines found via an actual `npm run build` (not just source review �
 
 `render()`'s return type changed from `str` to `(markdown, internal_links)` — `internal_links` is a structured `(target_slug, anchor)` list, and `convert.py`/`validate.check_cross_references` consume it directly instead of regex-scanning the rendered Markdown for `](...)` patterns, which turned out to be genuinely ambiguous (see the "structured internal_links" decision row above). Getting to a clean 10/10 conversion took three real rounds of live-data debugging, all recorded as decision rows above: the regex-ambiguity bug, the round-trip normalizer needing the same URL-shape-aware fix, and the self- vs cross-doc anchor-safety split (with crossheadings gaining anchors as a side effect). `pipeline/uk/tests/test_link_resolution.py` (new, stdlib-only, 10 checks) proves the in-batch/compound/self/external/footnote-backlink paths synthetically, since the live batch has zero real in-batch citations. Final state: all 10 Acts convert with 0 validation errors (round-trip + numbering + cross-reference, all three gates), re-run confirmed byte-identical (UKLINK-04's idempotency criterion), Israel's golden gate unaffected (5/5), and `npm run build` zero errors/warnings (including zero of the "empty URL" MDX lint warnings an earlier iteration introduced). `.planning/ROADMAP.md` and `.planning/REQUIREMENTS.md` (UKLINK-01..03) checked off, `pipeline/UK_PIPELINE.md` updated with the new validator and linking sections.
 
+**Session 13 (2026-08-10) — Phase 13 (Starter Batch + Deploy) closed, v1.1 milestone COMPLETE:** Verification-only phase — no code or content changes, per the decision row above. Checked all 4 ROADMAP success criteria against both a fresh local build and the actual live deployment (not source review):
+
+1. `laws/uk/england/` already has the 10 committed Acts + `index.md` (from Phases 9/12, commit `0395e7a`)
+2. Ran `npm run build` fresh: `[SUCCESS]`, prebuild generated 122 law-meta entries (111 Israel + 10 England + England's index), zero broken-link/anchor warnings
+3. Checked `git ls-remote`/`git log origin/gh-pages` — HEAD already matches `0395e7a`, i.e. Phase 12's deploy already shipped Phase 13's content; live `curl` checks: `/laws/england` → 200, `/laws/england/ukpga-1990-18` → 200, `/laws/2000001/` → serves an HTML meta-refresh (`content="0; url=/codex-civica/laws/israel/2000001"`) confirming the client-redirect plugin still works against the rebased route
+4. Fetched live HTML: homepage has a working `href` to `laws/england`, the England index lists all 10 Act slugs, and an Act page's auto-generated Docusaurus TOC contains unquoted `href=#section-1-1-a`-style anchors down to subsection depth — confirmed the homepage → country → Act → section click path has no dead end
+
+`.planning/ROADMAP.md` Phase 13 checkbox and its 4 success criteria checked off with evidence inline; progress table row set to Done. **v1.1 "UK Laws" milestone is now 7/7 phases complete** (Phases 7-13, all closed 2026-08-10). No `gsd-tools.cjs state` subcommands were invoked for this update (see the recurring frontmatter-corruption bug below) — STATE.md/ROADMAP.md were edited directly.
+
+**Session 14 (2026-08-10) — post-milestone content growth, both countries, explicit user go-ahead ("fetch 10 new laws for Israel and 10 new laws for england... run all of them through the pipeline, qa, fix, commit, push, deploy"):**
+
+- **Israel**: `batch_import.py --count 10` — drained 5 items off the priority queue plus 5 from manifest order, all through native extraction + OCR + Gemini reconciliation + link-resolve + cross-link. 0 failures. 111 → 121/718. 2 more laws queued into the priority list by this run's own cross-linking (referenced by the new laws, not yet converted). Committed `9fb906a`.
+- **England**: grew `fetch_uk.py`'s `BATCH` 10 → 20 (see the Phase 8/13 extension decision rows above for the size-probe methodology). Converting the full 20-Act batch immediately surfaced a real bug: Parliament Act 1911 cites Fixed-term Parliaments Act 2011 s.7(2), but that subsection has since been omitted entirely from the revised source text, so `check_cross_references` correctly failed the run with `BROKEN_ANCHOR`. Fixed generically (not a per-Act patch) by extending the existing self-citation anchor-safety pattern to cross-document citations — `convert.py` now parses the whole fetched batch once up front to build a `slug -> known_anchors` map (`render.compute_known_anchors`), threaded through as `RenderContext.batch_known_anchors`. All 20 Acts now convert with 0 errors; re-run confirmed byte-identical. Committed `17506bd`.
+- **QA pass**: `pipeline/tests/verify_golden.py` failed 5/8 immediately after the Israel batch (all "corpus grew, fixtures are stale" — the golden gate's *own* documented failure mode, not a real regression). Re-ran `capture_golden.py` to re-baseline, then manually updated `verify_golden.py`'s two hardcoded constants (`EXPECTED_LAW_FILES` 112→122, `FRONTMATTER_SHA256`) since those pin one specific corpus snapshot as Phase 7's regression proof rather than being derived from the fixture files dynamically. `capture_golden.py`'s own `link_resolver` capture step raised a false-positive "not restored" against the 10 new *untracked* Israel files (its dirty-check doesn't distinguish pre-existing untracked content from files its own `--all` run touched) — verified the actual `link_resolver_all.diff` artifact was still captured correctly before that false positive fired, and confirmed it resolves itself once the new laws are committed (re-ran `verify_golden.py` post-commit: 8/8 green). Committed `4d9f071`.
+- **QA finding, not fixed** (see Todos above): 21 of the 121 converted Israel laws (2 of the 10 new ones) are missing `category` frontmatter entirely — a pre-existing manifest-data gap (19 of 21 predate this session), not something this batch caused. Directly fails Phase 4's own success criterion #2. Flagged rather than fixed — backfilling categories is a separate design decision (ministry-based inference? re-classification?) beyond this session's scope.
+- Fresh local `npm run build` after each stage: zero errors, zero broken links, 142 generated law-meta entries at the end (121 Israel + 20 England + England's index page).
+- Deploy: pending as of this note — see the very next action below.
+
 **Next-session actions:**
 
-1. Phase 13 (Starter Batch + Deploy) is the only phase left in v1.1 — it's an integration phase (verifies Phases 8–12 at batch scale, no new requirements of its own per the roadmap's coverage note)
-2. Known gap carried forward (see Known Constraints above): cross-document self-citation anchors aren't pre-verified at render time the way same-document ones are — watch for this if Phase 13's batch growth introduces a real in-batch amendment relationship (none exist in the current 10 Acts)
-3. If/when the England batch grows, watch for both Phase 11's MDX-brace landmine and Phase 12's regex-ambiguity class of bug recurring on new content — both are properties of UK citation text, not one-offs
-4. Consider an actual browser/visual pass (screenshot) of `/laws/england` once browser tooling (chromium-cli or Playwright) is available in-session — every session so far has verified via build output only
+1. Push `9fb906a`/`17506bd`/`4d9f071` (and this docs commit) to `origin/main`, then deploy (`USE_SSH=true GIT_USER=Yuvaldv npm run deploy` from `site/`) — the user explicitly asked for push+deploy this session; do this before ending the session if not already done.
+2. Decide whether/how to backfill the 21-law `category` gap found above — no decision made yet, flagged only.
+3. 5 more Tier-A-adjacent UK Acts were live-verified but left out of this round for size conservatism (Video Recordings Act 1984 483KB, Theft Act 1968 277KB, Protection from Harassment Act 1997 184KB, Public Order Act 1986 641KB, Football Spectators Act 1989 545KB) — good candidates for a future England extension without re-doing the probe.
+4. Large UK Acts (Companies Act 2006, Data Protection Act 2018, etc.) remain blocked on a page-splitting strategy not yet designed.
+5. Consider an actual browser/visual pass (screenshot) of `/laws/england` once browser tooling (chromium-cli or Playwright) is available in-session — every session so far, including this one, has verified via build output + live HTML/curl, not a rendered screenshot.
 
 **Files to review on re-entry:**
 
-- `pipeline/uk/render.py` — `RenderContext`, `_resolve_link`, the anchor-threading through `_render_provision`
+- `.planning/ROADMAP.md` — v1.1 fully checked off (Phases 7-13, with a Phase 8/13 post-closure extension note); v1.0 Phases 1-6 still open (Phase 4 at 121/718, paused between batches, Phase 6 not started)
+- `pipeline/uk/render.py` — `RenderContext`, `compute_known_anchors`, `_resolve_link`, the anchor-threading through `_render_provision`
+- `pipeline/uk/convert.py` — the new two-pass structure (parse everything first, then render `rows`)
 - `pipeline/uk/validate.py` — `check_cross_references` (batch-level, called once after the full loop, not per-doc)
 - `pipeline/uk/convert.py` — computes `batch_slugs`, threads `internal_links` from `render()` into the validator
 - `pipeline/uk/tests/test_link_resolution.py` — the only place UKLINK-01/03's in-batch branch is actually exercised
 
 ---
 
-*Last updated: 2026-08-10 (session 12) — Phase 12 (Cross-Reference + Amendment Linking) complete; 6/7 v1.1 phases done, only Phase 13 remains*
+*Last updated: 2026-08-10 (session 14) — post-milestone content growth: Israel 111->121/718, England 10->20 Acts, cross-document anchor safety fix, golden fixtures re-baselined (8/8 green)*

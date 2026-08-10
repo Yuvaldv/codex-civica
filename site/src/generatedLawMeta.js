@@ -824,6 +824,20 @@ export const GENERATED_LAW_META = {
       "ערכאות שיפוטיות"
     ]
   },
+  "2000278": {
+    "country": "israel",
+    "year": 1951,
+    "categoryLabel": "Defense",
+    "categoryLabelHe": "ביטחון",
+    "minister": "Defense",
+    "ministerHe": "שר הביטחון",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "ביטחון",
+      "מצב חירום"
+    ]
+  },
   "2000291": {
     "country": "israel",
     "year": 1975,
@@ -848,6 +862,20 @@ export const GENERATED_LAW_META = {
     "statusHe": "תקף",
     "tags": [
       "ביטחון",
+      "תעסוקה"
+    ]
+  },
+  "2000305": {
+    "country": "israel",
+    "year": 1953,
+    "categoryLabel": "Education",
+    "categoryLabelHe": "חינוך",
+    "minister": "Labor & Welfare",
+    "ministerHe": "שר העבודה והרווחה",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חינוך",
       "תעסוקה"
     ]
   },
@@ -889,6 +917,19 @@ export const GENERATED_LAW_META = {
     "statusHe": "תקף",
     "tags": [
       "מעמד אישי"
+    ]
+  },
+  "2000339": {
+    "country": "israel",
+    "year": 1983,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Communications",
+    "ministerHe": "שר התקשורת",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "תרבות"
     ]
   },
   "2000349": {
@@ -1106,6 +1147,19 @@ export const GENERATED_LAW_META = {
       "בנקאות וכספים"
     ]
   },
+  "2000541": {
+    "country": "israel",
+    "year": 1961,
+    "categoryLabel": "Local Government",
+    "categoryLabelHe": "רשויות מקומיות",
+    "minister": "Finance",
+    "ministerHe": "שר האוצר",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "רשויות מקומיות"
+    ]
+  },
   "2000542": {
     "country": "israel",
     "year": 1956,
@@ -1228,6 +1282,19 @@ export const GENERATED_LAW_META = {
       "תעסוקה"
     ]
   },
+  "2000752": {
+    "country": "israel",
+    "year": 1949,
+    "categoryLabel": "Education",
+    "categoryLabelHe": "חינוך",
+    "minister": "Sports",
+    "ministerHe": "שר הספורט",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "חינוך"
+    ]
+  },
   "2000780": {
     "country": "israel",
     "year": 1959,
@@ -1278,6 +1345,20 @@ export const GENERATED_LAW_META = {
     "status": "In Effect",
     "statusHe": "תקף",
     "tags": [
+      "מיסוי"
+    ]
+  },
+  "2001070": {
+    "country": "israel",
+    "year": 1961,
+    "categoryLabel": "Housing",
+    "categoryLabelHe": "דיור ובנייה",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בינוי ושיכון",
       "מיסוי"
     ]
   },
@@ -1349,6 +1430,34 @@ export const GENERATED_LAW_META = {
       "רווחה"
     ]
   },
+  "2001108": {
+    "country": "israel",
+    "year": 1950,
+    "categoryLabel": "Real Estate",
+    "categoryLabelHe": "מקרקעין",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מקרקעין",
+      "ניהול נכסים"
+    ]
+  },
+  "2001111": {
+    "country": "israel",
+    "year": 1950,
+    "categoryLabel": "Real Estate",
+    "categoryLabelHe": "מקרקעין",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "מקרקעין",
+      "ניהול נכסים"
+    ]
+  },
   "2001134": {
     "country": "israel",
     "year": 1953,
@@ -1373,6 +1482,19 @@ export const GENERATED_LAW_META = {
     "statusHe": "תקף",
     "tags": [
       "תעסוקה"
+    ]
+  },
+  "2001168": {
+    "country": "israel",
+    "year": 1961,
+    "categoryLabel": "Other",
+    "categoryLabelHe": "Other",
+    "minister": "Tourism",
+    "ministerHe": "שר התיירות",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "בנקאות וכספים"
     ]
   },
   "2001189": {
@@ -1413,6 +1535,21 @@ export const GENERATED_LAW_META = {
     "statusHe": "תקף",
     "tags": [
       "תרבות"
+    ]
+  },
+  "2001233": {
+    "country": "israel",
+    "year": 1953,
+    "categoryLabel": "Religion",
+    "categoryLabelHe": "דת",
+    "minister": "Communications",
+    "ministerHe": "שר התקשורת",
+    "status": "In Effect",
+    "statusHe": "תקף",
+    "tags": [
+      "דתות",
+      "מעמד אישי",
+      "ערכאות שיפוטיות"
     ]
   },
   "2001269": {
@@ -1512,9 +1649,24 @@ export const GENERATED_LAW_META = {
     "year": 1297,
     "status": "Revised"
   },
+  "aep-1677-3": {
+    "country": "england",
+    "year": 1677,
+    "status": "Revised"
+  },
+  "aep-1679-2": {
+    "country": "england",
+    "year": 1679,
+    "status": "Revised"
+  },
   "aep-1688-2": {
     "country": "england",
     "year": 1688,
+    "status": "Revised"
+  },
+  "aep-1700-2": {
+    "country": "england",
+    "year": 1700,
     "status": "Revised"
   },
   "aep-1706-11": {
@@ -1527,14 +1679,44 @@ export const GENERATED_LAW_META = {
     "year": null,
     "status": null
   },
+  "ukpga-1911-13": {
+    "country": "england",
+    "year": 1911,
+    "status": "Revised"
+  },
+  "ukpga-1911-6": {
+    "country": "england",
+    "year": 1911,
+    "status": "Revised"
+  },
   "ukpga-1949-103": {
     "country": "england",
     "year": 1949,
     "status": "Revised"
   },
+  "ukpga-1959-66": {
+    "country": "england",
+    "year": 1959,
+    "status": "Revised"
+  },
+  "ukpga-1961-60": {
+    "country": "england",
+    "year": 1961,
+    "status": "Revised"
+  },
   "ukpga-1978-30": {
     "country": "england",
     "year": 1978,
+    "status": "Revised"
+  },
+  "ukpga-1988-27": {
+    "country": "england",
+    "year": 1988,
+    "status": "Revised"
+  },
+  "ukpga-1989-6": {
+    "country": "england",
+    "year": 1989,
     "status": "Revised"
   },
   "ukpga-1990-18": {
@@ -1545,6 +1727,11 @@ export const GENERATED_LAW_META = {
   "ukpga-1998-42": {
     "country": "england",
     "year": 1998,
+    "status": "Revised"
+  },
+  "ukpga-2000-44": {
+    "country": "england",
+    "year": 2000,
     "status": "Revised"
   },
   "ukpga-2010-23": {
