@@ -28,6 +28,7 @@ import tempfile
 import time
 from pathlib import Path
 
+from common import deploy as _deploy
 from common import progress as _progress
 
 PIPELINE_DIR = Path(__file__).parent
@@ -225,25 +226,7 @@ def stage_reconcile(entry: dict, force: bool = False) -> bool:
 # ---------------------------------------------------------------------------
 
 def deploy() -> bool:
-    """Build and deploy the Docusaurus site."""
-    logging.info("Deploying site...")
-    env = {**os.environ, "USE_SSH": "true", "GIT_USER": "Yuvaldv"}
-    try:
-        result = subprocess.run(
-            ["npm", "run", "deploy"],
-            cwd=str(SITE_DIR),
-            env=env,
-            timeout=300,
-            capture_output=False,
-        )
-        if result.returncode != 0:
-            logging.error("Deploy failed with exit code %d", result.returncode)
-            return False
-        logging.info("Deploy successful.")
-        return True
-    except (subprocess.TimeoutExpired, OSError) as e:
-        logging.error("Deploy error: %s", e)
-        return False
+    return _deploy.deploy(SITE_DIR, {"USE_SSH": "true", "GIT_USER": "Yuvaldv"})
 
 
 # ---------------------------------------------------------------------------
