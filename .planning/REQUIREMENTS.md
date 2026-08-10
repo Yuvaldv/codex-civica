@@ -43,10 +43,10 @@
 ### UK — Site Integration
 
 - [x] **UKSITE-01**: Israel's Docusaurus route is rebased from `/laws` to `/laws/israel`, with `@docusaurus/plugin-client-redirects` covering all 111 existing indexed URLs (verified via build + redirect check, zero 404s)
-- [ ] **UKSITE-02**: A second Docusaurus docs instance serves England content at `/laws/england`, stored on disk at `laws/uk/england/` — leaving room for `laws/uk/scotland/` etc. later without a reshuffle
-- [ ] **UKSITE-03**: `DocItem/Content`, `generate-law-meta.js`, and `lawSort.js` read a country/jurisdiction discriminator instead of hardcoding Hebrew/RTL/Israel — England pages render `lang="en" dir="ltr"` with correct JSON-LD, and non-numeric UK law IDs are not dropped from sidebar grouping
-- [ ] **UKSITE-04**: Homepage "Pick a country" grid and navbar both gain an England entry (flag/label matching the existing Israel pattern)
-- [ ] **UKSITE-05**: OGL v3 attribution (including the conditional EU/Westlaw variant where `dc:publisher` requires it) is displayed on every England law page
+- [x] **UKSITE-02**: A second Docusaurus docs instance serves England content at `/laws/england`, stored on disk at `laws/uk/england/` — leaving room for `laws/uk/scotland/` etc. later without a reshuffle
+- [x] **UKSITE-03**: `DocItem/Content`, `generate-law-meta.js`, and `lawSort.js` read a country/jurisdiction discriminator instead of hardcoding Hebrew/RTL/Israel — England pages render `lang="en" dir="ltr"` with correct JSON-LD, and non-numeric UK law IDs are not dropped from sidebar grouping
+- [x] **UKSITE-04**: Homepage "Pick a country" grid and navbar both gain an England entry (flag/label matching the existing Israel pattern)
+- [x] **UKSITE-05**: OGL v3 attribution (including the conditional EU/Westlaw variant where `dc:publisher` requires it) is displayed on every England law page
 
 ---
 
@@ -95,10 +95,10 @@
 | UKVALID-01 | Phase 9 — CLML → Markdown Conversion | Complete |
 | UKVALID-02 | Phase 9 — CLML → Markdown Conversion | Complete |
 | UKSITE-01 | Phase 10 — Site: Route Rebase | Complete |
-| UKSITE-02 | Phase 11 — Site: England Instance | Pending |
-| UKSITE-03 | Phase 11 — Site: England Instance | Pending |
-| UKSITE-04 | Phase 11 — Site: England Instance | Pending |
-| UKSITE-05 | Phase 11 — Site: England Instance | Pending |
+| UKSITE-02 | Phase 11 — Site: England Instance | Complete |
+| UKSITE-03 | Phase 11 — Site: England Instance | Complete |
+| UKSITE-04 | Phase 11 — Site: England Instance | Complete |
+| UKSITE-05 | Phase 11 — Site: England Instance | Complete |
 | UKLINK-01 | Phase 12 — Cross-Reference + Amendment Linking | Pending |
 | UKLINK-02 | Phase 12 — Cross-Reference + Amendment Linking | Pending |
 | UKLINK-03 | Phase 12 — Cross-Reference + Amendment Linking | Pending |

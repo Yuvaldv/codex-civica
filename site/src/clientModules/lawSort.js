@@ -1,4 +1,11 @@
 import { GENERATED_LAW_META } from '../generatedLawMeta';
+import { COUNTRIES } from '../countryConfig';
+
+// Built from countryConfig.js so a new instance (e.g. laws/uk/scotland/) is
+// picked up here automatically — no hardcoded country name in this file.
+const LAW_HREF_RE = new RegExp(
+  '(?:' + COUNTRIES.map(c => c.pathPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')([^/?#]+)'
+);
 
 // ─── Storage ──────────────────────────────────────────────────────────────────
 
@@ -9,20 +16,21 @@ function writeGroup(v) { try { localStorage.setItem('law-group', v); } catch {} 
 
 const STATUS_HE = { 'In Effect': 'תקף', 'Cancelled': 'בטל', 'Expired': 'פקע' };
 
+// 'Other' — never a Hebrew fallback, since this also groups England entries
+// which carry no Hebrew labels at all.
 function groupKey(by, meta) {
   switch (by) {
-    case 'category': return meta.categoryLabelHe || meta.categoryLabel || 'אחר';
-    case 'minister': return meta.ministerHe || meta.minister || 'אחר';
-    case 'status':   return meta.statusHe || STATUS_HE[meta.status] || meta.status || '?';
-    default:         return meta.year ? String(meta.year) : '?'; // 'year' + fallback
+    case 'category': return meta.categoryLabelHe || meta.categoryLabel || 'Other';
+    case 'minister': return meta.ministerHe || meta.minister || 'Other';
+    case 'status':   return meta.statusHe || STATUS_HE[meta.status] || meta.status || 'Other';
+    default:         return meta.year ? String(meta.year) : 'Other'; // 'year' + fallback
   }
 }
 
 // ─── Sidebar grouping ─────────────────────────────────────────────────────────
 
 function lawIdFromHref(href) {
-  // Phase 10 rebased Israel's route to /laws/israel/<id> (was /laws/<id>).
-  const m = (href || '').match(/\/laws\/israel\/(\d+)/);
+  const m = (href || '').match(LAW_HREF_RE);
   return m ? m[1] : null;
 }
 

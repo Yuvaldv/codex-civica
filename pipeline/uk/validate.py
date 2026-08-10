@@ -60,6 +60,9 @@ def _normalize_rendered(markdown: str) -> str:
     text = _REPEAL_NOTE_RE.sub("", text)
     text = _STATUS_MARKER_RE.sub("", text)
     text = text.replace("[", "").replace("]", "").replace("**", "")
+    # Renderer's MDX-safety escaping (render._mdx_escape) is a parser-facing
+    # backslash, not a textual change -- undo it before comparing to source.
+    text = text.replace("\\{", "{").replace("\\}", "}")
     return _normalize(text)
 
 

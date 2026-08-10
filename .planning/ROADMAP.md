@@ -184,7 +184,7 @@
 - [x] **Phase 8: UK Acquisition** — England-extent `ukpga`/`aep` CLML XML fetched, stub- and version-gated, into `data/raw/uk/xml/`
 - [x] **Phase 9: CLML → Markdown Conversion** — The core: CLML → typed IR → deterministic Markdown + frontmatter, with amendment/extent/status fidelity and a round-trip validator
 - [x] **Phase 10: Site — Route Rebase** — Israel moves `/laws` → `/laws/israel` with redirects covering all 111 already-indexed URLs
-- [ ] **Phase 11: Site — England Instance** — Second docs instance at `/laws/england` (`laws/uk/england/` on disk), country discriminator, homepage + navbar entry
+- [x] **Phase 11: Site — England Instance** — Second docs instance at `/laws/england` (`laws/uk/england/` on disk), country discriminator, homepage + navbar entry
 - [ ] **Phase 12: Cross-Reference + Amendment Linking** — Citation resolution, end-of-document amendment lists, inline back-links from amending provisions
 - [ ] **Phase 13: Starter Batch + Deploy** — Full England starter batch converted, validated, linked, built, and live
 
@@ -301,6 +301,7 @@ Plans:
   4. The homepage "Pick a country" grid and the navbar both offer an England entry (flag/label matching the Israel pattern) that reaches the England law index
   5. Every England law page displays the OGL v3 attribution, using the alternate wording where `dc:publisher` requires it
 
+**Status**: Complete
 **Plans**: TBD
 **UI hint**: yes
 **Design note (added 2026-08-09, not new scope):** `laws/uk/england/` and its site hierarchy should be designed as one instance of a general **country → subdivision → law** pattern — the same shape will eventually be needed for USA (federal + state), the EU (supranational + member state), and other UK nations — rather than UK-specific special-casing. Countries with no subdivision (Israel, most others) must degrade cleanly to the existing flat structure, not be forced through a redundant empty subdivision layer. USA/EU are not being built now; this only affects how Phase 11's country/subdivision plumbing is shaped.
@@ -345,7 +346,7 @@ Plans:
 | 8. UK Acquisition | 0/? | Not started | - |
 | 9. CLML → Markdown Conversion | 0/? | Not started | - |
 | 10. Site — Route Rebase | 0/? | Not started | - |
-| 11. Site — England Instance | 0/? | Not started | - |
+| 11. Site — England Instance | -/- | Done | 2026-08-10 |
 | 12. Cross-Reference + Amendment Linking | 0/? | Not started | - |
 | 13. Starter Batch + Deploy | 0/? | Not started | - |
 

@@ -55,12 +55,18 @@
   background-color: #0a1440;
 }
 
-/* Hebrew law content — RTL */
+/* Law content typography — shared by every jurisdiction */
 .markdown {
-  direction: rtl;
-  text-align: right;
   font-size: 1.05rem;
   line-height: 1.85;
+}
+
+/* Hebrew law content — RTL. Scoped to html[dir='rtl'], set per-doc by
+   DocItem/Content from countryConfig.js, so LTR jurisdictions (England)
+   get ordinary browser-default LTR layout instead. */
+html[dir='rtl'] .markdown {
+  direction: rtl;
+  text-align: right;
 }
 
 .markdown h1 {
@@ -104,14 +110,19 @@
 
 /* Margin notes */
 .markdown blockquote {
-  border-right: 4px solid var(--brand-gold);
-  border-left: none;
+  border-left: 4px solid var(--brand-gold);
+  border-right: none;
   background: rgba(254, 203, 64, 0.08);
   padding: 0.3rem 0.6rem;
   margin: 0.4rem 0;
   font-size: 0.9rem;
   color: var(--ifm-color-emphasis-700);
   font-style: normal;
+}
+
+html[dir='rtl'] .markdown blockquote {
+  border-right: 4px solid var(--brand-gold);
+  border-left: none;
 }
 
 [data-theme='dark'] .markdown blockquote {
@@ -123,6 +134,11 @@
 }
 
 .markdown ul {
+  padding-left: 1.5rem;
+  padding-right: 0;
+}
+
+html[dir='rtl'] .markdown ul {
   padding-right: 1.5rem;
   padding-left: 0;
 }
@@ -203,10 +219,12 @@ li.law-group.menu__list-item--collapsed > ul.menu__list {
   margin-top: 0.5rem;
 }
 
-/* Doc layout: sidebar on right, TOC removed */
+/* Doc layout: TOC removed everywhere; sidebar side follows text direction */
 
-/* Move law-list sidebar to the right */
-aside.theme-doc-sidebar-container {
+/* RTL jurisdictions (Israel): move law-list sidebar to the right so it sits
+   on the reading-start side, matching Docusaurus's own LTR default of
+   sidebar-on-left. LTR jurisdictions (England) keep the ordinary default. */
+html[dir='rtl'] aside.theme-doc-sidebar-container {
   order: 2;
   border-right: none !important;
   border-left: 1px solid var(--ifm-toc-border-color);
@@ -240,11 +258,11 @@ aside.theme-doc-sidebar-container {
 
 /* Pull RTL law text closer to the right sidebar — remove right-side padding */
 @media (min-width: 997px) {
-  [class*='docMainContainer'] {
+  html[dir='rtl'] [class*='docMainContainer'] {
     padding-right: 0 !important;
   }
 
-  [class*='docItemCol'] {
+  html[dir='rtl'] [class*='docItemCol'] {
     padding-right: 0 !important;
   }
 }

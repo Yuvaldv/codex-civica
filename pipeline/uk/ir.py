@@ -65,6 +65,7 @@ class DocMeta:
     valid_date: str | None
     extent: str | None
     number_of_provisions: int | None
+    publisher: str | None  # dc:publisher — drives OGL attribution wording on site
 
 
 @dataclass

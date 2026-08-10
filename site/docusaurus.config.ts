@@ -54,6 +54,16 @@ const config: Config = {
 
   plugins: [
     [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'england',
+        path: '../laws/uk/england',
+        routeBasePath: 'laws/england',
+        sidebarPath: './sidebars.ts',
+        showLastUpdateTime: false,
+      },
+    ],
+    [
       '@docusaurus/plugin-client-redirects',
       {
         // Every previously indexed /laws/<id> URL (111 laws, indexed before the
@@ -85,6 +95,11 @@ const config: Config = {
         },
         {
           type: 'html',
+          position: 'left',
+          value: '<a href="/codex-civica/laws/england" class="navbar__link navbar-flag" title="England">🏴󠁧󠁢󠁥󠁮󠁧󠁿</a>',
+        },
+        {
+          type: 'html',
           position: 'right',
           className: 'navbar-groupby-item',
           value: '<div class="navbar-sortby" id="navbar-sortby" style="display:none"><span class="navbar-sortby__label">Group by</span><select id="law-sort-select" class="navbar-sortby__select"><option value="year">Year</option><option value="category">Category</option><option value="minister">Ministry</option><option value="status">Status</option></select></div>',
@@ -113,7 +128,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Codex Civica — content derived from public legislation of the State of Israel`,
+      copyright: `Codex Civica — content derived from public legislation of the State of Israel and the United Kingdom`,
     },
     prism: {
       theme: prismThemes.github,

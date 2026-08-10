@@ -389,6 +389,7 @@ def _walk_schedules(schedules_el) -> list[Provision]:
 def _parse_metadata(root) -> DocMeta:
     title = _text_of(root, ".//dc:title") or ""
     long_title = _text_of(root, ".//dc:description")
+    publisher = _text_of(root, ".//dc:publisher")
     year_el = root.find(".//ukm:Year", NS)
     number_el = root.find(".//ukm:Number", NS)
     main_type_el = root.find(".//ukm:DocumentMainType", NS)
@@ -409,6 +410,7 @@ def _parse_metadata(root) -> DocMeta:
         valid_date=valid,
         extent=root.get("RestrictExtent"),
         number_of_provisions=int(n_provisions) if n_provisions else None,
+        publisher=publisher,
     )
 
 

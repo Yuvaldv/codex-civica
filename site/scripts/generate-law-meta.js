@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 const LAWS_DIR = path.resolve(__dirname, '../../laws/israel');
+const ENGLAND_LAWS_DIR = path.resolve(__dirname, '../../laws/uk/england');
 const OUT_FILE = path.resolve(__dirname, '../src/generatedLawMeta.js');
 
 // Category slug -> English label
@@ -157,7 +158,26 @@ for (const fname of fs.readdirSync(LAWS_DIR).sort()) {
 
   const tags = getTags(text);
 
-  meta[String(lawId)] = { year, categoryLabel, categoryLabelHe, minister, ministerHe, status, statusHe, tags };
+  meta[String(lawId)] = { country: 'israel', year, categoryLabel, categoryLabelHe, minister, ministerHe, status, statusHe, tags };
+  count++;
+}
+
+// England — no numeric law_id; keyed by filename slug (the Docusaurus doc id).
+// No category/ministry data in the UK frontmatter, so only year + status apply.
+for (const fname of fs.existsSync(ENGLAND_LAWS_DIR) ? fs.readdirSync(ENGLAND_LAWS_DIR).sort() : []) {
+  if (!fname.endsWith('.md')) continue;
+  const text = fs.readFileSync(path.join(ENGLAND_LAWS_DIR, fname), 'utf8');
+
+  const fmMatch = text.match(/^---\n([\s\S]*?)\n---/);
+  if (!fmMatch) continue;
+  const fm = fmMatch[1];
+
+  const slug = fname.replace(/\.md$/, '');
+  const year = parseInt(getField(fm, 'year') || '', 10) || null;
+  const rawStatus = (getField(fm, 'document_status') || '').trim();
+  const status = rawStatus ? rawStatus[0].toUpperCase() + rawStatus.slice(1) : null;
+
+  meta[slug] = { country: 'england', year, status };
   count++;
 }
 

@@ -20,6 +20,10 @@ export default function Home(): ReactNode {
                 <span className={styles.countryFlag}>🇮🇱</span>
                 <span className={styles.countryName}>Israel</span>
               </Link>
+              <Link className={styles.countryCard} to="/laws/england">
+                <span className={styles.countryFlag}>🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                <span className={styles.countryName}>England</span>
+              </Link>
             </div>
           </div>
         </div>

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
 status: executing
-last_updated: "2026-08-10T09:00:00.000Z"
-last_activity: 2026-08-10 -- Phase 10 COMPLETE: Israel route rebased /laws -> /laws/israel; @docusaurus/plugin-client-redirects covers all 111 old URLs; navbar/homepage/sidebar-grouping updated; npm run build zero errors/warnings
+last_updated: "2026-08-10T10:30:00.000Z"
+last_activity: 2026-08-10 -- Phase 11 COMPLETE: England docs instance live at /laws/england (10 Acts), country-discriminator refactor of DocItem/Content + generate-law-meta.js + lawSort.js, RTL CSS scoped to html[dir=rtl], OGL v3 attribution, npm run build zero errors/broken links
 progress:
   total_phases: 7
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 7
   completed_plans: 7
-  percent: 57
+  percent: 71
 ---
 
 # State — Codex Civica
@@ -25,16 +25,16 @@ progress:
 
 **Current milestone:** v1.1 — UK Laws: Pipeline + Law Directory (England only).
 
-**Current focus:** Phase 7 — Shared Pipeline Core
+**Current focus:** Phase 12 — Cross-Reference + Amendment Linking
 
 ---
 
 ## Current Position
 
-Phase: 10 (Site — Route Rebase) — COMPLETE
-Status: Phases 7, 8, 9, 10 complete. Next: Phase 11 (Site — England Instance) or Phase 12 (Cross-Reference + Amendment Linking)
-Progress: 4/7 phases complete — [████░░░░░░] v1.1
-Last activity: 2026-08-10 -- Phase 10 COMPLETE: Israel route rebased /laws -> /laws/israel; @docusaurus/plugin-client-redirects covers all 111 old URLs; navbar/homepage/sidebar-grouping updated; npm run build zero errors/warnings
+Phase: 11 (Site — England Instance) — COMPLETE
+Status: Phases 7, 8, 9, 10, 11 complete. Next: Phase 12 (Cross-Reference + Amendment Linking)
+Progress: 5/7 phases complete — [███████░░░] v1.1
+Last activity: 2026-08-10 -- Phase 11 COMPLETE: England docs instance live at /laws/england (10 Acts), country-discriminator refactor, RTL CSS scoped, OGL attribution, npm run build zero errors/broken links
 
 **Note on process (2026-08-10 user feedback):** the user asked to stop producing meticulous
 per-phase PLAN.md/SUMMARY.md documents with full XML task/threat-model ceremony — ROADMAP.md's 13
@@ -90,6 +90,11 @@ otherwise. See [[feedback_lightweight_phase_execution]] in memory.
 | 2026-08-10 | UKVALID-01's round-trip check normalises BOTH the rendered Markdown and the source `<Text>` needle before comparing (strips `[`, `]`, `**`, footnote refs, and the renderer's own synthetic `(repealed...)`/`[REPEALED]` annotations) | The bracket-and-footnote convention (UKCONV-06) and archaic-Act source text that itself contains literal square brackets (Magna Carta's editorially-supplied-word convention) both defeat a naive byte-exact substring check in opposite directions; symmetric normalisation resolves both without weakening what the gate actually verifies (that no word is silently dropped) |
 | 2026-08-10 | Phase 10 redirects derived via `createRedirects()`, not a hardcoded 111-id list | `@docusaurus/plugin-client-redirects@3.10.1` (pinned to match the installed `@docusaurus/core@3.10.1`) generates `/laws/<id>` from every existing `/laws/israel/<id>` route at build time — never drifts from the actual `laws/israel/` content, and needs no update when the Israel corpus grows |
 | 2026-08-10 | `lawSort.js`'s `lawIdFromHref` regex updated to `/\/laws\/israel\/(\d+)/` (was `/\/laws\/(\d+)/`) | Direct, minimal consequence of the route rebase — the sidebar-grouping feature would otherwise silently stop matching any law link. Still numeric-only; Phase 11's UKSITE-03 must generalise this further for non-numeric UK slugs (`ukpga-1998-42`) |
+| 2026-08-10 | Phase 11 built directly (no PLAN.md/RESEARCH.md/SUMMARY.md ceremony), same as Phases 8–10 | See [[feedback_lightweight_phase_execution]] |
+| 2026-08-10 | Single `site/src/countryConfig.js` as the one source of truth for per-instance lang/dir/locale/jsonLd-name/pathPrefix, consumed by `docusaurus.config.ts`, `DocItem/Content/index.jsx`, and `lawSort.js` | Satisfies the Phase 11 design note (general country→subdivision pattern, not UK-special-casing) — adding `laws/uk/scotland/` later means one new entry in this file plus one new `@docusaurus/plugin-content-docs` instance, nothing else |
+| 2026-08-10 | RTL CSS rules (direction, blockquote/list border-side, sidebar order, docMainContainer padding) rewritten LTR-first with `html[dir='rtl']` overrides, instead of being scoped by an England-specific class | `<html dir>` is already set per-doc by `LawSeoHead` from `countryConfig.js`, so this piggybacks on an existing, tested mechanism; also correctly degrades any *future* LTR jurisdiction with zero further CSS changes |
+| 2026-08-10 | `dc:publisher` captured into `DocMeta`/frontmatter (`pipeline/uk/ir.py`, `clml.py`, `render.py`) to drive UKSITE-05's OGL attribution | Real, sourced conditional wording (verbatim from https://www.legislation.gov.uk/contributors) for "Westlaw UK" and "British History Online" publisher values, on top of the always-shown standard OGL v3 line. All 10 current Acts have `dc:publisher = "Statute Law Database"` (standard line only) — the alternate branches are real but not yet exercised by data. **Not implemented:** a distinct EU/EUR-Lex branch — the contributors page's suggested EU-acknowledgement wording exists, but nothing in the fetched CLML indicates what `dc:publisher` value (if any) marks EU-derived content, and none of the current batch is EU-derived; fabricating a trigger string would violate CLAUDE.md's no-hallucination rule. Revisit if/when an EU-originating Act enters the batch |
+| 2026-08-10 | Added `laws/uk/england/index.md` (England's docs-instance root, `slug: /`, mirrors `laws/israel/index.md`'s role but with England-appropriate English-language content) | Without it, `npm run build` reported the homepage's `/laws/england` link as broken — a Docusaurus multi-instance docs plugin has no default root page. Content is a "how to read this Act" guide grounded in `render.py`'s actual output conventions (unapplied-effects banner, REPEALED/prospective markers, amendment brackets, extent notes, OGL attribution), not a copy of Israel's Hebrew guide |
 
 ### Known Constraints
 
@@ -98,7 +103,7 @@ otherwise. See [[feedback_lightweight_phase_execution]] in memory.
 - `KNS_IsraelLawMinistry` stores `GovMinistryID` in 1–50 range. `KNS_GovMinistry` uses 490+ range. No API join. Ministry names resolved via hardcoded lookup in `generate-law-meta.js`.
 - Docusaurus requires at least one doc in the docs dir. `laws/israel/placeholder.md` fills this when the library is empty.
 - legislation.gov.uk enforces a mandatory 5s `Crawl-delay` and an identifying User-Agent; no bulk download exists and no concurrency is permitted. Fetch must be sequential and cache-first.
-- UK site content must carry OGL v3 attribution (with the conditional EU/Westlaw variant where `dc:publisher` requires it).
+- UK site content must carry OGL v3 attribution (with the conditional EU/Westlaw variant where `dc:publisher` requires it) — implemented in Phase 11 (`DocItem/Content`'s `OglAttribution`), see the Phase 11 decision row above for what is and isn't covered.
 - Large UK Acts (>1MB XML — e.g. Companies Act 2006 at 15MB, Data Protection Act 2018 at 5.8MB) are blocked on a page-splitting strategy; out of scope for the v1.1 Tier A starter batch, but a known constraint for any later expansion.
 
 ### Todos
@@ -112,8 +117,10 @@ otherwise. See [[feedback_lightweight_phase_execution]] in memory.
 - Phase 7 off-repo backup of the gitignored import state lives at `$HOME/codex-civica-backups/phase07/` (checksums in `MANIFEST.sha256`). Restore with `cp $HOME/codex-civica-backups/phase07/import_progress.json data/raw/israel/`
 - Phase 7 CLOSED (07-07, 2026-08-10): `--structure` went 11 → 7 → 2 → 0 errors across 07-02..07-05; 07-06 (highest-risk plan) extracted `render_frontmatter`/`quote` and delegated `reconcile.build_frontmatter`'s fence-wrapping, matching the 111-law SHA gate (`dab1887e...`) on the first run. 07-07 added `pipeline/tests/test_country_blind.py` (SC-4 proof — round-trips progress/batch-selection/frontmatter using only `common.*` with UK-shaped field names, never touches Israel code) and wired both `--structure` and `--country-blind` into the default `verify_golden.py` suite (was opt-in/red until 07-06). Full gate is 8/8 green. `pipeline/PIPELINE.md` documents the `common/` layout, the one-way import boundary, `python pipeline/X.py` as the only supported invocation form, and the harness commands
 - Phase 7 sampling contract (07-03..07-07, now closed): `~/.venv-codex/bin/python pipeline/tests/verify_golden.py --quick` after every task commit (~2.4s, mutates nothing); full suite `~/.venv-codex/bin/python pipeline/tests/verify_golden.py` (~8s, now 8/8 checks) before closing each plan
-- Open design call for Phase 11 planning: nation segment lives in the path (`laws/uk/england/`) per UKSITE-02 — confirm the Docusaurus sidebar/routing shape against the installed Docusaurus version at implementation time
 - Pin/verify `@docusaurus/plugin-client-redirects` against the installed Docusaurus version before Phase 10 implementation
+- **Phase 11 CLOSED (2026-08-10):** second `@docusaurus/plugin-content-docs` instance (`id: 'england'`) confirmed working against the installed `3.10.1` — multi-instance docs + a shared swizzled `DocItem/Content` is fully supported, no version mismatch
+- **Landmine (found during Phase 11's first real `npm run build`, 2026-08-10):** Docusaurus's MDX (acorn) parser fails the whole build on a literal `{`/`}` in source legal text — hit on Bribery Act 2010's Editorial Notes ("by {S.I. 2011/1418}, art. 2"), a real UK citation convention, not malformed data. `render.py` already knew about this class of bug (`<span id>` chosen over `{#id}` specifically to avoid it) but missed that raw `<Text>`/`Commentary` content can contain the same characters. Fixed generically in `pipeline/uk/render.py` (`_mdx_escape()`, applied at every raw-text emission point: Run leaves, Commentary text, preamble) with the matching un-escape added to `validate.py`'s `_normalize_rendered()` so the round-trip gate isn't fooled by the renderer's own escape backslashes. **Any future UK batch growth (Phase 13+) should assume this will recur** — it's a property of UK citation text, not a one-off
+- **Landmine (found during Phase 11 build-verification, 2026-08-10):** Docusaurus's `useDoc().metadata.permalink` includes the site's `baseUrl` (e.g. `/codex-civica/laws/israel/2000001`, not `/laws/israel/2000001`). A first-pass `countryForPath()` using `.startsWith(prefix)` silently matched *nothing* — including for Israel, which regressed `lang`/`dir`/JSON-LD/bubbles back to Docusaurus's `en`/`ltr` default until caught by explicitly grepping the built HTML (not just checking for build success). Fixed with `.includes()`/`.endsWith()` instead of anchored `.startsWith()`. **Any future path-prefix matching against `metadata.permalink` in this codebase must account for `baseUrl`** — build success and zero broken-links do NOT prove per-doc `<html>`/JSON-LD overrides are actually firing; grep the rendered HTML directly
 - **GSD tooling bug, confirmed recurring (found 2026-08-09):** both `gsd-tools.cjs state planned-phase` and `state begin-phase` corrupt STATE.md frontmatter the same way every time they run — `milestone_name` gets overwritten with a garbage roadmap-checkbox string (also seen in `init.execute-phase`'s JSON output, so it's a shared derivation bug, not per-command), and `progress` totals get invented numbers (e.g. `total_phases: 13`, `total_plans: 10`) unrelated to the actual milestone scope. Body text (Current Position, Current focus) is written correctly — only the YAML frontmatter is affected. Manually corrected twice so far. Worth a bug report against the GSD CLI; until fixed, re-check STATE.md frontmatter after every `state` subcommand invocation in this milestone.
 
 ### Blockers
@@ -168,8 +175,25 @@ otherwise. See [[feedback_lightweight_phase_execution]] in memory.
 - `site/docusaurus.config.ts`, `site/sidebars.ts` — targets for the Phase 10 route rebase and Phase 11 second instance
 - `site/src/theme/DocItem/Content/index.jsx`, `site/scripts/generate-law-meta.js`, `site/src/clientModules/lawSort.js` — the three files hardcoding Hebrew/RTL/Israel and numeric law IDs (Phase 11)
 
-**Deploy status:** Pushed `main` → `origin/main` (up through `3389d5c`) and deployed to GitHub Pages (`gh-pages`). Live at https://Yuvaldv.github.io/codex-civica/. Deploy command: `USE_SSH=true GIT_USER=Yuvaldv npm run deploy`.
+**Session 11 (2026-08-10) — Phase 11 (Site: England Instance) closed:** Built directly from ROADMAP.md, no PLAN.md ceremony. Second `@docusaurus/plugin-content-docs` instance (`id: england`, `laws/uk/england/` → `/laws/england`) added to `docusaurus.config.ts`, reusing `sidebars.ts`. New `site/src/countryConfig.js` is the single source of truth for per-instance lang/dir/locale/jsonLd-country-name, consumed by `docusaurus.config.ts` (navbar), `DocItem/Content/index.jsx` (rewritten: `LawSeoHead` now branches on country instead of hardcoding Hebrew/Israel; added `EnglandMetaBubbles` and `OglAttribution`), and `lawSort.js` (`lawIdFromHref` generalised from a numeric-only Israel regex to one built from `countryConfig.js`). `custom.css`'s RTL rules (direction, blockquote/list border-side, sidebar order, docMainContainer padding) rewritten LTR-first with `html[dir='rtl']` overrides so England gets ordinary LTR layout for free. `generate-law-meta.js` now also reads `laws/uk/england/*.md`, emitting country-tagged entries keyed by filename slug (122 total: 111 Israel + 10 England + England's own index page). Added `laws/uk/england/index.md` (England's docs-root landing page, English-language, mirrors Israel's reading-guide role) — without it the homepage's England link 404'd, since a Docusaurus docs instance has no default root.
+
+Pipeline touched too: `pipeline/uk/{ir,clml,render}.py` now capture `dc:publisher` into frontmatter (drives `OglAttribution`'s conditional Westlaw/British-History-Online wording, sourced verbatim from legislation.gov.uk's own contributors page). Re-ran `pipeline/uk/convert.py` — all 10 England `.md` files regenerated, diff is exactly one new frontmatter line each (deterministic, `retrieved_at` preserved from the manifest).
+
+Two real landmines found via an actual `npm run build` (not just source review — see Todos above for both): the MDX/acorn parser breaking on literal `{}` in UK citation text (fixed generically in `render.py` + `validate.py`), and `metadata.permalink` including `baseUrl` (broke country-detection for Israel too, until caught by grepping built HTML directly rather than trusting a green build). Final build: zero errors, zero broken links; verified in the actual build output (not just review) that Israel is pixel-for-pixel unchanged (`lang=he dir=rtl`, Hebrew bubbles, Israel JSON-LD) and England is correct (`lang=en dir=ltr`, English bubbles, UK JSON-LD, OGL attribution, no Hebrew/RTL leakage). Could not get an actual browser screenshot — no `chromium-cli` or Playwright available in this environment; verification is built-HTML/CSS-based, not visual. `.planning/ROADMAP.md` and `.planning/REQUIREMENTS.md` (UKSITE-02..05) checked off. Not deployed — user hasn't asked for a push/deploy this session.
+
+**Next-session actions:**
+
+1. Phase 12 (Cross-Reference + Amendment Linking) or Phase 13 (Starter Batch + Deploy) — either is unblocked; Phase 13 also needs the combined-corpus `npm run build` check it names in its own success criteria
+2. If/when the England batch grows past the current 10 Acts (still capped per the 2026-08-09 constraint), watch for the MDX-brace landmine recurring on new content
+3. Consider an actual browser/visual pass (screenshot) of `/laws/england` and `/laws/israel` once browser tooling is available in-session — this session's verification was build-output-only
+
+**Files to review on re-entry:**
+
+- `site/src/countryConfig.js` — the new single source of truth for per-instance jurisdiction config
+- `site/src/theme/DocItem/Content/index.jsx` — country-branched SEO head, bubbles, OGL attribution
+- `pipeline/uk/render.py` — `_mdx_escape()` and the `dc:publisher` capture
+- `laws/uk/england/index.md` — England's docs-root landing page
 
 ---
 
-*Last updated: 2026-08-09 (session 10) — milestone v1.1 roadmap created (Phases 7–13, 23/23 requirements mapped); Israel import still paused at 111/718*
+*Last updated: 2026-08-10 (session 11) — Phase 11 (Site: England Instance) complete; 5/7 v1.1 phases done*

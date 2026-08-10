@@ -20,6 +20,16 @@ def _anchor(id_: str | None) -> str:
     return f' <span id="{id_}" />' if id_ else ""
 
 
+def _mdx_escape(text: str) -> str:
+    """Escape literal MDX/JSX expression delimiters in source-derived text so
+    Docusaurus's acorn-based MDX parser doesn't choke on legal citations that
+    happen to contain literal braces (e.g. "by {S.I. 2011/1418}, art. 2").
+    Renders back to a literal '{'/'}' on the page -- purely a parser escape,
+    not a text change.
+    """
+    return text.replace("{", "\\{").replace("}", "\\}")
+
+
 def _external_link(uri: str) -> str:
     """legislation.gov.uk id-URIs resolve to the public site with /id/ stripped."""
     return uri.replace("http://www.legislation.gov.uk/id/", "https://www.legislation.gov.uk/") \
@@ -28,34 +38,34 @@ def _external_link(uri: str) -> str:
 
 def _render_run(run: Run, doc: LegalDoc, footnotes: list[tuple[str, str]]) -> str:
     if run.kind in ("addition", "substitution"):
-        inner = "".join(_render_run(c, doc, footnotes) for c in run.children) or run.text
+        inner = "".join(_render_run(c, doc, footnotes) for c in run.children) or _mdx_escape(run.text)
         marker = _footnote_marker(run.commentary_ref, doc, footnotes)
         return f"[{inner}]{marker}"
     if run.kind == "repeal":
         marker = _footnote_marker(run.commentary_ref, doc, footnotes)
         if run.retain_text:
-            inner = "".join(_render_run(c, doc, footnotes) for c in run.children) or run.text
+            inner = "".join(_render_run(c, doc, footnotes) for c in run.children) or _mdx_escape(run.text)
             extent_note = f" (repealed for {run.extent})" if run.extent else " (repealed)"
             return f"[{inner}]{marker}{extent_note}"
         return f". . . . . .{marker}"
     if run.kind == "term":
-        return run.text
+        return _mdx_escape(run.text)
     if run.kind == "citation":
         if run.uri:
-            return f"[{run.text}]({_external_link(run.uri)})"
-        return run.text
+            return f"[{_mdx_escape(run.text)}]({_external_link(run.uri)})"
+        return _mdx_escape(run.text)
     if run.kind == "emphasis":
-        return f"*{run.text}*"
+        return f"*{_mdx_escape(run.text)}*"
     if run.kind == "commentary_marker":
         return _footnote_marker(run.commentary_ref, doc, footnotes)
-    return run.text
+    return _mdx_escape(run.text)
 
 
 def _footnote_marker(commentary_ref: str | None, doc: LegalDoc, footnotes: list[tuple[str, str]]) -> str:
     if not commentary_ref:
         return ""
     commentary = doc.commentaries.get(commentary_ref)
-    text = commentary.text if commentary else f"see amending instrument (commentary {commentary_ref} not found)"
+    text = _mdx_escape(commentary.text) if commentary else f"see amending instrument (commentary {commentary_ref} not found)"
     label = f"f{commentary_ref}"
     if not any(existing_label == label for existing_label, _ in footnotes):
         footnotes.append((label, text))
@@ -149,6 +159,7 @@ def _render_frontmatter(doc: LegalDoc, retrieved_at: str) -> str:
         f"extent: {m.extent or '~'}",
         f"number_of_provisions: {m.number_of_provisions if m.number_of_provisions is not None else '~'}",
         f"unapplied_effects_count: {len(doc.unapplied_effects)}",
+        f'publisher: "{_esc(m.publisher)}"' if m.publisher else "publisher: ~",
         "jurisdiction: uk",
         "generated_by: pipeline/uk/render.py",
         f"retrieved_at: {retrieved_at}",
@@ -192,7 +203,7 @@ def render(doc: LegalDoc, retrieved_at: str | None = None) -> str:
     out: list[str] = [_render_frontmatter(doc, retrieved_at)]
     out.append(_render_unapplied_banner(doc))
     if doc.preamble:
-        out.append(doc.preamble + "\n\n")
+        out.append(_mdx_escape(doc.preamble) + "\n\n")
 
     footnotes: list[tuple[str, str]] = []
     for prov in doc.body:
@@ -211,7 +222,7 @@ def render(doc: LegalDoc, retrieved_at: str | None = None) -> str:
             "amendment marker above:\n\n"
         )
         for c in unused:
-            out.append(f"- {c.text}\n")
+            out.append(f"- {_mdx_escape(c.text)}\n")
         out.append("\n")
 
     if footnotes:

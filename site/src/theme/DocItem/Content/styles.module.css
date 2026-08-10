@@ -3,8 +3,11 @@
   flex-wrap: wrap;
   gap: 0.4rem;
   margin-bottom: 1.25rem;
-  direction: rtl;
   justify-content: flex-start;
+}
+
+.lawMetaRtl {
+  direction: rtl;
 }
 
 .bubble {
@@ -49,3 +52,22 @@
   color: #fca5a5;
   border-color: rgba(220, 38, 38, 0.35);
 }
+
+.oglAttribution {
+  margin-top: 2.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ifm-toc-border-color);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.oglAttribution a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.oglAttribution p {
+  margin: 0 0 0.25rem 0;
+}
+
