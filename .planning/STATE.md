@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
 status: executing
-last_updated: "2026-08-10T02:00:00.000Z"
-last_activity: 2026-08-10 -- Phase 7 plan 06 complete (render_frontmatter + quote added to common/frontmatter.py; reconcile.build_frontmatter delegates fence-wrapping only; 111-law SHA gate matched first try; all four named extractions done)
+last_updated: "2026-08-10T03:00:00.000Z"
+last_activity: 2026-08-10 -- Phase 7 COMPLETE (07-07 close-out: test_country_blind.py proves SC-4; --structure + --country-blind now in default gate, 8/8 green; PIPELINE.md documents common/; phase-exit gate green, laws/israel/ byte-identical to HEAD)
 progress:
   total_phases: 7
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 7
-  completed_plans: 0
-  percent: 0
+  completed_plans: 7
+  percent: 14
 ---
 
 # State — Codex Civica
@@ -31,11 +31,11 @@ progress:
 
 ## Current Position
 
-Phase: 7 (Shared Pipeline Core) — EXECUTING
-Plan: 7 of 7 (07-06 complete — Wave 6 extraction done, close-out remains)
-Status: Executing Phase 7
-Progress: 0/7 phases complete (0%) — [░░░░░░░░░░] v1.1 · Phase 7: 6/7 plans
-Last activity: 2026-08-10 -- Phase 7 plan 06 complete (render_frontmatter + quote added to common/frontmatter.py; reconcile.build_frontmatter delegates fence-wrapping only; 111-law SHA gate matched first try; all four named extractions done)
+Phase: 7 (Shared Pipeline Core) — COMPLETE
+Plan: 7 of 7 (07-07 complete — phase closed)
+Status: Phase 7 done; next milestone work is v1.1 Phase 8+ (UK CLML fetch/parse/render — not started)
+Progress: 1/7 phases complete — [█░░░░░░░░░] v1.1 · Phase 7: 7/7 plans
+Last activity: 2026-08-10 -- Phase 7 COMPLETE (07-07 close-out: test_country_blind.py proves SC-4; --structure + --country-blind now in default gate, 8/8 green; PIPELINE.md documents common/; phase-exit gate green, laws/israel/ byte-identical to HEAD)
 
 ## Accumulated Context
 
