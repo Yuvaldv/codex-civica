@@ -1,6 +1,6 @@
 Total laws:      1076
 With PDF:        718
-Converted:       111
+Converted:       121
 Failed:          0
-Pending:         607
+Pending:         597
 Total deployed:  111

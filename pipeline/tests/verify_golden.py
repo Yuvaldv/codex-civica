@@ -61,8 +61,12 @@ LAWS_PATH = "laws/israel/"
 LAWS_DIR = PROJECT_DIR / "laws" / "israel"
 
 BATCH_COUNTS = (1, 5, 25, 100)
-EXPECTED_LAW_FILES = 112
-FRONTMATTER_SHA256 = "dab1887e06dd074051ed6a2eff2c2fcdabff1a2f523c8a3cc93fd20c7168dd37"
+# 121 converted laws + laws/israel/placeholder.md. Re-baselined 2026-08-10 when
+# the corpus grew 111 -> 121 (10 new laws); update both constants together via
+# capture_golden.py whenever the corpus grows again -- these pin a specific
+# corpus snapshot as a regression proof, not a fixed constant of the pipeline.
+EXPECTED_LAW_FILES = 122
+FRONTMATTER_SHA256 = "079caeaedbd27d5be52a16309747941fecb1fc6c4e4dc89b169e9a4e7e284e70"
 
 # The six splitter edge cases enumerated in 07-RESEARCH.md "Code Examples".
 EDGE_CASES = (
