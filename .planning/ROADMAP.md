@@ -180,7 +180,7 @@
 
 ## Phases — v1.1
 
-- [ ] **Phase 7: Shared Pipeline Core** — Extract the ~150 country-blind lines (frontmatter, progress, deploy) into `pipeline/common/` with zero behavior change to Israel
+- [x] **Phase 7: Shared Pipeline Core** — Extract the ~150 country-blind lines (frontmatter, progress, deploy) into `pipeline/common/` with zero behavior change to Israel
 - [ ] **Phase 8: UK Acquisition** — England-extent `ukpga`/`aep` CLML XML fetched, stub- and version-gated, into `data/raw/uk/xml/`
 - [ ] **Phase 9: CLML → Markdown Conversion** — The core: CLML → typed IR → deterministic Markdown + frontmatter, with amendment/extent/status fidelity and a round-trip validator
 - [ ] **Phase 10: Site — Route Rebase** — Israel moves `/laws` → `/laws/israel` with redirects covering all 111 already-indexed URLs
@@ -220,19 +220,19 @@ Plans:
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
-- [ ] 07-04-PLAN.md — Extract progress load/save, `get_next_batch`, `print_status` into `common/progress.py`
+- [x] 07-04-PLAN.md — Extract progress load/save, `get_next_batch`, `print_status` into `common/progress.py`
 
 **Wave 5** *(blocked on Wave 4 completion)*
 
-- [ ] 07-05-PLAN.md — Extract `deploy()` into `common/deploy.py` + lock down the `common/` security boundary
+- [x] 07-05-PLAN.md — Extract `deploy()` into `common/deploy.py` + lock down the `common/` security boundary
 
 **Wave 6** *(blocked on Wave 5 completion)*
 
-- [ ] 07-06-PLAN.md — Extract `render_frontmatter`/`quote`; delegate fence-wrapping from `reconcile.build_frontmatter` (highest risk, last)
+- [x] 07-06-PLAN.md — Extract `render_frontmatter`/`quote`; delegate fence-wrapping from `reconcile.build_frontmatter` (highest risk, last)
 
 **Wave 7** *(blocked on Wave 6 completion)*
 
-- [ ] 07-07-PLAN.md — Close-out: country-blindness probe, structural gate on, PIPELINE.md + STATE.md
+- [x] 07-07-PLAN.md — Close-out: country-blindness probe, structural gate on, PIPELINE.md + STATE.md
 
 ### Phase 8: UK Acquisition
 
