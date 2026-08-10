@@ -20,9 +20,10 @@ Checks:
   --batch                get_next_batch selection at counts 1/5/25/100
   --progress-roundtrip   in-memory re-serialisation of the live progress file
   --status               the status CLI's stdout vs golden/status.txt
-  --structure            SC-1 layout assertions — OPT-IN, expected red until 07-06
+  --structure            SC-1 / SC-4b layout assertions (common/ exists, boundary holds)
+  --country-blind        SC-4 — test_country_blind.py exits 0 (non-Israel caller proof)
   --quick                split + frontmatter + status + progress-roundtrip + batch
-  (no flag)              --quick plus the link-resolver differential
+  (no flag)              structure + quick + country-blind + the link-resolver differential
 
 Stdlib only. Read-only with respect to the live progress file (this gate never
 writes it) and tree-neutral with respect to laws/israel/ (the one mutating check
@@ -362,11 +363,7 @@ def _delegation_state(tree: ast.Module, name: str) -> bool | None:
 
 
 def check_structure() -> bool:
-    """SC-1 / SC-4b — the common/ package exists and the boundary holds.
-
-    OPT-IN and expected to fail until plan 07-06 lands; deliberately excluded
-    from both --quick and the default suite.
-    """
+    """SC-1 / SC-4b — the common/ package exists and the boundary holds."""
     ok = True
     common_dir = PIPELINE_DIR / "common"
 
@@ -402,6 +399,27 @@ def check_structure() -> bool:
     if ok:
         logging.info("structure: common/ present, boundary clean, no local redefinitions")
     return ok
+
+
+def check_country_blind() -> bool:
+    """SC-4 — a non-Israel caller can round-trip progress and render frontmatter
+    using only pipeline/common/. Runs test_country_blind.py as a subprocess and
+    fails on any non-zero exit code.
+    """
+    result = subprocess.run(
+        [sys.executable, str(Path(__file__).parent / "test_country_blind.py")],
+        capture_output=True,
+        text=True,
+        cwd=str(PROJECT_DIR),
+        check=False,
+    )
+    if result.returncode != 0:
+        logging.error("country-blind: probe exited %d: %s",
+                      result.returncode, result.stderr.strip()[-500:])
+        return False
+
+    logging.info("country-blind: probe exited 0, full common/ surface exercised")
+    return True
 
 
 def check_link_resolver() -> bool:
@@ -474,16 +492,17 @@ CHECKS = {
     "progress_roundtrip": ("--progress-roundtrip", check_progress_roundtrip),
     "status": ("--status", check_status),
     "structure": ("--structure", check_structure),
+    "country_blind": ("--country-blind", check_country_blind),
     "link_resolver": ("(full suite)", check_link_resolver),
 }
 
 CHECK_ORDER = ("structure", "split", "frontmatter", "batch",
-               "progress_roundtrip", "status", "link_resolver")
+               "progress_roundtrip", "status", "country_blind", "link_resolver")
 QUICK = ("split", "frontmatter", "batch", "progress_roundtrip", "status")
-FULL = QUICK + ("link_resolver",)
+FULL = ("structure",) + QUICK + ("country_blind", "link_resolver")
 
 INDIVIDUAL_FLAGS = ("split", "frontmatter", "batch",
-                    "progress_roundtrip", "status", "structure")
+                    "progress_roundtrip", "status", "structure", "country_blind")
 
 
 # ---------------------------------------------------------------------------
@@ -504,7 +523,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--status", action="store_true",
                         help="Status CLI stdout vs the golden fixture")
     parser.add_argument("--structure", action="store_true",
-                        help="SC-1 layout assertions (opt-in; red until 07-06)")
+                        help="SC-1 / SC-4b layout assertions")
+    parser.add_argument("--country-blind", action="store_true",
+                        dest="country_blind",
+                        help="SC-4 — test_country_blind.py exits 0")
     parser.add_argument("--quick", action="store_true",
                         help="All non-mutating checks (~2s)")
     args = parser.parse_args(argv)
