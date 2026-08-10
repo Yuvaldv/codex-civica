@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
 status: executing
-last_updated: "2026-08-10T04:00:00.000Z"
-last_activity: 2026-08-10 -- Phase 8 planned (08-01-PLAN.md): pipeline/uk/fetch_uk.py design for the 10-item Tier A CLML starter batch, two hard gates (stub rejection, revised-not-enacted), manifest schema; not yet executed
+last_updated: "2026-08-10T05:00:00.000Z"
+last_activity: 2026-08-10 -- Phase 8 COMPLETE: pipeline/uk/fetch_uk.py built and run live, all 10 Tier A Acts fetched (3 aep, 7 ukpga), both gates proven against live data, manifest_uk.json + UK_PIPELINE.md written
 progress:
   total_phases: 7
   completed_phases: 1
@@ -31,11 +31,16 @@ progress:
 
 ## Current Position
 
-Phase: 8 (UK Acquisition) — PLANNED, not yet executed
-Plan: 08-01-PLAN.md written (1 plan, 1 wave — mvp mode, single vertical slice)
-Status: Phase 7 complete; Phase 8 planned (fetcher module design done, live fetch not yet run)
-Progress: 1/7 phases complete — [█░░░░░░░░░] v1.1 · Phase 8: 0/1 plans executed
-Last activity: 2026-08-10 -- Phase 8 planned (08-01-PLAN.md): pipeline/uk/fetch_uk.py design for the 10-item Tier A CLML starter batch, two hard gates (stub rejection, revised-not-enacted), manifest schema; not yet executed
+Phase: 8 (UK Acquisition) — COMPLETE
+Status: Phase 7 and 8 complete. Next: Phase 9 (CLML → Markdown Conversion)
+Progress: 2/7 phases complete — [██░░░░░░░░] v1.1
+Last activity: 2026-08-10 -- Phase 8 COMPLETE: pipeline/uk/fetch_uk.py built and run live, all 10 Tier A Acts fetched (3 aep, 7 ukpga), both gates proven against live data, manifest_uk.json + UK_PIPELINE.md written
+
+**Note on process (2026-08-10 user feedback):** the user asked to stop producing meticulous
+per-phase PLAN.md/SUMMARY.md documents with full XML task/threat-model ceremony — ROADMAP.md's 13
+phases already constitute "the plan." Phase 8 was executed directly from a lightweight research
+distillation, no PLAN.md/SUMMARY.md pair. Apply this lighter weight to Phase 9 onward unless asked
+otherwise. See [[feedback_lightweight_phase_execution]] in memory.
 
 ## Accumulated Context
 

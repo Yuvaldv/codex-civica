@@ -181,7 +181,7 @@
 ## Phases — v1.1
 
 - [x] **Phase 7: Shared Pipeline Core** — Extract the ~150 country-blind lines (frontmatter, progress, deploy) into `pipeline/common/` with zero behavior change to Israel
-- [ ] **Phase 8: UK Acquisition** — England-extent `ukpga`/`aep` CLML XML fetched, stub- and version-gated, into `data/raw/uk/xml/`
+- [x] **Phase 8: UK Acquisition** — England-extent `ukpga`/`aep` CLML XML fetched, stub- and version-gated, into `data/raw/uk/xml/`
 - [ ] **Phase 9: CLML → Markdown Conversion** — The core: CLML → typed IR → deterministic Markdown + frontmatter, with amendment/extent/status fidelity and a round-trip validator
 - [ ] **Phase 10: Site — Route Rebase** — Israel moves `/laws` → `/laws/israel` with redirects covering all 111 already-indexed URLs
 - [ ] **Phase 11: Site — England Instance** — Second docs instance at `/laws/england` (`laws/uk/england/` on disk), country discriminator, homepage + navbar entry
@@ -253,7 +253,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 08-01-PLAN.md — Build `pipeline/uk/fetch_uk.py` (User-Agent + 5s crawl-delay, stub gate, revised-version gate, hardcoded 10-item Tier A batch), run it live, document in `pipeline/UK_PIPELINE.md`
+- [x] 08-01-PLAN.md — Build `pipeline/uk/fetch_uk.py` (User-Agent + 5s crawl-delay, stub gate, revised-version gate, hardcoded 10-item Tier A batch), run it live, document in `pipeline/UK_PIPELINE.md`
 
 ### Phase 9: CLML → Markdown Conversion
 
