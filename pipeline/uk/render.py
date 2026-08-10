@@ -29,6 +29,17 @@ def _collect_known_anchors(provisions: list[Provision], out: set[str]) -> None:
         _collect_known_anchors(p.children, out)
 
 
+def compute_known_anchors(doc: LegalDoc) -> frozenset[str]:
+    """Public entry point for convert.py's first pass: every anchor `doc`
+    will render, without doing a full render. Same logic RenderContext uses
+    for its own doc, exposed so a batch-wide slug->anchors map can be built
+    before any document is actually rendered (see batch_known_anchors)."""
+    ids: set[str] = set()
+    _collect_known_anchors(doc.body, ids)
+    _collect_known_anchors(doc.schedules, ids)
+    return frozenset(ids)
+
+
 @dataclass
 class RenderContext:
     """Render-time context threaded alongside each Provision/Run -- constant
@@ -39,6 +50,13 @@ class RenderContext:
     doc: LegalDoc
     own_slug: str | None = None
     batch_slugs: frozenset[str] = field(default_factory=frozenset)
+    # Other in-batch documents' own known_anchors, keyed by slug -- lets a
+    # cross-document citation get the same anchor-safety check a self-citation
+    # already gets (see known_anchors below). Populated by convert.py's first
+    # pass; empty by default so a caller that hasn't done that pass (e.g. a
+    # single-document render) still gets the pre-existing optimistic behavior
+    # instead of a crash or a silent no-op.
+    batch_known_anchors: dict[str, frozenset[str]] = field(default_factory=dict)
     # Every internal link this render actually emitted (target slug, target
     # anchor-or-None), recorded structurally as it happens -- the validator
     # checks these directly rather than re-parsing them back out of the
@@ -57,10 +75,7 @@ class RenderContext:
     known_anchors: frozenset[str] = field(init=False, default_factory=frozenset)
 
     def __post_init__(self) -> None:
-        ids: set[str] = set()
-        _collect_known_anchors(self.doc.body, ids)
-        _collect_known_anchors(self.doc.schedules, ids)
-        self.known_anchors = frozenset(ids)
+        self.known_anchors = compute_known_anchors(self.doc)
 
 
 def _clamp(level: int) -> int:
@@ -113,6 +128,17 @@ def _resolve_link(uri: str, target_anchor: str | None, ctx: RenderContext) -> st
         # degrade to a plain self-reference rather than a fragment we already
         # know is wrong.
         target_anchor = None
+    elif slug != ctx.own_slug and target_anchor is not None:
+        other_anchors = ctx.batch_known_anchors.get(slug)
+        # Same anchor-safety check as the self-citation case above, now that a
+        # real example exists (Parliament Act 1911 -> Fixed-term Parliaments
+        # Act 2011 s.7(2), a subsection since omitted from the revised text
+        # entirely -- the enclosing section survives so the *document* link is
+        # still good, only the fragment is stale). Unlike self-citations, a
+        # bad anchor here still leaves a useful target (the other document),
+        # so drop only the fragment, never the whole link.
+        if other_anchors is not None and target_anchor not in other_anchors:
+            target_anchor = None
     if target_anchor or slug != ctx.own_slug:
         ctx.internal_links.append((slug, target_anchor))
     if slug == ctx.own_slug and not target_anchor:
@@ -312,7 +338,9 @@ def _render_term_index(doc: LegalDoc) -> str:
 
 def render(doc: LegalDoc, retrieved_at: str | None = None,
            own_slug: str | None = None,
-           batch_slugs: frozenset[str] = frozenset()) -> tuple[str, list[tuple[str, str | None]]]:
+           batch_slugs: frozenset[str] = frozenset(),
+           batch_known_anchors: dict[str, frozenset[str]] | None = None
+           ) -> tuple[str, list[tuple[str, str | None]]]:
     """Returns (markdown, internal_links) -- internal_links is every (target
     slug, target anchor-or-None) this render resolved in-batch (UKLINK-01),
     for validate.check_cross_references to verify without re-parsing Markdown.
@@ -322,9 +350,17 @@ def render(doc: LegalDoc, retrieved_at: str | None = None,
     going external. A single-document conversion (batch_slugs empty or just
     {own_slug}) is still fully correct -- every citation simply has nothing
     in-batch to resolve to, so it falls through to the external link, exactly
-    as before this parameter existed."""
+    as before this parameter existed.
+
+    batch_known_anchors: optional slug -> that document's own known_anchors,
+    from a first pass over the whole batch (see compute_known_anchors). Lets
+    a cross-document citation's anchor get the same safety check a
+    self-citation already gets. Omitting it (the default) falls back to
+    trusting the source SectionRef for cross-document anchors, exactly as
+    before this parameter existed."""
     retrieved_at = retrieved_at or dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    ctx = RenderContext(doc=doc, own_slug=own_slug, batch_slugs=batch_slugs)
+    ctx = RenderContext(doc=doc, own_slug=own_slug, batch_slugs=batch_slugs,
+                         batch_known_anchors=batch_known_anchors or {})
 
     out: list[str] = [_render_frontmatter(doc, retrieved_at)]
     out.append(_render_unapplied_banner(doc))

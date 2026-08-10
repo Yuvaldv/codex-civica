@@ -80,14 +80,21 @@ otherwise it's an explicit `https://www.legislation.gov.uk/...` link. Nothing is
   (`S. 8(2)(6)(b)` → one ref spanning three sibling subsections) or a virtual location (`introduction`)
   that has no single matching provision in the parsed tree. For a self-citation, `render.py` checks the
   anchor against the document's own known ids (`RenderContext.known_anchors`, cheap — computed from the
-  same doc) and degrades to a plain link rather than a fragment already known to be wrong. **This check
-  does not extend to cross-document anchors** — render.py is a pure per-document function with no
-  visibility into another doc's provision tree at render time — so a compound/virtual `SectionRef`
-  pointing at *another* batch doc still emits the (unverified) anchor and relies on
-  `check_cross_references` to catch it after the full batch has been rendered. None of the current
-  10-Act batch triggers this (verified: zero in-batch citations exist at all in the live data — see
-  STATE.md), so it's untested against real content; `pipeline/uk/tests/test_link_resolution.py` proves
-  the mechanism synthetically.
+  same doc) and degrades to a plain link rather than a fragment already known to be wrong.
+- **Cross-document anchor safety** (added 2026-08-10, when the batch grew past 10 and produced its first
+  real in-batch citation): `render.py` is a pure per-document function, so it can't see another doc's
+  provision tree on its own — `convert.py` now does a cheap first pass over the *whole* fetched batch,
+  parsing every doc once and computing its `known_anchors` via the public `render.compute_known_anchors`,
+  before rendering any of them. That `slug -> known_anchors` map is threaded through as
+  `RenderContext.batch_known_anchors`, so `_resolve_link` can apply the same safety check to a
+  cross-document anchor that self-citations already got — degrading to a plain document link (not
+  dropping the link entirely, since the target document is still real) rather than a fragment already
+  known to be stale. Proven against live data by the Parliament Act 1911 → Fixed-term Parliaments Act
+  2011 citation: the 1911 Act cites "s. 7(2)" of the 2011 Act, but that subsection has since been omitted
+  entirely from the revised text (only the enclosing `<P1>` survives, as dot-leader text) — the fragment
+  is stale, the document link is not. Callers that don't do this first pass (a single-document `render()`
+  call, or the synthetic tests) simply omit `batch_known_anchors`, which falls back to the pre-existing
+  optimistic behavior — `check_cross_references` remains the safety net either way.
 
 ## Testing
 
@@ -97,8 +104,9 @@ otherwise it's an explicit `https://www.legislation.gov.uk/...` link. Nothing is
 
 Stdlib-only (no pytest, matching `pipeline/tests/test_country_blind.py`'s precedent). Exercises
 `render.py`'s in-batch/external/self-citation resolution and `validate.check_cross_references`
-directly against hand-built `ir.py` objects — necessary because the live 10-Act batch has zero real
-in-batch citations to exercise this path against.
+directly against hand-built `ir.py` objects — still useful as a synthetic proof even now that the
+live batch has real in-batch citations, since it covers edge cases (compound refs, whole-document
+self-citations) the current 20-Act batch doesn't happen to exercise.
 
 ## Running
 
@@ -106,9 +114,12 @@ in-batch citations to exercise this path against.
 ~/.venv-codex/bin/python pipeline/uk/fetch_uk.py
 ```
 
-No arguments — the batch is a hardcoded list of 10 Tier A Acts (see `BATCH` in the script).
-Deliberately unparameterised: growing the batch past 10 Acts needs an explicit go-ahead per the
-project's roadmap constraint (2026-08-09).
+No arguments — the batch is a hardcoded list, 20 Acts as of 2026-08-10 (originally 10 Tier A Acts;
+see `BATCH` in the script for the full list and per-item size). Deliberately unparameterised: growing
+the batch further needs an explicit go-ahead, same as the original 10 → 20 growth did. Re-running is
+cache-first: any URI already recorded as `status: "fetched"` in the existing manifest (and whose XML
+file still exists on disk) is reused without a new network request — only genuinely new URIs in
+`BATCH` cost a fetch + the 5s crawl delay.
 
 **Outputs:**
 - `data/raw/uk/xml/<type>-<year>-<number>.xml` — raw CLML per Act

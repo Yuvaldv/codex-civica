@@ -41,10 +41,16 @@ NS = {
     "dc": "http://purl.org/dc/elements/1.1/",
 }
 
-# The 10-item Tier A starter batch (3 aep, 7 ukpga) — see
-# .planning/phases/08-uk-acquisition/08-RESEARCH.md "Starter Batch" for the
-# full drop rationale. Hardcoded, not discovered: growing this batch requires
-# an explicit go-ahead per the ROADMAP's <=10 constraint.
+# The 20-item England batch (13 aep, 7... see per-row comments), grown from the
+# original 10-item Tier A starter batch on 2026-08-10 with an explicit user
+# go-ahead ("fetch 10 new laws for england"). Hardcoded, not discovered: any
+# further growth needs the same explicit go-ahead. The extension 10 were
+# chosen from a live-verified probe of 15 candidates (see manifest_uk.json
+# history / STATE.md decision log) — 3 are Tier A Acts originally dropped as
+# redundant-with-a-kept-Act (now added back since "redundant" was a batch-of-10
+# constraint, not a quality judgment), the other 7 are new small/medium Acts
+# (22KB-162KB XML) picked to stay well clear of the >1MB page-splitting
+# blocker documented in STATE.md's Known Constraints.
 BATCH = [
     {"uri": "ukpga/Geo6/12-13-14/103", "type": "ukpga"},  # Parliament Act 1949
     {"uri": "ukpga/2011/14", "type": "ukpga"},              # Fixed-term Parliaments Act 2011
@@ -56,6 +62,17 @@ BATCH = [
     {"uri": "ukpga/1990/18", "type": "ukpga"},               # Computer Misuse Act 1990
     {"uri": "ukpga/1998/42", "type": "ukpga"},               # Human Rights Act 1998
     {"uri": "ukpga/1978/30", "type": "ukpga"},               # Interpretation Act 1978
+    # -- extension batch, added 2026-08-10 --
+    {"uri": "ukpga/Geo5/1-2/13", "type": "ukpga"},           # Parliament Act 1911 (20KB)
+    {"uri": "aep/Will3/12-13/2", "type": "aep"},             # Act of Settlement 1700 (41KB)
+    {"uri": "aep/Cha2/31/2", "type": "aep"},                 # Habeas Corpus Act 1679 (57KB)
+    {"uri": "aep/Cha2/29/3", "type": "aep"},                 # Statute of Frauds 1677 (22KB)
+    {"uri": "ukpga/1988/27", "type": "ukpga"},               # Malicious Communications Act 1988 (31KB)
+    {"uri": "ukpga/1961/60", "type": "ukpga"},               # Suicide Act 1961 (39KB)
+    {"uri": "ukpga/1911/6", "type": "ukpga"},                # Perjury Act 1911 (78KB)
+    {"uri": "ukpga/1959/66", "type": "ukpga"},               # Obscene Publications Act 1959 (83KB)
+    {"uri": "ukpga/2000/44", "type": "ukpga"},               # Sexual Offences (Amendment) Act 2000 (98KB)
+    {"uri": "ukpga/1989/6", "type": "ukpga"},                # Official Secrets Act 1989 (162KB)
 ]
 
 
@@ -201,17 +218,31 @@ def save_manifest(rows: list[dict]) -> None:
 def main() -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
+    cached_by_uri = {
+        row["uri"]: row
+        for row in load_manifest()
+        if row.get("status") == "fetched" and row.get("xml_path") and Path(row["xml_path"]).exists()
+    }
+
     session = make_session()
     rows: list[dict] = []
+    fetched_this_run = 0
 
     for i, item in enumerate(BATCH):
+        cached = cached_by_uri.get(item["uri"])
+        if cached is not None:
+            logging.info("[%d/%d] %s (%s) -> cached, skipping fetch", i + 1, len(BATCH), item["uri"], item["type"])
+            rows.append(cached)
+            continue
+
+        if fetched_this_run:
+            time.sleep(CRAWL_DELAY)
+
         logging.info("[%d/%d] fetching %s (%s)...", i + 1, len(BATCH), item["uri"], item["type"])
         row = fetch_item(session, item["uri"], item["type"])
         rows.append(row)
         logging.info("  -> status=%s", row["status"])
-
-        if i < len(BATCH) - 1:
-            time.sleep(CRAWL_DELAY)
+        fetched_this_run += 1
 
     save_manifest(rows)
 

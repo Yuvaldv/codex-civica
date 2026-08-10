@@ -25,12 +25,12 @@ MANIFEST_PATH = PROJECT_DIR / "data" / "raw" / "uk" / "manifest_uk.json"
 OUT_DIR = PROJECT_DIR / "laws" / "uk" / "england"
 
 
-def convert_one(xml_path: Path, meta_row: dict, own_slug: str, batch_slugs: frozenset[str]
+def convert_one(doc, xml_bytes: bytes, meta_row: dict, own_slug: str, batch_slugs: frozenset[str],
+                 batch_known_anchors: dict[str, frozenset[str]]
                  ) -> tuple[str, list[tuple[str, str | None]], list[validate.ValidationError]]:
-    xml_bytes = xml_path.read_bytes()
-    doc = clml.parse(xml_bytes)
     md, internal_links = render.render(doc, retrieved_at=meta_row.get("fetched_at"),
-                                        own_slug=own_slug, batch_slugs=batch_slugs)
+                                        own_slug=own_slug, batch_slugs=batch_slugs,
+                                        batch_known_anchors=batch_known_anchors)
     errors = validate.validate(doc, xml_bytes, md)
     return md, internal_links, errors
 
@@ -38,10 +38,9 @@ def convert_one(xml_path: Path, meta_row: dict, own_slug: str, batch_slugs: froz
 def main(only_slug: str | None = None) -> int:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
-    rows = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-    rows = [r for r in rows if r.get("status") == "fetched"]
-    if only_slug:
-        rows = [r for r in rows if r.get("slug") == only_slug]
+    all_rows = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    all_rows = [r for r in all_rows if r.get("status") == "fetched"]
+    rows = [r for r in all_rows if r.get("slug") == only_slug] if only_slug else all_rows
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -52,17 +51,46 @@ def main(only_slug: str | None = None) -> int:
     # to external. Any slug that fails to actually write a file below gets
     # caught by check_cross_references (BROKEN_INTERNAL_LINK), not silently
     # trusted here.
-    batch_slugs = frozenset(r["slug"] for r in json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-                             if r.get("status") == "fetched")
+    batch_slugs = frozenset(r["slug"] for r in all_rows)
+
+    # First pass over the WHOLE fetched batch (not just `rows`, which may be
+    # narrowed by --slug): parse every doc once and compute its known_anchors,
+    # so a cross-document citation can be checked against its actual target's
+    # anchors instead of trusted optimistically (see render.py's
+    # batch_known_anchors / the Parliament Act 1911 -> Fixed-term Parliaments
+    # Act 2011 s.7(2) case that motivated this -- a subsection since omitted
+    # entirely from the revised text, so the citation's own SectionRef no
+    # longer matches any real anchor in the target document).
+    docs: dict[str, tuple["clml.LegalDoc", bytes]] = {}
+    batch_known_anchors: dict[str, frozenset[str]] = {}
+    parse_errors: dict[str, clml.UnknownElementError] = {}
+    for row in all_rows:
+        try:
+            xml_bytes = (PROJECT_DIR / row["xml_path"]).read_bytes()
+            doc = clml.parse(xml_bytes)
+        except clml.UnknownElementError as e:
+            # A batch-mate's own parse failure shouldn't abort a --slug run
+            # targeting a different, healthy doc; that batch-mate's slug just
+            # falls back to the pre-existing optimistic cross-doc behavior
+            # (no verified known_anchors), and if it's the row actually being
+            # converted below, the per-row handling there reports it properly.
+            parse_errors[row["slug"]] = e
+            continue
+        docs[row["slug"]] = (doc, xml_bytes)
+        batch_known_anchors[row["slug"]] = render.compute_known_anchors(doc)
 
     ok, failed = 0, 0
     rendered: dict[str, str] = {}
     links_by_slug: dict[str, list[tuple[str, str | None]]] = {}
     for row in rows:
         slug = row["slug"]
-        xml_path = PROJECT_DIR / row["xml_path"]
+        if slug in parse_errors:
+            logging.error("%s: UNHANDLED ELEMENT: %s", slug, parse_errors[slug])
+            failed += 1
+            continue
+        doc, xml_bytes = docs[slug]
         try:
-            md, internal_links, errors = convert_one(xml_path, row, slug, batch_slugs)
+            md, internal_links, errors = convert_one(doc, xml_bytes, row, slug, batch_slugs, batch_known_anchors)
         except clml.UnknownElementError as e:
             logging.error("%s: UNHANDLED ELEMENT: %s", slug, e)
             failed += 1
