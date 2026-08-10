@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
 status: executing
-last_updated: "2026-08-10T00:00:00.000Z"
-last_activity: 2026-08-10 -- Phase 7 plan 04 complete (pipeline/common/progress.py created; batch_import.py reduced to thin wrappers, full gate 6/6 green)
+last_updated: "2026-08-10T01:00:00.000Z"
+last_activity: 2026-08-10 -- Phase 7 plan 05 complete (pipeline/common/deploy.py created; batch_import.deploy() reduced to a wrapper; common/ security boundary statically verified; full gate 6/6 green, --structure also green early)
 progress:
   total_phases: 7
   completed_phases: 0
@@ -32,10 +32,10 @@ progress:
 ## Current Position
 
 Phase: 7 (Shared Pipeline Core) — EXECUTING
-Plan: 5 of 7 (07-04 complete — Wave 4 extraction done)
+Plan: 6 of 7 (07-05 complete — Wave 5 extraction done)
 Status: Executing Phase 7
-Progress: 0/7 phases complete (0%) — [░░░░░░░░░░] v1.1 · Phase 7: 4/7 plans
-Last activity: 2026-08-10 -- Phase 7 plan 04 complete (pipeline/common/progress.py created; batch_import.py reduced to thin wrappers, full gate 6/6 green)
+Progress: 0/7 phases complete (0%) — [░░░░░░░░░░] v1.1 · Phase 7: 5/7 plans
+Last activity: 2026-08-10 -- Phase 7 plan 05 complete (pipeline/common/deploy.py created; batch_import.deploy() reduced to a wrapper; common/ security boundary statically verified; full gate 6/6 green, --structure also green early)
 
 ## Accumulated Context
 
@@ -93,7 +93,7 @@ Last activity: 2026-08-10 -- Phase 7 plan 04 complete (pipeline/common/progress.
 - **Pre-existing bug (found during Phase 7 research, 2026-08-09), fix deferred by user request:** `link_resolver.py`'s `_STRIP_MG_INDEX` regex (lines 122-124) fails to strip the sidenotes index when a note's text contains a nested Markdown link — corrupts 4 law files (`2000326`, `2000390`, `2000416`, `2000595`) a little more on every `--all` re-run. Nothing in the repo is corrupted today (reproduced from a clean `HEAD`, not present in committed history); this is latent and would trigger on the next factory-import resume. Not fixed in Phase 7 (would break its byte-identity verification gate). Track as v1.0 Phase 4 follow-up work.
 - Stale `pipeline/requirements.txt` (found during Phase 7 research): missing `python-dotenv` and `google-genai`, both imported by `reconcile.py`. A fresh env provisioned from `requirements.txt` alone cannot import `reconcile`. Out of scope for Phase 7; needs a follow-up fix.
 - Phase 7 off-repo backup of the gitignored import state lives at `$HOME/codex-civica-backups/phase07/` (checksums in `MANIFEST.sha256`). Restore with `cp $HOME/codex-civica-backups/phase07/import_progress.json data/raw/israel/`
-- Phase 7 extraction progress: `--structure` was 11 errors at 07-02, 7 after 07-03, now **2** after 07-04 (`common/progress.py` created; `load_progress`/`save_progress`/`get_next_batch`/`print_status` delegation cleared). Remaining: `common/deploy.py` missing, `batch_import`'s `deploy` still implemented locally — 07-05 clears these
+- Phase 7 extraction progress: `--structure` was 11 errors at 07-02, 7 after 07-03, 2 after 07-04, now **0** after 07-05 (`common/deploy.py` created; `deploy` delegation cleared; `--structure` fully green ahead of schedule — its scope never depended on 07-06's `render_frontmatter`). 07-06 (frontmatter fence-wrapping extraction from `reconcile.py`) and 07-07 (close-out) remain
 - Phase 7 sampling contract (in force for plans 07-03..07-07): `~/.venv-codex/bin/python pipeline/tests/verify_golden.py --quick` after every task commit (~2.4s, mutates nothing); full suite `~/.venv-codex/bin/python pipeline/tests/verify_golden.py` (~8s) before closing each plan. `--structure` is opt-in and red by design until 07-06; its error list is the remaining-extraction checklist
 - Open design call for Phase 11 planning: nation segment lives in the path (`laws/uk/england/`) per UKSITE-02 — confirm the Docusaurus sidebar/routing shape against the installed Docusaurus version at implementation time
 - Pin/verify `@docusaurus/plugin-client-redirects` against the installed Docusaurus version before Phase 10 implementation
