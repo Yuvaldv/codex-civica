@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
 status: executing
-last_updated: "2026-08-10T03:00:00.000Z"
-last_activity: 2026-08-10 -- Phase 7 COMPLETE (07-07 close-out: test_country_blind.py proves SC-4; --structure + --country-blind now in default gate, 8/8 green; PIPELINE.md documents common/; phase-exit gate green, laws/israel/ byte-identical to HEAD)
+last_updated: "2026-08-10T04:00:00.000Z"
+last_activity: 2026-08-10 -- Phase 8 planned (08-01-PLAN.md): pipeline/uk/fetch_uk.py design for the 10-item Tier A CLML starter batch, two hard gates (stub rejection, revised-not-enacted), manifest schema; not yet executed
 progress:
   total_phases: 7
   completed_phases: 1
@@ -31,11 +31,11 @@ progress:
 
 ## Current Position
 
-Phase: 7 (Shared Pipeline Core) — COMPLETE
-Plan: 7 of 7 (07-07 complete — phase closed)
-Status: Phase 7 done; next milestone work is v1.1 Phase 8+ (UK CLML fetch/parse/render — not started)
-Progress: 1/7 phases complete — [█░░░░░░░░░] v1.1 · Phase 7: 7/7 plans
-Last activity: 2026-08-10 -- Phase 7 COMPLETE (07-07 close-out: test_country_blind.py proves SC-4; --structure + --country-blind now in default gate, 8/8 green; PIPELINE.md documents common/; phase-exit gate green, laws/israel/ byte-identical to HEAD)
+Phase: 8 (UK Acquisition) — PLANNED, not yet executed
+Plan: 08-01-PLAN.md written (1 plan, 1 wave — mvp mode, single vertical slice)
+Status: Phase 7 complete; Phase 8 planned (fetcher module design done, live fetch not yet run)
+Progress: 1/7 phases complete — [█░░░░░░░░░] v1.1 · Phase 8: 0/1 plans executed
+Last activity: 2026-08-10 -- Phase 8 planned (08-01-PLAN.md): pipeline/uk/fetch_uk.py design for the 10-item Tier A CLML starter batch, two hard gates (stub rejection, revised-not-enacted), manifest schema; not yet executed
 
 ## Accumulated Context
 
@@ -74,6 +74,10 @@ Last activity: 2026-08-10 -- Phase 7 COMPLETE (07-07 close-out: test_country_bli
 | 2026-08-09 | Characterization harness is stdlib-only; pytest deliberately not installed | Zero new dependencies in a zero-behaviour-change refactor; the frozen-clock shim lives in the harness so `reconcile.py` never gains an injectable clock |
 | 2026-08-09 | v1.1 roadmap = Phases 7–13, continuing v1.0's numbering | v1.0 Phases 1–6 stay open and untouched (Phase 4 paused at 111/718, Phase 6 not started); v1.1 runs in parallel per user's explicit "new milestone" choice |
 | 2026-08-09 | Phase 7 exit gate redefined from the literal ROADMAP wording | ROADMAP said "re-run pipeline, `git diff --stat laws/israel/` must be empty" — unachievable as a live re-run because of the pre-existing, unrelated `_STRIP_MG_INDEX` idempotency bug (link_resolver mutates 4 files' sidenote index a little more every `--all` run, independent of this refactor). The redefined gate is a BEFORE/AFTER diff-fingerprint differential (`link_resolver_all.diff`, captured once in 07-01, reproduced byte-for-byte by every later plan) plus a `git status --porcelain laws/israel/` empty assertion at every checkpoint. Strictly stronger than the literal wording: the committed Israel content was never touched across all of Phase 7, so `git diff --stat laws/israel/` against HEAD is *also* empty at phase close — both the literal criterion and the differential hold simultaneously |
+| 2026-08-10 | Phase 8 starter batch = 10 of FEATURES.md's 13 Tier A Acts, dropping Parliament Act 1911, Act of Settlement 1700, Habeas Corpus Act 1679 | Each drop is redundant with a kept Act on the exact feature it was chosen for (1911 pairs-with-1949, but 1949 alone covers "smallest Act"; Act of Settlement's 42-citation density is dominated by Interpretation Act 1978's 380; Habeas Corpus's `/enacted` 404 is already the headline reason Magna Carta is in the batch). Result: 3 `aep` + 7 `ukpga`, ~1.45 MB total, matching the user's ≤10 constraint (2026-08-09) while keeping every uniquely-named structural feature (repealed titles, Roman numerals, Part-as-Article, sub-UK extent, heavy Commentary, heavy Citation, Schedule-internal Part/Chapter) covered |
+| 2026-08-10 | Phase 8 planned without spawning gsd-phase-researcher | The milestone-level research (`.planning/research/{ARCHITECTURE,FEATURES,PITFALLS,STACK}.md`, HIGH confidence, live-verified 2026-08-09) already answered every Phase-8-scoped question — API URLs, rate limits, User-Agent string, the two hard gates, manifest schema, file layout, and even the Tier A candidate table. `08-RESEARCH.md` is a phase-scoped distillation of that existing material plus the one new decision (the 10-of-13 cut) rather than a fresh agent research pass, avoiding redundant re-discovery |
+| 2026-08-10 | Phase 8 fetch batch is a hardcoded Python list, not a CSV-crawl enumerator | ARCHITECTURE.md's per-year `data.csv` discovery path is Tier B/general-crawl machinery; the ≤10-Act starter batch is a fixed, named list, so building a general enumerator now would be speculative generality against CLAUDE.md's "do not over-abstract" |
+| 2026-08-10 | Phase 8 skips `requests-cache` (STACK.md called it "recommended, optional") | A manual `dest_path.exists()` skip-on-rerun — the same idiom `pipeline/fetch.py`'s `download_pdf` already uses — gets equivalent caching for a 10-item one-shot batch without a new pip dependency |
 
 ### Known Constraints
 

@@ -248,7 +248,12 @@ Plans:
   4. Every manifest entry records the resolved `DocumentURI` and derived version, and the starter batch contains only items with a genuine revised version — no `/enacted` content silently mixed in
   5. **The initial fetch is capped at 10 Acts or fewer** (user constraint, 2026-08-09) — selected from FEATURES.md's structurally-diverse Tier A candidates; the fetcher must not pull the full 13-Act list or beyond without an explicit later go-ahead
 
-**Plans**: TBD
+**Plans**: 1 plan in 1 wave (acquisition is a single vertical slice per mvp mode — build the fetcher, run it live, done)
+
+Plans:
+**Wave 1**
+
+- [ ] 08-01-PLAN.md — Build `pipeline/uk/fetch_uk.py` (User-Agent + 5s crawl-delay, stub gate, revised-version gate, hardcoded 10-item Tier A batch), run it live, document in `pipeline/UK_PIPELINE.md`
 
 ### Phase 9: CLML → Markdown Conversion
 
