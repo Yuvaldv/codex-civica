@@ -21,3 +21,17 @@ def split_frontmatter(text: str) -> tuple[str, str]:
     if split < len(text) and text[split] == "\n":
         split += 1
     return text[:split], text[split:]
+
+
+def render_frontmatter(lines: list[str]) -> str:
+    """Wrap pre-rendered YAML lines in --- fences. Trailing newline included.
+
+    Callers own field selection, ordering, and value formatting; this owns only
+    the block shape. Deliberately thin — see CLAUDE.md 'do not over-abstract'.
+    """
+    return "\n".join(["---", *lines, "---", ""])
+
+
+def quote(value: str) -> str:
+    """Double-quote a scalar, escaping embedded double quotes."""
+    return '"' + value.replace('"', '\\"') + '"'
