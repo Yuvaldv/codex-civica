@@ -28,6 +28,8 @@ import tempfile
 import time
 from pathlib import Path
 
+from common import progress as _progress
+
 PIPELINE_DIR = Path(__file__).parent
 PROJECT_DIR = PIPELINE_DIR.parent
 DATA_DIR = PROJECT_DIR / "data" / "raw" / "israel"
@@ -45,15 +47,11 @@ DEPLOY_EVERY = 25
 # ---------------------------------------------------------------------------
 
 def load_progress() -> dict:
-    if PROGRESS_PATH.exists():
-        with open(PROGRESS_PATH, encoding="utf-8") as f:
-            return json.load(f)
-    return {"done": [], "failed": [], "total_deployed": 0, "priority": []}
+    return _progress.load_progress(PROGRESS_PATH)
 
 
 def save_progress(progress: dict) -> None:
-    with open(PROGRESS_PATH, "w", encoding="utf-8") as f:
-        json.dump(progress, f, ensure_ascii=False, indent=2)
+    _progress.save_progress(PROGRESS_PATH, progress)
 
 
 # ---------------------------------------------------------------------------
@@ -253,64 +251,11 @@ def deploy() -> bool:
 # ---------------------------------------------------------------------------
 
 def get_next_batch(manifest: list[dict], progress: dict, count: int) -> list[dict]:
-    """Return next N unprocessed laws that have PDFs. Priority queue is drained first."""
-    done_set = set(str(x) for x in progress.get("done", []))
-    failed_set = set(str(x) for x in progress.get("failed", []))
-    priority_ids = [str(x) for x in progress.get("priority", [])
-                    if str(x) not in done_set and str(x) not in failed_set]
-
-    # Build a lookup by law_id for fast access
-    by_id = {str(e.get("law_id") or e.get("bill_id")): e for e in manifest}
-
-    batch: list[dict] = []
-
-    # Drain priority queue first
-    for pid in priority_ids:
-        if len(batch) >= count:
-            break
-        entry = by_id.get(pid)
-        if not entry:
-            continue
-        if not entry.get("pdf_path") or not Path(entry["pdf_path"]).exists():
-            continue
-        batch.append(entry)
-
-    # Fill remaining slots from manifest in order
-    for entry in manifest:
-        if len(batch) >= count:
-            break
-        law_id = entry.get("law_id") or entry.get("bill_id")
-        if not law_id:
-            continue
-        if str(law_id) in done_set or str(law_id) in failed_set:
-            continue
-        if any(e is entry for e in batch):
-            continue
-        if not entry.get("pdf_path") or not Path(entry["pdf_path"]).exists():
-            continue
-        batch.append(entry)
-
-    return batch
+    return _progress.get_next_batch(manifest, progress, count)
 
 
 def print_status(manifest: list[dict], progress: dict) -> None:
-    done = set(str(x) for x in progress.get("done", []))
-    failed = set(str(x) for x in progress.get("failed", []))
-    total = len(manifest)
-    with_pdf = sum(1 for e in manifest if e.get("pdf_path"))
-    pending = sum(
-        1 for e in manifest
-        if (e.get("law_id") or e.get("bill_id")) and
-           str(e.get("law_id") or e.get("bill_id")) not in done and
-           str(e.get("law_id") or e.get("bill_id")) not in failed and
-           e.get("pdf_path")
-    )
-    print(f"Total laws:      {total}")
-    print(f"With PDF:        {with_pdf}")
-    print(f"Converted:       {len(done)}")
-    print(f"Failed:          {len(failed)}")
-    print(f"Pending:         {pending}")
-    print(f"Total deployed:  {progress.get('total_deployed', 0)}")
+    _progress.print_status(manifest, progress)
 
 
 def _process_law(entry: dict, force: bool = False) -> bool:
