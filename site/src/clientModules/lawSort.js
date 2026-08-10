@@ -21,7 +21,8 @@ function groupKey(by, meta) {
 // ─── Sidebar grouping ─────────────────────────────────────────────────────────
 
 function lawIdFromHref(href) {
-  const m = (href || '').match(/\/laws\/(\d+)/);
+  // Phase 10 rebased Israel's route to /laws/israel/<id> (was /laws/<id>).
+  const m = (href || '').match(/\/laws\/israel\/(\d+)/);
   return m ? m[1] : null;
 }
 

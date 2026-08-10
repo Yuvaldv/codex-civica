@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UK Laws
 status: executing
-last_updated: "2026-08-10T06:00:00.000Z"
-last_activity: 2026-08-10 -- Phase 9 COMPLETE: pipeline/uk/{ir,clml,render,validate,convert}.py built; all 10 fetched Acts converted to laws/uk/england/*.md with 0 round-trip and 0 numbering errors
+last_updated: "2026-08-10T09:00:00.000Z"
+last_activity: 2026-08-10 -- Phase 10 COMPLETE: Israel route rebased /laws -> /laws/israel; @docusaurus/plugin-client-redirects covers all 111 old URLs; navbar/homepage/sidebar-grouping updated; npm run build zero errors/warnings
 progress:
   total_phases: 7
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 7
   completed_plans: 7
-  percent: 43
+  percent: 57
 ---
 
 # State — Codex Civica
@@ -31,10 +31,10 @@ progress:
 
 ## Current Position
 
-Phase: 9 (CLML → Markdown Conversion) — COMPLETE
-Status: Phases 7, 8, 9 complete. Next: Phase 10 (Site — Route Rebase) or Phase 11/12 (independent of 10)
-Progress: 3/7 phases complete — [███░░░░░░░] v1.1
-Last activity: 2026-08-10 -- Phase 9 COMPLETE: pipeline/uk/{ir,clml,render,validate,convert}.py built; all 10 fetched Acts converted to laws/uk/england/*.md with 0 round-trip and 0 numbering errors
+Phase: 10 (Site — Route Rebase) — COMPLETE
+Status: Phases 7, 8, 9, 10 complete. Next: Phase 11 (Site — England Instance) or Phase 12 (Cross-Reference + Amendment Linking)
+Progress: 4/7 phases complete — [████░░░░░░] v1.1
+Last activity: 2026-08-10 -- Phase 10 COMPLETE: Israel route rebased /laws -> /laws/israel; @docusaurus/plugin-client-redirects covers all 111 old URLs; navbar/homepage/sidebar-grouping updated; npm run build zero errors/warnings
 
 **Note on process (2026-08-10 user feedback):** the user asked to stop producing meticulous
 per-phase PLAN.md/SUMMARY.md documents with full XML task/threat-model ceremony — ROADMAP.md's 13
@@ -88,6 +88,8 @@ otherwise. See [[feedback_lightweight_phase_execution]] in memory.
 | 2026-08-10 | `shortId` is only trustworthy as an anchor inside Schedules, not in the Body | Found live on Computer Misuse Act 1990 s.5(2): two genuinely distinct `<P3>` elements (different full `@id`, different `DocumentURI`) share the same `shortId="section-5-2-b"` — a real TNA data quirk, not a parser bug. `clml.py` now prefers `shortId` only when walking `ScheduleBody` (`prefer_short=True`), and the always-unique full `@id` everywhere else |
 | 2026-08-10 | Per-provision `RestrictExtent` can live on the `<P1group>` wrapper, not on the `<P1>` it contains | Found live on Computer Misuse Act 1990 (Scotland/N.I.-only provisions) — `_walk_group_or_block` now reads the group's `RestrictExtent` and propagates it onto the leaf provision unless the leaf already declared a more specific extent of its own |
 | 2026-08-10 | UKVALID-01's round-trip check normalises BOTH the rendered Markdown and the source `<Text>` needle before comparing (strips `[`, `]`, `**`, footnote refs, and the renderer's own synthetic `(repealed...)`/`[REPEALED]` annotations) | The bracket-and-footnote convention (UKCONV-06) and archaic-Act source text that itself contains literal square brackets (Magna Carta's editorially-supplied-word convention) both defeat a naive byte-exact substring check in opposite directions; symmetric normalisation resolves both without weakening what the gate actually verifies (that no word is silently dropped) |
+| 2026-08-10 | Phase 10 redirects derived via `createRedirects()`, not a hardcoded 111-id list | `@docusaurus/plugin-client-redirects@3.10.1` (pinned to match the installed `@docusaurus/core@3.10.1`) generates `/laws/<id>` from every existing `/laws/israel/<id>` route at build time — never drifts from the actual `laws/israel/` content, and needs no update when the Israel corpus grows |
+| 2026-08-10 | `lawSort.js`'s `lawIdFromHref` regex updated to `/\/laws\/israel\/(\d+)/` (was `/\/laws\/(\d+)/`) | Direct, minimal consequence of the route rebase — the sidebar-grouping feature would otherwise silently stop matching any law link. Still numeric-only; Phase 11's UKSITE-03 must generalise this further for non-numeric UK slugs (`ukpga-1998-42`) |
 
 ### Known Constraints
 

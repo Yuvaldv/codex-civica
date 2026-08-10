@@ -40,7 +40,7 @@ const config: Config = {
       {
         docs: {
           path: '../laws/israel',
-          routeBasePath: 'laws',
+          routeBasePath: 'laws/israel',
           sidebarPath: './sidebars.ts',
           showLastUpdateTime: false,
         },
@@ -49,6 +49,24 @@ const config: Config = {
           customCss: './src/css/custom.css',
         },
       } satisfies Preset.Options,
+    ],
+  ],
+
+  plugins: [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // Every previously indexed /laws/<id> URL (111 laws, indexed before the
+        // Phase 10 route rebase) must keep resolving. Derived from whatever
+        // exists at build time rather than a hardcoded id list, so it never
+        // drifts from the actual laws/israel/ content.
+        createRedirects(existingPath: string) {
+          if (existingPath.startsWith('/laws/israel/')) {
+            return [existingPath.replace('/laws/israel/', '/laws/')];
+          }
+          return [];
+        },
+      },
     ],
   ],
 
@@ -63,7 +81,7 @@ const config: Config = {
         {
           type: 'html',
           position: 'left',
-          value: '<a href="/codex-civica/laws" class="navbar__link navbar-flag" title="Israel">🇮🇱</a>',
+          value: '<a href="/codex-civica/laws/israel" class="navbar__link navbar-flag" title="Israel">🇮🇱</a>',
         },
         {
           type: 'html',
